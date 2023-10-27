@@ -1,22 +1,17 @@
 import React, { useRef, useState } from 'react';
 import './App.css';
 
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/auth';
-import 'firebase/analytics';
+import './firebaseConfig.js';
+
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+import 'firebase/compat/auth';
+import 'firebase/compat/analytics';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-firebase.initializeApp({
-    apiKey: "AIzaSyB9qMGPaNQgVoR7AjldJ81D88gecKbiQCM",
-    authDomain: "bizchina-4c5df.firebaseapp.com",
-    projectId: "bizchina-4c5df",
-    storageBucket: "bizchina-4c5df.appspot.com",
-    messagingSenderId: "993229226150",
-    appId: "1:993229226150:web:7b69c6f046d868be7f7467"
-})
+
 
 const auth = firebase.auth();
 const firestore = firebase.firestore();
