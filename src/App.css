@@ -1,5 +1,8 @@
 body {
-  background-color: #282c34;
+  background: rgb(247, 223, 223); /*og color is (255,243,243,1);*/
+  position: absolute;
+  height: 100%;
+  width: 100%
 }
 
 .App {
@@ -9,19 +12,19 @@ body {
 }
 
 .App header {
-  background-color: #181717;
+  background-color: rgba(255, 194, 194, 1);
   height: 10vh;
   min-height: 50px;
   color: white;
   position: fixed;
   width: 100%;
-  max-width: 728px;
   top: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   z-index: 99;
   padding: 10px;
+  margin-left: -25.2%; /* Adjusted margin to start a third of the screen to the left */
   box-sizing: border-box;
 }
 
@@ -30,7 +33,7 @@ body {
   flex-direction: column;
   justify-content: center;
   min-height: 100vh;
-  background-color: rgb(40, 37, 53);
+  background-color:rgb(247, 223, 223)
 }
 
 main {
@@ -100,16 +103,75 @@ button:disabled {
 }
 
 
-.sign-in {
-  color: #282c34;
-  background: white;
-  max-width: 400px;
-  margin: 0 auto;
+#signInContainer {
+  position: relative;
+  margin: auto; /* horizontally centre */
+  width: 50%;
+
+  /* vertically centre*/
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+
+  /* centres elements within container in the middle*/
+  display: grid;
+  /* grid-template-columns: repeat(2, 1fr); grid will have 2 cols, each col take up 1 fraction (50%) of this container */
+  justify-content: center;
+  align-items: center;
 }
 
+#signIn {
+  font-family: Lexend Deca;
+  font-weight: regular;
+  font-size: 60px;
+  text-align: center;
+}
 
+.inputBox {
+  background: black;
+  border-radius: 10px;
+  color: white;
+  font-family: Lexend Deca;
+  font-size: 15px;
 
+  display: grid; /* vertically aligning text in input box*/
+  align-items: center;
 
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.5);
+  margin-top: 10%;
+
+  height: 45px;
+  width: 95%;
+  padding-left: 5%;
+}
+
+.inputBox::placeholder {
+  color: white;
+  font-family: Lexend Deca;
+  font-size: 15px;
+  opacity: 1;
+}
+
+#login {
+  background: rgba(255,194,194,1); /* og is rgba(255,194,194,1);*/
+  border-radius: 10px;
+  color: black;
+  text-align: center;
+
+  display: grid;
+  align-items: center;
+
+  font-family: Lexend Deca;
+  font-weight: bold;
+
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.5);
+  margin-top: 10%;
+
+  height: 45px;
+}
+#login:hover {
+  cursor: pointer;
+}
 ul, li {
   text-align: left;
   list-style: none;
