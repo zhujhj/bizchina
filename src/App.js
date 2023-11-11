@@ -2,6 +2,7 @@ import  React, { useRef, useState } from 'react';
 import './App.css';
 
 import './firebaseConfig.js';
+import logo from './images/logo.png';
 
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
@@ -25,7 +26,7 @@ function App() {
     return (
         <div className="App">
             <header>
-                <h1>⚛️🔥💬</h1>
+                <h1><img src={logo} className='logo'></img></h1>
                 <SignOut />
             </header>
 
