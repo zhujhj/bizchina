@@ -9,6 +9,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
+import Dashboard from './pages/Dashboard.tsx';
 import ChatRoom from './pages/chatPage';
 import SignIn from './pages/signInPage';
 
@@ -33,11 +34,13 @@ function App() {
                 
                     <Route path="/" element={<SignIn />} /> 
                     <Route path="/chat" element={<ChatRoom />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
                 </Routes>
             </Router>
         </>
     )
 }
+
 
 export default App;
 

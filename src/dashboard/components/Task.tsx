@@ -1,10 +1,10 @@
 import { DeleteIcon } from '@chakra-ui/icons';
 import { Box, IconButton, ScaleFade } from '@chakra-ui/react';
 import _ from 'lodash';
-import { memo } from 'react';
-import { useTaskDragAndDrop } from '../hooks/useTaskDragAndDrop';
+import React, { memo } from 'react';
+import { useTaskDragAndDrop } from '../hooks/useTaskDragAndDrop.ts';
 import { TaskModel } from '../utils/models';
-import { AutoResizeTextarea } from './AutoResizeTextArea';
+import { AutoResizeTextarea } from './AutoResizeTextArea.tsx';
 
 type TaskProps = {
   index: number;
