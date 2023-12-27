@@ -1,6 +1,6 @@
-const loginBtn = document.getElementById("login");
-loginBtn.onclick = login;
+// const loginBtn = document.getElementById("login");
+// loginBtn.onclick = login;
 
-function login() {
-    window.alert("login button clicked!");
-}
+// function login() {
+//     window.alert("login button clicked!");
+// }

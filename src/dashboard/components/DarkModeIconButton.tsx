@@ -9,12 +9,14 @@ function DarkModeIconButton({
 
   const isDark = colorMode === 'dark';
 
+  const { 'aria-label': ariaLabel, ...otherProps } = rest;
+
   return (
     <IconButton
       onClick={toggleColorMode}
       icon={isDark ? <MoonIcon /> : <SunIcon />}
-      aria-label={'dark-mode-toggle'}
-      {...rest}
+      aria-label={ariaLabel}
+      {...otherProps}
     />
   );
 }
