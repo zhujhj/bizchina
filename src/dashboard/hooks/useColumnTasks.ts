@@ -5,8 +5,30 @@ import { pickChakraRandomColor, swap } from '../utils/helpers.ts';
 import { debug } from '../utils/logging.ts';
 import { TaskModel } from '../utils/models.ts';
 import useTaskCollection from './useTaskCollection.ts';
+import firebase from "firebase/compat/app";
+import 'firebase/compat/firestore';
 
 const MAX_TASK_PER_COLUMN = 100;
+
+const firestore = firebase.firestore();
+
+const tasksCollection = firestore.collection('tasks');
+const taskQueryById = (id) => tasksCollection.where('id', '==', id);
+
+const saveTask = (task: TaskModel) => {
+  tasksCollection.add(task)
+      .then(_ => console.log(`task added: ${task.id}`));
+}
+
+
+const deleteTaskById = (taskId: TaskModel['id']) => {
+  taskQueryById(taskId)
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => doc.ref.delete());
+        console.log(`task deleted: ${taskId}`);
+      });
+}
 
 function useColumnTasks(column: ColumnType) {
   const [tasks, setTasks] = useTaskCollection();
@@ -30,6 +52,8 @@ function useColumnTasks(column: ColumnType) {
         column,
       };
 
+      saveTask(newColumnTask);
+
       return {
         ...allTasks,
         [column]: [newColumnTask, ...columnTasks],
@@ -42,6 +66,9 @@ function useColumnTasks(column: ColumnType) {
       debug(`Removing task ${id}..`);
       setTasks((allTasks) => {
         const columnTasks = allTasks[column];
+
+        deleteTaskById(id);
+
         return {
           ...allTasks,
           [column]: columnTasks.filter((task) => task.id !== id),

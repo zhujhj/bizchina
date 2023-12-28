@@ -7,7 +7,6 @@ import {
   Stack,
   useColorModeValue,
 } from '@chakra-ui/react';
-import React from 'react';
 import useColumnDrop from '../hooks/useColumnDrop.ts';
 import useColumnTasks from '../hooks/useColumnTasks.ts';
 import { ColumnType } from '../utils/enums.ts';
