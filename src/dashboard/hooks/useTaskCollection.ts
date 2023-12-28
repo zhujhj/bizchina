@@ -4,6 +4,21 @@ import { v4 as uuidv4 } from 'uuid';
 import { ColumnType } from '../utils/enums.ts';
 import { TaskModel } from '../utils/models.ts';
 
+import '../../firebaseConfig.js';
+
+import 'firebase/compat/analytics';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+
+import { getAuth } from "firebase/auth";
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+
+const auth = getAuth();
+const firestore = firebase.firestore();
+
+const kanbanRef = firestore.collection('Tasks');
+
 function useTaskCollection() {
   return useLocalStorage<{
     [key in ColumnType]: TaskModel[];
