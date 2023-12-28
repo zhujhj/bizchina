@@ -1,19 +1,14 @@
 import { Stack, Typography, IconButton } from '@mui/material'
 // import CloseIcon from "@mui/icons-material/Close";
 
-const ModalHeader = () => {
+const ModalHeader = ({title, onClose}) => {
     return (
-        <Dialog open fullWidth maxWidth='xs'>
-            <Stack p={2}>
-                <Stack direction='row'>
-                    <Typography variant='h5'>Create Board</Typography>
-                    <IconButton size='small'>
-                        {/* <CloseIcon/> */}
-                        X
-                    </IconButton>
-                </Stack>
-            </Stack>
-        </Dialog>
+        <Stack diurection='row' justifyContent='space-between' alignItems='center'>
+            <Typography fontWeight={700} variant='h6'>{title}</Typography>
+            <IconButton onClick={onClose} size='small'>
+                X
+            </IconButton>
+        </Stack>
     )
 }
 
