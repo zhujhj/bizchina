@@ -4,8 +4,7 @@ const Tasks = require('./config');
 const app = express();
 
 app.use(express.json());
-app.use(cors());
-
+app.use(cors({origin:true}));
 app.get("/tasks", async (req, res) => {
     const snapshot = await Tasks.get();
     // const ids = snapshot.docs.map((doc)=>doc.id);
@@ -40,5 +39,21 @@ app.get("/tasks/:id", async (req, res) => {
 
     res.send({id: id, ...task});
 })
+app.post("/authenticate", async (req, res) => {
+    const { username } = req.body;
 
-app.listen(3000, ()=> console.log(`Up and running on port 3000`));
+    try {
+        const r = await axios.put(
+            'https://api.chatengine.io/users/',
+            {username: username, secret: username, first_name: username},
+            {headers: {"private-key": "d98ff472-5f53-4586-b3ef-8ccce7a717ec"}}
+        )
+        return res.status(r.status).json(r.data)
+    } catch (e) {
+        return res.status(e.r.status).json(e.r.data)
+    }
+
+
+    return res.json({ username: username, secret: "sha256..." }); // secret: is a fake pasword
+});
+app.listen(3001, ()=> console.log(`Up and running on port 3001`));
