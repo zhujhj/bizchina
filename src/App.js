@@ -12,7 +12,6 @@ import 'firebase/compat/firestore';
 import Dashboard from './pages/Dashboard.tsx';
 import ChatRoom from './pages/chatPage';
 import SignIn from './pages/signInPage';
-import Dashboard from './pages/DashboardScreen/Dashboard.js';
 
 import { getAuth } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';

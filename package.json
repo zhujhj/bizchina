@@ -40,13 +40,13 @@
     "@vitejs/plugin-react": "^2.0.1",
     "eslint": "^8.22.0",
     "eslint-config-airbnb-typescript-prettier": "^5.0.0",
-    "eslint-plugin-jest": "^26.8.3",
+    "eslint-plugin-jest": "^27.6.0",
     "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-unicorn": "^43.0.2",
     "lodash": "^4.17.21",
     "prettier": "2.7.1",
-    "typescript": "^4.6.4",
+    "typescript": "^5.3.3",
     "vite": "^3.2.7"
   },
   "scripts": {
@@ -74,8 +74,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "tailwindcss": "^3.4.0"
   }
 }
