@@ -11,6 +11,7 @@ import 'firebase/compat/firestore';
 
 import ChatRoom from './pages/chatPage';
 import SignIn from './pages/signInPage';
+import Dashboard from './pages/DashboardScreen/Dashboard.js';
 
 import { getAuth } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -33,6 +34,7 @@ function App() {
                 
                     <Route path="/" element={<SignIn />} /> 
                     <Route path="/chat" element={<ChatRoom />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
                 </Routes>
             </Router>
         </>
