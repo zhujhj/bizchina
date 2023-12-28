@@ -36,7 +36,7 @@ function SignIn(props) {
                 console.log(user);
                 await axios.post(
                     'http://localhost:3001/authenticate',
-                    {username: 'John'}
+                    {username: user.uid}
                 )
                     .then(r => props.onAuth({...r.data, secret: user.uid}))
                     .catch(e => console.log('error', e))
