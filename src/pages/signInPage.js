@@ -32,7 +32,7 @@ function SignIn() {
                 // The signed-in user info.
                 const user = result.user;
                 // to be changed, hoping to use navigate.push for optimal performance.
-                window.location.href = "/chat";
+                window.location.href = "/dashboard";
                 // IdP data available using getAdditionalUserInfo(result)
                 // ...
             }).catch((error) => {
