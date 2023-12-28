@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../signInPage.css';
+import axios from 'axios'
 
 import '../firebaseConfig.js';
 
@@ -18,21 +19,27 @@ const auth = getAuth();
 
 
 
-function SignIn() {
+function SignIn(props) {
     const navigate = useNavigate();
-    const [user] = useAuthState(auth);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const signInWithGoogle = () => {
+    const signInWithGoogle = (props) => {
         const provider = new firebase.auth.GoogleAuthProvider();
         signInWithPopup(auth, provider)
-            .then((result) => {
+            .then(async (result) => {
                 // This gives you a Google Access Token. You can use it to access the Google API.
                 const credential = GoogleAuthProvider.credentialFromResult(result);
                 const token = credential.accessToken;
                 // The signed-in user info.
-                const user = result.user;
+                let user = result.user;
+                console.log(user);
+                await axios.post(
+                    'http://localhost:3001/authenticate',
+                    {username: 'John'}
+                )
+                    .then(r => props.onAuth({...r.data, secret: user.uid}))
+                    .catch(e => console.log('error', e))
                 // to be changed, hoping to use navigate.push for optimal performance.
                 window.location.href = "/chat";
                 // IdP data available using getAdditionalUserInfo(result)
@@ -52,7 +59,13 @@ function SignIn() {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // Signed up
-                const user = userCredential.user;
+                let user = userCredential.user;
+                axios.post(
+                    'http://localhost:3001/authenticate',
+                    {username: user.uid}
+                )
+                    .then(r => props.onAuth({ ...r.data, secret: user.uid}))
+                    .catch(e => console.log('error', e))
                 // ...
             })
             .catch((error) => {

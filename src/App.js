@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import './App.css';
 
@@ -9,9 +9,8 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
-import ChatRoom from './pages/chatPage';
 import SignIn from './pages/signInPage';
-
+import ChatsPage from "./pages/ChatsPage";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
 
@@ -24,15 +23,15 @@ const analytics = firebase.analytics();
 function App() {
 
     const [user] = useAuthState(auth);
-    
+    const [chatUser, setUser] = useState(undefined);
 
     return (
         <>
             <Router>
                 <Routes>
                 
-                    <Route path="/" element={<SignIn />} /> 
-                    <Route path="/chat" element={<ChatRoom />} />
+                    <Route path="/" element={<SignIn onAuth={(chatUser) => setUser(chatUser)} />} />
+                    <Route path="/chat" element={<ChatsPage user={chatUser} />} />
                 </Routes>
             </Router>
         </>
