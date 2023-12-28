@@ -16,8 +16,6 @@ import { useNavigate } from "react-router-dom";
 const auth = getAuth();
 
 
-
-
 function SignIn() {
     const navigate = useNavigate();
     const [user] = useAuthState(auth);
