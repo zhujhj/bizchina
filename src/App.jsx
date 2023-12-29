@@ -31,7 +31,7 @@ function App() {
                 <Routes>
                 
                     <Route path="/" element={<SignIn onAuth={(chatUser) => setUser(chatUser)} />} />
-                    <Route path="/chat" element={<ChatsPage user={chatUser} />} />
+                    <Route path="/chat/:chatUser" element={<ChatsPage />} />
                 </Routes>
             </Router>
         </>

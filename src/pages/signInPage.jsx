@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 
 const auth = getAuth();
 
+// ...
+
 
 
 
@@ -23,7 +25,7 @@ function SignIn(props) {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
+    const [user] = useAuthState(auth);
     const signInWithGoogle = (props) => {
         const provider = new firebase.auth.GoogleAuthProvider();
         signInWithPopup(auth, provider)
@@ -32,7 +34,7 @@ function SignIn(props) {
                 const credential = GoogleAuthProvider.credentialFromResult(result);
                 const token = credential.accessToken;
                 // The signed-in user info.
-                let user = result.user;
+                const user = result.user;
                 console.log(user);
                 await axios.post(
                     'http://localhost:3001/authenticate',
@@ -41,7 +43,8 @@ function SignIn(props) {
                     .then(r => props.onAuth({...r.data, secret: user.uid}))
                     .catch(e => console.log('error', e))
                 // to be changed, hoping to use navigate.push for optimal performance.
-                window.location.href = "/chat";
+                navigate(`/chat/${user.uid}`);
+
                 // IdP data available using getAdditionalUserInfo(result)
                 // ...
             }).catch((error) => {
