@@ -38,12 +38,12 @@ function SignIn(props) {
                 console.log(user);
                 await axios.post(
                     'http://localhost:3001/authenticate',
-                    {username: user.uid}
+                    {username: user.email}
                 )
-                    .then(r => props.onAuth({...r.data, secret: user.uid}))
+                    .then(r => props.onAuth({...r.data, secret: user.email}))
                     .catch(e => console.log('error', e))
                 // to be changed, hoping to use navigate.push for optimal performance.
-                navigate(`/chat/${user.uid}`);
+                navigate(`/chat/${user.email}`);
 
                 // IdP data available using getAdditionalUserInfo(result)
                 // ...
@@ -65,9 +65,9 @@ function SignIn(props) {
                 let user = userCredential.user;
                 axios.post(
                     'http://localhost:3001/authenticate',
-                    {username: user.uid}
+                    {username: user.email}
                 )
-                    .then(r => props.onAuth({ ...r.data, secret: user.uid}))
+                    .then(r => props.onAuth({ ...r.data, secret: user.email}))
                     .catch(e => console.log('error', e))
                 // ...
             })
