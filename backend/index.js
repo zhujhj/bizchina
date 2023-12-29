@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const Tasks = require('./config');
 const app = express();
-
+const { default: axios } = require("axios");
 app.use(express.json());
 app.use(cors({origin:true}));
 app.get("/tasks", async (req, res) => {
@@ -54,6 +54,6 @@ app.post("/authenticate", async (req, res) => {
     }
 
 
-    return res.json({ username: username, secret: "sha256..." }); // secret: is a fake pasword
+    return res.json({ username: username, secret: username }); // secret: is a fake pasword
 });
 app.listen(3001, ()=> console.log(`Up and running on port 3001`));
