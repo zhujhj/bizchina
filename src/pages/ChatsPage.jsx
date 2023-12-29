@@ -5,7 +5,7 @@ const ChatsPage = () => {
     const { chatUser } = useParams();
 
     const chatProps = useMultiChatLogic(
-        'd00b15d8-699b-4210-a469-8d4da48dadbd',
+        'd00b15d8-699b-4210-a469-8d4da48dadbd', // CHATENGINE PROJECT ID
          chatUser,
         chatUser
     );
