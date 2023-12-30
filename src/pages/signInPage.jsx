@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../signInPage.css';
+import './signInPage.css';
 import axios from 'axios'
 
 import '../firebaseConfig.js';
@@ -16,16 +16,12 @@ import { useNavigate } from "react-router-dom";
 
 const auth = getAuth();
 
-// ...
-
-
-
-
 function SignIn(props) {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [user] = useAuthState(auth);
+
     const signInWithGoogle = (props) => {
         const provider = new firebase.auth.GoogleAuthProvider();
         signInWithPopup(auth, provider)
@@ -81,22 +77,22 @@ function SignIn(props) {
     
     return (
         <div id="signInContainer">
-            <img src={logo} className="logo"></img>
+            <img src={logo} id="logo"></img>
             <div id="signIn">Sign in</div>
             <div id="manage">Log in to start managing your tasks!</div>
 
             {/* Email and Password inputs */}
             <input
+                className="userInput"
                 type="text"
                 placeholder="Email"
-                className="inputBox"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
             />
             <input
+                className="userInput"
                 type="password"
                 placeholder="Password"
-                className="inputBox"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />

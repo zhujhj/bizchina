@@ -1,6 +1,8 @@
 import { MultiChatSocket, MultiChatWindow, useMultiChatLogic } from 'react-chat-engine-advanced'
 import { useParams } from "react-router-dom";
 
+import './ChatPage.css';
+
 const ChatsPage = () => {
     const { chatUser } = useParams();
 
