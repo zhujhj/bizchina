@@ -1,5 +1,6 @@
-import {} from '@chakra-ui/icons';
+import { } from '@chakra-ui/icons';
 import { Container, Heading, SimpleGrid } from '@chakra-ui/react';
+import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import Column from './components/Column';
