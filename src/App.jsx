@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import './App.css';
 
@@ -9,14 +9,10 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
-import Calendar from './pages/calendar.js';
-import ChatRoom from './pages/chatPage';
-import SignIn from './pages/signInPage';
-
-
 import { getAuth } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
-import ChakraDashBoard from './pages/main.tsx';
+import ChatPage from "./pages/chatPage";
+import SignIn from './pages/signInPage';
 
 
 const auth = getAuth();
@@ -27,24 +23,20 @@ const analytics = firebase.analytics();
 function App() {
 
     const [user] = useAuthState(auth);
-    
-    
+    const [chatUser, setUser] = useState(undefined);
+
     return (
         <>
             <Router>
                 <Routes>
                 
-                    <Route path="/" element={<SignIn />} /> 
-                    <Route path="/chat" element={<ChatRoom />} />
-                    <Route path="/dashboard" element={<ChakraDashBoard />} />
-                    <Route path="/calendar" element={<Calendar />} />
-
+                    <Route path="/" element={<SignIn onAuth={(chatUser) => setUser(chatUser)} />} />
+                    <Route path="/chat/:chatUser" element={<ChatPage />} />
                 </Routes>
             </Router>
         </>
     )
 }
-
 
 export default App;
 
