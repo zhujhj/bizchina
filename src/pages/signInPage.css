@@ -5,7 +5,7 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: white;
+    background: rgb(247, 223, 223);
 }
 
 /* Styling for the sign-in title */
