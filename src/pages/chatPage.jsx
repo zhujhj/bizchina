@@ -1,9 +1,9 @@
 import { MultiChatSocket, MultiChatWindow, useMultiChatLogic } from 'react-chat-engine-advanced'
 import { useParams } from "react-router-dom";
 
-import './ChatPage.css';
+import './chatPage.css';
 
-const ChatsPage = () => {
+const ChatPage = () => {
     const { chatUser } = useParams();
 
     const chatProps = useMultiChatLogic(
@@ -19,4 +19,4 @@ const ChatsPage = () => {
     )
 }
 
-export default ChatsPage
+export default ChatPage
