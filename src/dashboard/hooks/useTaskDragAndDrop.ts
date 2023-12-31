@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useDrag, useDrop, XYCoord } from 'react-dnd';
-import { ItemType } from '../utils/enums';
-import { DragItem, TaskModel } from '../utils/models';
+import { ItemType } from '../utils/enums.ts';
+import { DragItem, TaskModel } from '../utils/models.ts';
 
 export function useTaskDragAndDrop<T extends HTMLElement>(
   { task, index }: { task: TaskModel; index: number },

@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { ColumnType } from '../utils/enums';
-import { pickChakraRandomColor, swap } from '../utils/helpers';
-import { debug } from '../utils/logging';
-import { TaskModel } from '../utils/models';
-import useTaskCollection from './useTaskCollection';
+import { pickChakraRandomColor, swap } from '../utils/helpers.ts';
+import { debug } from '../utils/logging.ts';
+import { TaskModel } from '../utils/models.ts';
+import useTaskCollection from './useTaskCollection.ts';
 
 const MAX_TASK_PER_COLUMN = 100;
 

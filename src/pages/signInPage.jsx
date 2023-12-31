@@ -1,6 +1,6 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import './signInPage.css';
-import axios from 'axios'
 
 import '../firebaseConfig.js';
 
@@ -39,7 +39,7 @@ function SignIn(props) {
                     .then(r => props.onAuth({...r.data, secret: user.email}))
                     .catch(e => console.log('error', e))
                 // to be changed, hoping to use navigate.push for optimal performance.
-                navigate(`/chat/${user.email}`);
+                navigate(`/dashboard`);
 
                 // IdP data available using getAdditionalUserInfo(result)
                 // ...
