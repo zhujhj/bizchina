@@ -3,7 +3,7 @@ import { Stack, Typography, IconButton } from '@mui/material'
 
 const ModalHeader = ({title, onClose}) => {
     return (
-        <Stack diurection='row' justifyContent='space-between' alignItems='center'>
+        <Stack direction='row' justifyContent='space-between' alignItems='center'>
             <Typography fontWeight={700} variant='h6'>{title}</Typography>
             <IconButton onClick={onClose} size='small'>
                 X

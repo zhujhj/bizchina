@@ -12,16 +12,16 @@ const colors = [
   "#D3D3D3",
 ];
 
-const CreateBoardModal = () => {
+const CreateBoardModal = ({ closeModal }) => {
   const [name, setName] = useState('');
   const [color, setColor] = useState(0);
 
   console.log({name, color});
 
     return (
-        <Dialog open fullWidth maxWidth='xs'>
+        <Dialog open onClose={closeModal} fullWidth maxWidth='xs'>
             <Stack p={2}>
-              <ModalHeader title='Create Board' />
+              <ModalHeader title='Create Board' onClose={closeModal} />
               <Stack my={5} spacing={3}>
                 <TextField 
                 label='Board Name' 

@@ -15,6 +15,8 @@ const firestore = firebase.firestore();
 const tasksCollection = firestore.collection('tasks');
 const taskQueryById = (id) => tasksCollection.where('id', '==', id);
 
+console.log();
+
 const saveTask = (task: TaskModel) => {
   tasksCollection.add(task)
       .then(_ => console.log(`task added: ${task.id}`));
@@ -28,6 +30,16 @@ const deleteTaskById = (taskId: TaskModel['id']) => {
         snapshot.forEach(doc => doc.ref.delete());
         console.log(`task deleted: ${taskId}`);
       });
+}
+
+const update = (task: TaskModel) => {
+  taskQueryById(task.id)
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          doc.ref.update(task);
+        })
+  });
 }
 
 function useColumnTasks(column: ColumnType) {
@@ -83,6 +95,11 @@ function useColumnTasks(column: ColumnType) {
       debug(`Updating task ${id} with ${JSON.stringify(updateTask)}`);
       setTasks((allTasks) => {
         const columnTasks = allTasks[column];
+
+        columnTasks.map((task) =>
+          update(task),
+        )
+        
         return {
           ...allTasks,
           [column]: columnTasks.map((task) =>
@@ -106,6 +123,10 @@ function useColumnTasks(column: ColumnType) {
         if (!movingTask) {
           return allTasks;
         }
+
+        toColumnTasks.map((task) =>
+          update(task),
+        )
 
         // remove the task from the original column and copy it within the destination column
         return {

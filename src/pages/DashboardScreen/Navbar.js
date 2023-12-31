@@ -14,13 +14,13 @@ function navigateToLogin() {
     window.location.href = '/';
 }
 
-const Navbar = () => {
+const Navbar = ({openModal}) => {
     return (
         <AppBar position='static'>
             <Toolbar sx={{justifyContent: "space-between",}}>
                 <img src={LogoImg}/>
                 <Stack direction="row" spacing={5}>
-                    <Button variant="contained">Create Board</Button>
+                    <Button onClick={openModal} variant="contained">Create Board</Button>
                     <Button variant="contained" onClick={navigateToChat}>Chat</Button>
                     <Button variant="contained" onClick={navigateToLogin}>Logout</Button>
                 </Stack>
