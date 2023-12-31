@@ -124,10 +124,6 @@ function useColumnTasks(column: ColumnType) {
           return allTasks;
         }
 
-        toColumnTasks.map((task) =>
-          update(task),
-        )
-
         // remove the task from the original column and copy it within the destination column
         return {
           ...allTasks,
