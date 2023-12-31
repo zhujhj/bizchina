@@ -17,9 +17,31 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 const auth = getAuth();
 const firestore = firebase.firestore();
 
-const kanbanRef = firestore.collection('Tasks');
+// let todo: TaskModel[] = [];
+// let inProgress = [];
+// let blocked = [];
+// let completed = [];
+
+// for (let task in kanbanRef.get()) {
+//   if (task['column'] === "Todo") {
+//     todo.push(task);
+//   } else if (task['column'] === "In Progress") {
+//     inProgress.push(task);
+//   } else if (task['column'] === "Blocked") {
+
+//   } else if (task['column'] === "Completed") {
+
+//   }
+// }
+
+const kanbanRef = firestore.collection('tasks');
+const query = kanbanRef.orderBy('id');
+const taskQueryByColumn = (column) => kanbanRef.where('column', '==', column);
+
+
 
 function useTaskCollection() {
+  
   return useLocalStorage<{
     [key in ColumnType]: TaskModel[];
   }>('tasks', {
