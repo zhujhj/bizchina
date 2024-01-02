@@ -17,6 +17,48 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 const auth = getAuth();
 const firestore = firebase.firestore();
 
+const citiesRef = firestore.collection('tasks');
+
+// gets all todo tasks
+const todoTasks = await citiesRef.where('column', '==', 'Todo').get();
+if (todoTasks.empty) {
+  console.log('No matching documents.');
+}  
+
+todoTasks.forEach(doc => {
+  console.log(doc.id, '=>', doc.data().column);
+});
+
+// gets all in progress tasks
+const inProgressTasks = await citiesRef.where('column', '==', 'In Progress').get();
+if (inProgressTasks.empty) {
+  console.log('No matching documents.');
+}  
+
+inProgressTasks.forEach(doc => {
+  console.log(doc.id, '=>', doc.data().column);
+});
+
+// gets all blocked tasks
+const blockedTasks = await citiesRef.where('column', '==', 'Blocked').get();
+if (blockedTasks.empty) {
+  console.log('No matching documents.');
+}  
+
+blockedTasks.forEach(doc => {
+  console.log(doc.id, '=>', doc.data().column);
+});
+
+// gets all completed tasks
+const completedTasks = await citiesRef.where('column', '==', 'Completed').get();
+if (completedTasks.empty) {
+  console.log('No matching documents.');
+}  
+
+completedTasks.forEach(doc => {
+  console.log(doc.id, '=>', doc.data().column);
+});
+
 // let todo: TaskModel[] = [];
 // let inProgress = [];
 // let blocked = [];
