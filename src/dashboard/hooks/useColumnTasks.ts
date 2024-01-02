@@ -43,6 +43,7 @@ const update = (task: TaskModel) => {
 }
 
 function useColumnTasks(column: ColumnType) {
+  localStorage.clear();
   const [tasks, setTasks] = useTaskCollection();
 
   const columnTasks = tasks[column];
