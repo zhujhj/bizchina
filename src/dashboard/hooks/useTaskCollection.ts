@@ -25,8 +25,16 @@ if (todoTasks.empty) {
   console.log('No matching documents.');
 }  
 
+const todoTaskModels: TaskModel[] = []
+
 todoTasks.forEach(doc => {
   console.log(doc.id, '=>', doc.data().column);
+  todoTaskModels.push({
+    id: doc.data().id,
+    column: doc.data().column,
+    title: doc.data().title,
+    color: doc.data().color,
+  });
 });
 
 // gets all in progress tasks
@@ -35,8 +43,16 @@ if (inProgressTasks.empty) {
   console.log('No matching documents.');
 }  
 
+const inProgressTaskModels: TaskModel[] = []
+
 inProgressTasks.forEach(doc => {
   console.log(doc.id, '=>', doc.data().column);
+  inProgressTaskModels.push({
+    id: doc.data().id,
+    column: doc.data().column,
+    title: doc.data().title,
+    color: doc.data().color,
+  });
 });
 
 // gets all blocked tasks
@@ -45,8 +61,16 @@ if (blockedTasks.empty) {
   console.log('No matching documents.');
 }  
 
+const blockedTaskModels: TaskModel[] = []
+
 blockedTasks.forEach(doc => {
   console.log(doc.id, '=>', doc.data().column);
+  blockedTaskModels.push({
+    id: doc.data().id,
+    column: doc.data().column,
+    title: doc.data().title,
+    color: doc.data().color,
+  });
 });
 
 // gets all completed tasks
@@ -55,8 +79,16 @@ if (completedTasks.empty) {
   console.log('No matching documents.');
 }  
 
+const completedTaskModels: TaskModel[] = []
+
 completedTasks.forEach(doc => {
   console.log(doc.id, '=>', doc.data().column);
+  completedTaskModels.push({
+    id: doc.data().id,
+    column: doc.data().column,
+    title: doc.data().title,
+    color: doc.data().color,
+  });
 });
 
 // let todo: TaskModel[] = [];
@@ -87,38 +119,42 @@ function useTaskCollection() {
   return useLocalStorage<{
     [key in ColumnType]: TaskModel[];
   }>('tasks', {
-    Todo: [
-      {
-        id: uuidv4(),
-        column: ColumnType.TO_DO,
-        title: 'Task 1',
-        color: 'blue.300',
-      },
-    ],
-    'In Progress': [
-      {
-        id: uuidv4(),
-        column: ColumnType.IN_PROGRESS,
-        title: 'Task 2',
-        color: 'yellow.300',
-      },
-    ],
-    Blocked: [
-      {
-        id: uuidv4(),
-        column: ColumnType.BLOCKED,
-        title: 'Task 3',
-        color: 'red.300',
-      },
-    ],
-    Completed: [
-      {
-        id: uuidv4(),
-        column: ColumnType.COMPLETED,
-        title: 'Task 4',
-        color: 'green.300',
-      },
-    ],
+    // Todo: [
+    //   {
+    //     id: uuidv4(),
+    //     column: ColumnType.TO_DO,
+    //     title: 'Task 1',
+    //     color: 'blue.300',
+    //   },
+    // ],
+    Todo: todoTaskModels,
+    'In Progress': inProgressTaskModels,
+    Blocked: blockedTaskModels,
+    Completed: completedTaskModels,
+    // 'In Progress': [
+    //   {
+    //     id: uuidv4(),
+    //     column: ColumnType.IN_PROGRESS,
+    //     title: 'Task 2',
+    //     color: 'yellow.300',
+    //   },
+    // ],
+    // Blocked: [
+    //   {
+    //     id: uuidv4(),
+    //     column: ColumnType.BLOCKED,
+    //     title: 'Task 3',
+    //     color: 'red.300',
+    //   },
+    // ],
+    // Completed: [
+    //   {
+    //     id: uuidv4(),
+    //     column: ColumnType.COMPLETED,
+    //     title: 'Task 4',
+    //     color: 'green.300',
+    //   },
+    // ],
   });
 }
 
