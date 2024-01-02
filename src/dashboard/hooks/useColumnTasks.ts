@@ -121,9 +121,20 @@ function useColumnTasks(column: ColumnType) {
 
         console.log(`Moving task ${movingTask?.id} from ${from} to ${column}`);
 
+        if (movingTask) {
+          update({
+            id: movingTask.id,
+            column: column,
+            title: movingTask.title,
+            color: movingTask.color,
+          });
+        }
+
         if (!movingTask) {
           return allTasks;
         }
+
+        // update(movingTask);
 
         // remove the task from the original column and copy it within the destination column
         return {
