@@ -8,7 +8,7 @@ const ChatPage = () => {
     const user = getAuth().currentUser;
 
     const chatProps = useMultiChatLogic(
-        'd00b15d8-699b-4210-a469-8d4da48dadbd', // CHATENGINE PROJECT ID
+        '96035d14-d8b9-4c56-bfd6-d64fd0fdd566', // CHATENGINE PROJECT ID
          user.email,
         user.email
     );

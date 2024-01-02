@@ -16,7 +16,8 @@ import { useNavigate } from "react-router-dom";
 
 const auth = getAuth();
 
-function SignIn(props) {
+// function SignIn(props) {
+const SignIn = (props) => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -31,13 +32,13 @@ function SignIn(props) {
                 const token = credential.accessToken;
                 // The signed-in user info.
                 const user = result.user;
-                console.log(user);
+                // console.log(user);
                 await axios.post(
                     'http://localhost:3001/authenticate',
                     {username: user.email}
                 )
-                    .then(r => props.onAuth({...r.data, secret: user.email}))
-                    .catch(e => console.log('error', e))
+                .then(r => props.onAuth({...r.data, secret: user.email}))
+                .catch(e => console.log('error', e))
                 // to be changed, hoping to use navigate.push for optimal performance.
                 navigate(`/dashboard`);
 
@@ -54,6 +55,7 @@ function SignIn(props) {
             // ...
         });
     }
+
     const signUpWithEmailAndPassword = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
