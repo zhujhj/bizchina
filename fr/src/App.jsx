@@ -9,8 +9,8 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
-import SignIn from './pages/signInPage';
-import ChatPage from "./pages/chatPage";
+import SignIn from './pages/signInPage.jsx';
+import ChatPage from "./pages/chatPage.jsx";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
 
@@ -31,7 +31,7 @@ function App() {
                 <Routes>
                 
                     <Route path="/" element={<SignIn onAuth={(chatUser) => setUser(chatUser)} />} />
-                    <Route path="/chat/:chatUser" element={<ChatPage />} />
+                    <Route path="/chat" element={<ChatPage />} />
                 </Routes>
             </Router>
         </>
