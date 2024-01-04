@@ -134,8 +134,6 @@ function useColumnTasks(column: ColumnType) {
           return allTasks;
         }
 
-        // update(movingTask);
-
         // remove the task from the original column and copy it within the destination column
         return {
           ...allTasks,
