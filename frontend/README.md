@@ -14,7 +14,7 @@
     npm install
     ```
 
-3. Once inside the "backend" directory, start the server in development mode:
+3. Once inside the "frontend" directory, start the server in development mode:
 
     ```bash
     npm run dev
