@@ -7,11 +7,23 @@ import {
   IconButton,
   Stack,
   useColorModeValue,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Input,
+  Button,
 } from '@chakra-ui/react';
 import useColumnDrop from '../hooks/useColumnDrop.ts';
 import useColumnTasks from '../hooks/useColumnTasks.ts';
 import { ColumnType } from '../utils/enums.ts';
 import Task from './Task.tsx';
+import { pickChakraRandomColor, swap } from '../utils/helpers.ts';
+import { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid';
 
 const ColumnColorScheme: Record<ColumnType, string> = {
   Todo: 'gray',
@@ -21,6 +33,17 @@ const ColumnColorScheme: Record<ColumnType, string> = {
 };
 
 function Column({ column }: { column: ColumnType }) {
+  //changed
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const handleAddButtonClick = () => {
+    onOpen();
+    // You can perform additional logic here if needed
+  };
+  const [newTaskName, setNewTaskName] = useState('');
+  const [newTo, setNewTo] = useState('');
+  const [newFrom, setNewFrom] = useState('');
+  const [newDate, setNewDate] = useState('');
+  // changed
   const {
     tasks,
     addEmptyTask,
@@ -63,11 +86,62 @@ function Column({ column }: { column: ColumnType }) {
         _hover={{ bgColor: useColorModeValue('gray.200', 'gray.600') }}
         py={2}
         variant="solid"
-        onClick={addEmptyTask}
+        // onClick={addEmptyTask} // changed
+        onClick={handleAddButtonClick} // changed
         colorScheme="black"
         aria-label="add-task"
         icon={<AddIcon />}
       />
+      <Modal isOpen={isOpen} onClose={onClose} size="md">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add Task</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {/* Add your modal content here */}
+            {/* For example, you can include a form to add a new task */}
+            Task Name
+            <Input
+              mb={4}
+              placeholder="Task Name"
+              value={newTaskName}
+              onChange={(e) => setNewTaskName(e.target.value)}
+            />
+            To
+            <Input
+              mb={4}
+              placeholder="To"
+              value={newTo}
+              onChange={(e) => setNewTo(e.target.value)}
+            />
+            From
+            <Input
+              mb={4}
+              placeholder="From"
+              value={newFrom}
+              onChange={(e) => setNewFrom(e.target.value)}
+            />
+            Deadline
+            <Input
+              mb={4}
+              type='date'
+              placeholder="Deadline"
+              onChange={(e) => setNewDate(e.target.value)}
+            />
+            <Button colorScheme="blue" onClick={() => {addEmptyTask({
+                                                                id: uuidv4(),
+                                                                column,
+                                                                title: newTaskName,
+                                                                color: pickChakraRandomColor('.300'),
+                                                                to: newTo,
+                                                                from: newFrom,
+                                                                deadline: newDate,
+                                                              }); onClose();}}>
+              Add Task
+            </Button>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
       <Stack
         ref={dropRef}
         direction={{ base: 'row', md: 'column' }}

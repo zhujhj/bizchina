@@ -48,7 +48,7 @@ function useColumnTasks(column: ColumnType) {
 
   const columnTasks = tasks[column];
 
-  const addEmptyTask = useCallback(() => {
+  const addEmptyTask = useCallback((newTaskParams) => {
     debug(`Adding new empty task to ${column} column`);
     setTasks((allTasks) => {
       const columnTasks = allTasks[column];
@@ -58,15 +58,16 @@ function useColumnTasks(column: ColumnType) {
         return allTasks;
       }
 
-      const newColumnTask: TaskModel = {
-        id: uuidv4(),
-        title: `New ${column} task`,
-        color: pickChakraRandomColor('.300'),
-        column,
-        to: "",
-        from: "",
-        deadline: new Date(),
-      };
+      // const newColumnTask: TaskModel = {
+      //   id: uuidv4(),
+      //   title: `New ${column} task`,
+      //   color: pickChakraRandomColor('.300'),
+      //   column,
+      //   to: "",
+      //   from: "",
+      //   deadline: new Date(),
+      // };
+      const newColumnTask: TaskModel = newTaskParams;
 
       saveTask(newColumnTask);
 
