@@ -1,8 +1,6 @@
 {
-  "name": "bizchina",
-  "version": "0.1.0",
-  "private": true,
   "dependencies": {
+<<<<<<< HEAD
     "@chakra-ui/core": "^0.8.0",
     "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/react": "^2.2.6",
@@ -75,5 +73,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+=======
+    "yarn": "^1.22.21"
+>>>>>>> main
   }
 }
