@@ -5,6 +5,9 @@ export interface TaskModel {
   title: string;
   column: ColumnType;
   color: string;
+  to: string;
+  from: string;
+  deadline: Date;
 }
 
 export interface DragItem {
