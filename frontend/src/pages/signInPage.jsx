@@ -80,7 +80,7 @@ const SignIn = (props) => {
     return (
         <div id="signInContainer">
             <img src={logo} id="logo"></img>
-            <div id="signIn">Sign in</div>
+            <div id="signInTitle">Sign In</div>
             <div id="manage">Log in to start managing your tasks!</div>
 
             {/* Email and Password inputs */}
@@ -100,8 +100,8 @@ const SignIn = (props) => {
             />
 
             {/* Sign in buttons */}
-            <button id="login" onClick={signUpWithEmailAndPassword}>Login</button>
-            <button id="sign-in" onClick={signInWithGoogle}>Sign in with Google</button>
+            <button id="login" onClick={signUpWithEmailAndPassword}>Sign in</button>
+            <button id="signinGoogle" onClick={signInWithGoogle}>Sign in with Google</button>
         </div>
     )
 
