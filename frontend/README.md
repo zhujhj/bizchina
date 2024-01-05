@@ -19,3 +19,5 @@
     ```bash
     npm run dev
     ```
+
+4. Copy the localhost link given in the terminal and paste it into your browser.
