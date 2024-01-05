@@ -59,8 +59,9 @@ button {
 }
 
 button:hover {
-    opacity: 75%;
-    font-size: 1.4rem;
+    cursor: pointer;
+    opacity: 80%;
+    transform: scale(1.1);
 }
 
 button:disabled {
@@ -70,7 +71,7 @@ button:disabled {
 
 /* Style for the default log in button */
 #login {
-    background-color: #4285f4;
+    background-color: #982929;
     margin-bottom: 10px;
 }
 
@@ -91,8 +92,12 @@ button:disabled {
 
 #logo {
     position: relative;
-    top: 0px;
-    height: 75px;
-    width: 75px;
+    height: 80px;
+    width: 80px;
     margin-bottom: 10px;
+}
+
+#logo:hover {
+    opacity: 80%;
+    transform: scale(1.1);
 }
