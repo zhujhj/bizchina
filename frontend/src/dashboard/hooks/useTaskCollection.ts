@@ -34,6 +34,9 @@ todoTasks.forEach(doc => {
     column: doc.data().column,
     title: doc.data().title,
     color: doc.data().color,
+    to: doc.data().to,
+    from: doc.data().from,
+    deadline: doc.data().deadline,
   });
 });
 
@@ -52,6 +55,9 @@ inProgressTasks.forEach(doc => {
     column: doc.data().column,
     title: doc.data().title,
     color: doc.data().color,
+    to: doc.data().to,
+    from: doc.data().from,
+    deadline: doc.data().deadline,
   });
 });
 
@@ -70,6 +76,9 @@ blockedTasks.forEach(doc => {
     column: doc.data().column,
     title: doc.data().title,
     color: doc.data().color,
+    to: doc.data().to,
+    from: doc.data().from,
+    deadline: doc.data().deadline,
   });
 });
 
@@ -88,6 +97,9 @@ completedTasks.forEach(doc => {
     column: doc.data().column,
     title: doc.data().title,
     color: doc.data().color,
+    to: doc.data().to,
+    from: doc.data().from,
+    deadline: doc.data().deadline,
   });
 });
 

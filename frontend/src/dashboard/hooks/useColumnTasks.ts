@@ -63,6 +63,9 @@ function useColumnTasks(column: ColumnType) {
         title: `New ${column} task`,
         color: pickChakraRandomColor('.300'),
         column,
+        to: "",
+        from: "",
+        deadline: new Date(),
       };
 
       saveTask(newColumnTask);
@@ -127,6 +130,9 @@ function useColumnTasks(column: ColumnType) {
             column: column,
             title: movingTask.title,
             color: movingTask.color,
+            to: movingTask.to,
+            from: movingTask.from,
+            deadline: movingTask.deadline,
           });
         }
 
