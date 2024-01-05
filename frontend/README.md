@@ -14,8 +14,10 @@
     npm install
     ```
 
-3. Once inside the "backend" directory, start the server in development mode:
+3. Once inside the "frontend" directory, start the server in development mode:
 
     ```bash
     npm run dev
     ```
+
+4. Copy the localhost link given in the terminal and paste it into your browser.
