@@ -1,4 +1,4 @@
-# Project Name - Backend
+# Backend
 
 ## How to Run the Backend
 
