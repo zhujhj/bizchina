@@ -32,8 +32,8 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/" element={<SignIn onAuth={(chatUser) => setUser(chatUser)} />} />
-                    <Route path="/chat" element={<ChatPage />} />
-                    <Route path="/dashboard" element={<ChakraDashBoard />} />
+                    <Route path="/chat/:user" element={<ChatPage />} />
+                    <Route path="/dashboard/:user" element={<ChakraDashBoard />} />
                     <Route path="/calendar" element={<Calendar />} />
                     
                 </Routes>

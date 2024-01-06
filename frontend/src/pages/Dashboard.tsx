@@ -8,12 +8,15 @@ import Column from '../dashboard/components/Column.tsx';
 import DarkModeIconButton from '../dashboard/components/DarkModeIconButton.tsx';
 import { ColumnType } from '../dashboard/utils/enums.ts';
 import './dashboard.css';
+import {useParams} from "react-router-dom";
 
 function Dashboard() {
+    let { user } = useParams();
+    console.log("dashboard" + user);
   return (
     <main>
       <div className='navbar-container'>
-        <Navbar />
+          <Navbar user={user} />
       </div>
       
       
