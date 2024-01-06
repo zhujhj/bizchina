@@ -4,7 +4,6 @@ import './Navbar.css';
 import {getAuth} from "firebase/auth";
 
 function Navbar({ user }) {
-    console.log("Nav" + user)
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
   const handleClick = () => setClick(!click);

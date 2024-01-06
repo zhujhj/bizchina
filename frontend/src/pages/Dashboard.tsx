@@ -12,7 +12,6 @@ import {useParams} from "react-router-dom";
 
 function Dashboard() {
     let { user } = useParams();
-    console.log("dashboard" + user);
   return (
     <main>
       <div className='navbar-container'>

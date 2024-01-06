@@ -16,20 +16,16 @@ const ChatPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                console.log('Fetching data...');
                 const doc = await collection.get();
 
                 if (!doc.exists) {
-                    console.error('Document not found');
                     return;
                 }
 
                 const userData = doc.data();
-                console.log('User data:', userData);
                 setUser(userData);
                 setLoading(false);
             } catch (error) {
-                console.error('Error fetching data:', error);
                 setLoading(false);
             }
         };
@@ -47,11 +43,9 @@ const ChatContent = ({ chatUser, loading }) => {
     }
 
     if (!chatUser) {
-        console.error('User data not available');
         return null;
     }
 
-    console.log("Chat" + chatUser.email);
 
     const chatProps = useMultiChatLogic(
         '96035d14-d8b9-4c56-bfd6-d64fd0fdd566',
