@@ -16,13 +16,8 @@ import { useNavigate } from "react-router-dom";
 
 const auth = getAuth();
 
-<<<<<<< HEAD:frontend/src/pages/signInPage.jsx
 // function SignIn(props) {
 const SignIn = (props) => {
-=======
-
-function SignIn() {
->>>>>>> 288ff2fe889d7f005f2ce03856ce2b4ba4c9a5d6:src/pages/signInPage.js
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -45,12 +40,8 @@ function SignIn() {
                 .then(r => props.onAuth({...r.data, secret: user.email}))
                 .catch(e => console.log('error', e))
                 // to be changed, hoping to use navigate.push for optimal performance.
-<<<<<<< HEAD:frontend/src/pages/signInPage.jsx
                 navigate(`/dashboard`);
 
-=======
-                window.location.href = "/dashboard";
->>>>>>> 288ff2fe889d7f005f2ce03856ce2b4ba4c9a5d6:src/pages/signInPage.js
                 // IdP data available using getAdditionalUserInfo(result)
                 // ...
             }).catch((error) => {
