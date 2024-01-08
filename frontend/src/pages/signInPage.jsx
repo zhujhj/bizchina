@@ -40,11 +40,7 @@ const SignIn = (props) => {
                 .then(r => props.onAuth({...r.data, secret: user.email}))
                 .catch(e => console.log('error', e))
                 // to be changed, hoping to use navigate.push for optimal performance.
-<<<<<<< HEAD
-                navigate(`/dashboard`);
-=======
                 navigate(`/dashboard/${user.uid}`);
->>>>>>> origin/main
 
                 // IdP data available using getAdditionalUserInfo(result)
                 // ...
