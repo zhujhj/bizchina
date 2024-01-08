@@ -71,6 +71,8 @@ function useColumnTasks(column: ColumnType) {
 
       saveTask(newColumnTask);
 
+      saveTask(newColumnTask);
+
       return {
         ...allTasks,
         [column]: [newColumnTask, ...columnTasks],

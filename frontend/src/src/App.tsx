@@ -1,8 +1,4 @@
-// frontend/src/pages/Dashboard.tsx
-// import { } from '@chakra-ui/icons';
 import { } from '@chakra-ui/icons';
-// frontend/src/src/App.tsx
-// import { } from '@chakra-ui/icons';src/pages/Dashboard.tsx
 import { Container, Heading, SimpleGrid } from '@chakra-ui/react';
 import React from 'react';
 import { DndProvider } from 'react-dnd';
