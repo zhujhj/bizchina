@@ -1,5 +1,5 @@
 import { DeleteIcon } from '@chakra-ui/icons';
-import { Box, IconButton, ScaleFade } from '@chakra-ui/react';
+import { Box, IconButton, ScaleFade, Text } from '@chakra-ui/react';
 import _ from 'lodash';
 import React, { memo } from 'react';
 import { useTaskDragAndDrop } from '../hooks/useTaskDragAndDrop.ts';
@@ -77,6 +77,7 @@ function Task({
           cursor="inherit"
           border="none"
           p={0}
+          m={0}
           resize="none"
           minH={70}
           maxH={200}
@@ -84,6 +85,41 @@ function Task({
           color="gray.700"
           onChange={handleTitleChange}
         />
+        <Text
+          fontWeight="semibold"
+          fontSize={14}
+          cursor="inherit"
+          border="none"
+          p={0}
+          m={0}
+          resize="none"
+          color="gray.700"
+          align='left'>To: {task.to}
+        </Text>
+        <Text
+          fontWeight="semibold"
+          fontSize={14}
+          cursor="inherit"
+          border="none"
+          p={0}
+          m={0}
+          resize="none"
+          color="gray.700"
+          align='left'>From: {task.from}
+        </Text>
+        <Text
+          fontWeight="semibold"
+          fontSize={14}
+          cursor="inherit"
+          border="none"
+          p={0}
+          m={0}
+          resize="none"
+          color="gray.700"
+          align='left'>
+            {/* Date: {task.deadline.toString()} */}
+            Deadline: {task.deadline.toString()}
+        </Text>
       </Box>
     </ScaleFade>
   );

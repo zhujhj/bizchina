@@ -5,15 +5,50 @@ import { pickChakraRandomColor, swap } from '../utils/helpers.ts';
 import { debug } from '../utils/logging.ts';
 import { TaskModel } from '../utils/models.ts';
 import useTaskCollection from './useTaskCollection.ts';
+import firebase from "firebase/compat/app";
+import 'firebase/compat/firestore';
 
 const MAX_TASK_PER_COLUMN = 100;
 
+const firestore = firebase.firestore();
+
+const tasksCollection = firestore.collection('tasks');
+const taskQueryById = (id) => tasksCollection.where('id', '==', id);
+
+console.log();
+
+const saveTask = (task: TaskModel) => {
+  tasksCollection.add(task)
+      .then(_ => console.log(`task added: ${task.id}`));
+}
+
+
+const deleteTaskById = (taskId: TaskModel['id']) => {
+  taskQueryById(taskId)
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => doc.ref.delete());
+        console.log(`task deleted: ${taskId}`);
+      });
+}
+
+const update = (task: TaskModel) => {
+  taskQueryById(task.id)
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          doc.ref.update(task);
+        })
+  });
+}
+
 function useColumnTasks(column: ColumnType) {
+  localStorage.clear();
   const [tasks, setTasks] = useTaskCollection();
 
   const columnTasks = tasks[column];
 
-  const addEmptyTask = useCallback(() => {
+  const addEmptyTask = useCallback((newTaskParams) => {
     debug(`Adding new empty task to ${column} column`);
     setTasks((allTasks) => {
       const columnTasks = allTasks[column];
@@ -23,12 +58,20 @@ function useColumnTasks(column: ColumnType) {
         return allTasks;
       }
 
-      const newColumnTask: TaskModel = {
-        id: uuidv4(),
-        title: `New ${column} task`,
-        color: pickChakraRandomColor('.300'),
-        column,
-      };
+      // const newColumnTask: TaskModel = {
+      //   id: uuidv4(),
+      //   title: `New ${column} task`,
+      //   color: pickChakraRandomColor('.300'),
+      //   column,
+      //   to: "",
+      //   from: "",
+      //   deadline: new Date(),
+      // };
+      const newColumnTask: TaskModel = newTaskParams;
+
+      saveTask(newColumnTask);
+
+      saveTask(newColumnTask);
 
       return {
         ...allTasks,
@@ -42,6 +85,9 @@ function useColumnTasks(column: ColumnType) {
       debug(`Removing task ${id}..`);
       setTasks((allTasks) => {
         const columnTasks = allTasks[column];
+
+        deleteTaskById(id);
+
         return {
           ...allTasks,
           [column]: columnTasks.filter((task) => task.id !== id),
@@ -56,6 +102,11 @@ function useColumnTasks(column: ColumnType) {
       debug(`Updating task ${id} with ${JSON.stringify(updateTask)}`);
       setTasks((allTasks) => {
         const columnTasks = allTasks[column];
+
+        columnTasks.map((task) =>
+          update(task),
+        )
+        
         return {
           ...allTasks,
           [column]: columnTasks.map((task) =>
@@ -75,6 +126,18 @@ function useColumnTasks(column: ColumnType) {
         const movingTask = fromColumnTasks.find((task) => task.id === id);
 
         console.log(`Moving task ${movingTask?.id} from ${from} to ${column}`);
+
+        if (movingTask) {
+          update({
+            id: movingTask.id,
+            column: column,
+            title: movingTask.title,
+            color: movingTask.color,
+            to: movingTask.to,
+            from: movingTask.from,
+            deadline: movingTask.deadline,
+          });
+        }
 
         if (!movingTask) {
           return allTasks;

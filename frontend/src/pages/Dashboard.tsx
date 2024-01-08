@@ -1,4 +1,3 @@
-import { } from '@chakra-ui/icons';
 import { Container, Heading, SimpleGrid } from '@chakra-ui/react';
 import React from 'react';
 import { DndProvider } from 'react-dnd';
@@ -17,7 +16,6 @@ function Dashboard() {
       <div className='navbar-container'>
           <Navbar user={user} />
       </div>
-      
       
       <Heading
         fontSize={{ base: '4xl', sm: '5xl', md: '6xl' }}
