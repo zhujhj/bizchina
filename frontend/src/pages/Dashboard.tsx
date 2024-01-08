@@ -1,8 +1,3 @@
-// frontend/src/pages/Dashboard.tsx
-// import { } from '@chakra-ui/icons';
-import { } from '@chakra-ui/icons';
-// frontend/src/src/App.tsx
-// import { } from '@chakra-ui/icons';src/pages/Dashboard.tsx
 import { Container, Heading, SimpleGrid } from '@chakra-ui/react';
 import React from 'react';
 import { DndProvider } from 'react-dnd';
@@ -12,14 +7,15 @@ import Column from '../dashboard/components/Column.tsx';
 import DarkModeIconButton from '../dashboard/components/DarkModeIconButton.tsx';
 import { ColumnType } from '../dashboard/utils/enums.ts';
 import './dashboard.css';
+import {useParams} from "react-router-dom";
 
 function Dashboard() {
+    let { user } = useParams();
   return (
     <main>
       <div className='navbar-container'>
-        <Navbar />
+          <Navbar user={user} />
       </div>
-      
       
       <Heading
         fontSize={{ base: '4xl', sm: '5xl', md: '6xl' }}

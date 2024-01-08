@@ -40,7 +40,11 @@ const SignIn = (props) => {
                 .then(r => props.onAuth({...r.data, secret: user.email}))
                 .catch(e => console.log('error', e))
                 // to be changed, hoping to use navigate.push for optimal performance.
+<<<<<<< HEAD
                 navigate(`/dashboard`);
+=======
+                navigate(`/dashboard/${user.uid}`);
+>>>>>>> origin/main
 
                 // IdP data available using getAdditionalUserInfo(result)
                 // ...
@@ -79,8 +83,8 @@ const SignIn = (props) => {
     
     return (
         <div id="signInContainer">
-            <img src={logo} id="logo"></img>
-            <div id="signIn">Sign in</div>
+            <a href="https://www.ubcchinaforum.com/"> <img src={logo} id="logo"></img> </a>
+            <div id="signInTitle">Sign In</div>
             <div id="manage">Log in to start managing your tasks!</div>
 
             {/* Email and Password inputs */}
@@ -100,8 +104,8 @@ const SignIn = (props) => {
             />
 
             {/* Sign in buttons */}
-            <button id="login" onClick={signUpWithEmailAndPassword}>Login</button>
-            <button id="sign-in" onClick={signInWithGoogle}>Sign in with Google</button>
+            <button id="login" onClick={signUpWithEmailAndPassword}>Sign in</button>
+            <button id="signinGoogle" onClick={signInWithGoogle}>Sign in with Google</button>
         </div>
     )
 

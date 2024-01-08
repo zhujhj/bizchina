@@ -1,13 +1,24 @@
 import React, { useEffect, useState } from 'react';
+<<<<<<< HEAD
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 
 function Navbar() {
+=======
+import {Link, useParams} from 'react-router-dom';
+import './Navbar.css';
+import {getAuth} from "firebase/auth";
+
+function Navbar({ user }) {
+>>>>>>> origin/main
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
   const showButton = () => {
     if(window.innerWidth <= 960) {
       setButton(false);
@@ -38,7 +49,11 @@ function Navbar() {
                 </div>
                 <ul className={click ? 'nav-menu active': 'nav-menu'}>
                   <li className='nav-item'>
+<<<<<<< HEAD
                     <Link to='/chat' className='nav-links' onClick={closeMobileMenu}>
+=======
+                    <Link to={`/chat/${user}`} className='nav-links' onClick={closeMobileMenu}>
+>>>>>>> origin/main
                       Chat
                     </Link>
                   </li>
