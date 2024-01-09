@@ -186,8 +186,8 @@ return (
     </SevenColGrid>
 
     <SevenColGrid
-      $fullheight={true}
-      $is28Days={getDaysInMonth(currentDate) === 28}
+      fullheight={true}
+      is28Days={getDaysInMonth(currentDate) === 28}
     >
       {getSortedDays(currentDate).map((day) => (
         <div
