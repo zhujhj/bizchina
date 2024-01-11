@@ -1,29 +1,29 @@
-import React from 'react';
 import { AddIcon } from '@chakra-ui/icons';
 import {
   Badge,
   Box,
+  Button,
   Heading,
   IconButton,
-  Stack,
-  useColorModeValue,
+  Input,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
   ModalBody,
   ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Stack,
+  useColorModeValue,
   useDisclosure,
-  Input,
-  Button,
 } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import '../../pages/dashboard.css';
 import useColumnDrop from '../hooks/useColumnDrop.ts';
 import useColumnTasks from '../hooks/useColumnTasks.ts';
 import { ColumnType } from '../utils/enums.ts';
+import { pickChakraRandomColor } from '../utils/helpers.ts';
 import Task from './Task.tsx';
-import { pickChakraRandomColor, swap } from '../utils/helpers.ts';
-import { useState } from 'react'
-import { v4 as uuidv4 } from 'uuid';
 
 const ColumnColorScheme: Record<ColumnType, string> = {
   Todo: 'gray',
@@ -92,6 +92,7 @@ function Column({ column }: { column: ColumnType }) {
         aria-label="add-task"
         icon={<AddIcon />}
       />
+      <button className='send-button' onClick={handleAddButtonClick}>Send A Task!</button>
       <Modal isOpen={isOpen} onClose={onClose} size="md">
         <ModalOverlay />
         <ModalContent>

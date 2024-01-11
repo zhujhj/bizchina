@@ -19,10 +19,16 @@ import {
   prevMonth
 } from "../calendar/utils";
 
+
+// import { fetchTasks } from "../dashboard/hooks/useColumnTasks";
+
 export const Calendar = () => {
+
   const firestore = firebase.firestore();
-  const [tasks, setTasks] = useState([]); // Renamed to tasks for clarity
+  const [task, setTask] = useState([]);
   const [loading, setLoading] = useState(true);
+
+
 
   const collection = firestore.collection("tasks");
   useEffect(() => {
@@ -31,7 +37,7 @@ export const Calendar = () => {
       try {
         const querySnapshot = await collection.get();
         const newTasks = querySnapshot.docs.map(doc => doc.data());
-        setTasks(newTasks); // Correctly update tasks state
+        setTask(newTasks);
       } catch (error) {
         console.error("Error fetching tasks:", error);
       }
@@ -39,48 +45,33 @@ export const Calendar = () => {
     };
   
     fetchData();
-  }, []); // Empty dependency array ensures this runs only once
+  }, [collection]);
+
+
+  
 
   return (
-    <CalendarContent tasks={tasks} loading={loading} />
-  );
-};
+    <CalendarContent task={task} loading={loading}/>
+  )
+}
 
-const CalendarContent = ({ tasks, loading }) => {
+
+
+const CalendarContent = ({task, loading}) => {
+
   const [currentDate, setCurrentDate] = useState(new Date(2023, 12, 1));
   const [events, setEvents] = useState(MOCKAPPS);
   const dragDateRef = useRef();
-  const dragIndexRef = useRef();
+  const dragindexRef = useRef();
   const [showPortal, setShowPortal] = useState(false);
   const [portalData, setPortalData] = useState({});
 
+  // If you need to fetch or update MOCKAPPS when the component mounts or updates, use useEffect
   useEffect(() => {
-    setEvents(MOCKAPPS); // Update events if MOCKAPPS changes
-  }, [MOCKAPPS]);
-
-  useEffect(() => {
-    // Add events from tasks here to prevent duplicate additions
-    tasks.forEach(task => {
-      console.log(task);
-      addDashboardEvent(new Date(task.deadline), task.title, task.color);
-    });
-  }, [tasks]);
-
-  const addDashboardEvent = (date, description, color) => {
-    // if (!event.target.classList.contains("StyledEvent")) {
-    //   const text = window.prompt("name");
-      // if (text) {
-      //   date.setHours(0);
-      //   date.setSeconds(0);
-      //   date.setMilliseconds(0);
-      console.log(color);
-        setEvents((prev) => [
-          ...prev,
-          { date, title: description, color: "green"}
-        ]);
-      // }
-    // }
-  };
+    // If MOCKAPPS is static, this will simply re-set the static array
+    // If MOCKAPPS is dynamic or needs to be fetched, insert that logic here
+    setEvents(MOCKAPPS);
+  }, []);
 
   const addEvent = (date, event) => {
     if (!event.target.classList.contains("StyledEvent")) {
@@ -98,7 +89,7 @@ const CalendarContent = ({ tasks, loading }) => {
   };
 
   const drag = (index, e) => {
-    dragIndexRef.current = { index, target: e.target };
+    dragindexRef.current = { index, target: e.target };
   };
 
   const onDragEnter = (date, e) => {
@@ -111,7 +102,7 @@ const CalendarContent = ({ tasks, loading }) => {
 
     setEvents((prev) =>
       prev.map((ev, index) => {
-        if (index === dragIndexRef.current.index) {
+        if (index === dragindexRef.current.index) {
           ev.date = dragDateRef.current.date;
         }
         return ev;
@@ -165,22 +156,13 @@ const CalendarContent = ({ tasks, loading }) => {
   
   if (loading) {
     return <div>Loading...</div>;
-  }
+}
 
-//   if (!task) {
-//     return null;
-//   }
+  if (!task) {
+    return null;
+}
 
-//   const theArray = task[0];
-
-//   theArray.map((theArray) => {
-//     console.log(theArray);
-//     addEvent(new Date(theArray.date), theArray.title, theArray.color);
-//   });
-
-  
-
-// console.log(task);
+console.log(task);
 
 
 
@@ -204,8 +186,8 @@ return (
     </SevenColGrid>
 
     <SevenColGrid
-      $fullheight={true}
-      $is28Days={getDaysInMonth(currentDate) === 28}
+      fullheight={true}
+      is28Days={getDaysInMonth(currentDate) === 28}
     >
       {getSortedDays(currentDate).map((day) => (
         <div
