@@ -24,6 +24,7 @@ import useColumnTasks from '../hooks/useColumnTasks.ts';
 import { ColumnType } from '../utils/enums.ts';
 import { pickChakraRandomColor } from '../utils/helpers.ts';
 import Task from './Task.tsx';
+import { Select } from "@chakra-ui/react";
 
 const ColumnColorScheme: Record<ColumnType, string> = {
   Todo: 'gray',
@@ -108,20 +109,38 @@ function Column({ column }: { column: ColumnType }) {
               value={newTaskName}
               onChange={(e) => setNewTaskName(e.target.value)}
             />
-            To
-            <Input
-              mb={4}
-              placeholder="To"
-              value={newTo}
-              onChange={(e) => setNewTo(e.target.value)}
-            />
-            From
-            <Input
-              mb={4}
-              placeholder="From"
-              value={newFrom}
-              onChange={(e) => setNewFrom(e.target.value)}
-            />
+              <Select
+                  mb={4}
+                  placeholder="Select To"
+                  value={newTo}
+                  onChange={(e) => setNewTo(e.target.value)}
+              >
+                  <option value="IT">IT</option>
+                  <option value="HR">HR</option>
+                  <option value="Corporate Relations">Corporate Relations</option>
+                  <option value="English Department">English Department</option>
+                  <option value="Chinese Department">Chinese Department</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Events">Events</option>
+                  <option value="Prez">Prez</option>
+
+              </Select>
+
+              <Select
+                  mb={4}
+                  placeholder="Select From"
+                  value={newFrom}
+                  onChange={(e) => setNewFrom(e.target.value)}
+              >
+                  <option value="IT">IT</option>
+                  <option value="HR">HR</option>
+                  <option value="Corporate Relations">Corporate Relations</option>
+                  <option value="English Department">English Department</option>
+                  <option value="Chinese Department">Chinese Department</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Events">Events</option>
+                  <option value="Prez">Prez</option>
+              </Select>
             Deadline
             <Input
               mb={4}
