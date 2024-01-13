@@ -40,6 +40,7 @@ ITUsers.forEach(user => {
   console.log(user.data());
 });
 
+// finds current user in the firestore database
 const currentUser = await usersRef.where('email', '==', email).get();
 if (currentUser) {
   console.log("user existsssss " + currentUser);
@@ -52,8 +53,6 @@ currentUser.forEach(doc => {
   console.log(doc.data());
   currentDepartment = doc.data().department;
 });
-
-console.log("passed for loop");
 
 const citiesRef = firestore.collection('tasks');
 
