@@ -25,6 +25,12 @@ import { ColumnType } from '../utils/enums.ts';
 import { pickChakraRandomColor } from '../utils/helpers.ts';
 import Task from './Task.tsx';
 import { Select } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
+} from '@chakra-ui/react'
 
 const ColumnColorScheme: Record<ColumnType, string> = {
   Todo: 'gray',
@@ -103,44 +109,50 @@ function Column({ column }: { column: ColumnType }) {
             {/* Add your modal content here */}
             {/* For example, you can include a form to add a new task */}
             Task Name
-            <Input
-              mb={4}
-              placeholder="Task Name"
-              value={newTaskName}
-              onChange={(e) => setNewTaskName(e.target.value)}
-            />
-              <Select
-                  mb={4}
-                  placeholder="Select To"
-                  value={newTo}
-                  onChange={(e) => setNewTo(e.target.value)}
-              >
-                  <option value="IT">IT</option>
-                  <option value="HR">HR</option>
-                  <option value="Corporate Relations">Corporate Relations</option>
-                  <option value="English Department">English Department</option>
-                  <option value="Chinese Department">Chinese Department</option>
-                  <option value="Finance">Finance</option>
-                  <option value="Events">Events</option>
-                  <option value="Prez">Prez</option>
+            {/* <FormControl isInvalid={newTaskName === ''}> */}
+              <Input
+                mb={4}
+                placeholder="Task Name"
+                value={newTaskName}
+                onChange={(e) => setNewTaskName(e.target.value)}
+              />
+              {/* {!(newTaskName === '') ? ('') : (
+                  <FormErrorMessage pt={0} mt={0}>Task name is required.</FormErrorMessage>
+                )}
+            </FormControl> */}
+            Department To:
+            <Select
+                mb={4}
+                placeholder="Select To"
+                value={newTo}
+                onChange={(e) => setNewTo(e.target.value)}
+            >
+                <option value="IT">IT</option>
+                <option value="HR">HR</option>
+                <option value="Corporate Relations">Corporate Relations</option>
+                <option value="English Department">English Department</option>
+                <option value="Chinese Department">Chinese Department</option>
+                <option value="Finance">Finance</option>
+                <option value="Events">Events</option>
+                <option value="Prez">Prez</option>
 
-              </Select>
-
-              <Select
-                  mb={4}
-                  placeholder="Select From"
-                  value={newFrom}
-                  onChange={(e) => setNewFrom(e.target.value)}
-              >
-                  <option value="IT">IT</option>
-                  <option value="HR">HR</option>
-                  <option value="Corporate Relations">Corporate Relations</option>
-                  <option value="English Department">English Department</option>
-                  <option value="Chinese Department">Chinese Department</option>
-                  <option value="Finance">Finance</option>
-                  <option value="Events">Events</option>
-                  <option value="Prez">Prez</option>
-              </Select>
+            </Select>
+            Department From:
+            <Select
+                mb={4}
+                placeholder="Select From"
+                value={newFrom}
+                onChange={(e) => setNewFrom(e.target.value)}
+            >
+                <option value="IT">IT</option>
+                <option value="HR">HR</option>
+                <option value="Corporate Relations">Corporate Relations</option>
+                <option value="English Department">English Department</option>
+                <option value="Chinese Department">Chinese Department</option>
+                <option value="Finance">Finance</option>
+                <option value="Events">Events</option>
+                <option value="Prez">Prez</option>
+            </Select>
             Deadline
             <Input
               mb={4}
@@ -148,15 +160,21 @@ function Column({ column }: { column: ColumnType }) {
               placeholder="Deadline"
               onChange={(e) => setNewDate(e.target.value)}
             />
-            <Button colorScheme="blue" onClick={() => {addEmptyTask({
-                                                                id: uuidv4(),
-                                                                column,
-                                                                title: newTaskName,
-                                                                color: pickChakraRandomColor('.300'),
-                                                                to: newTo,
-                                                                from: newFrom,
-                                                                deadline: newDate,
-                                                              }); onClose();}}>
+            <Button colorScheme="blue" onClick={() => {
+              if (newTaskName.trim() === '' || newTo.trim() === '' || newFrom.trim() === '' || newDate.trim() === '') {
+                  alert("Please fill in all fields");
+              } else {
+                addEmptyTask({
+                  id: uuidv4(),
+                  column,
+                  title: newTaskName,
+                  color: pickChakraRandomColor('.300'),
+                  to: newTo,
+                  from: newFrom,
+                  deadline: newDate,
+                }); onClose();
+              }}}
+            >
               Add Task
             </Button>
           </ModalBody>
