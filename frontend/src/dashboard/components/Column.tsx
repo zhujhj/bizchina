@@ -40,17 +40,17 @@ const ColumnColorScheme: Record<ColumnType, string> = {
 };
 
 function Column({ column }: { column: ColumnType }) {
-  //changed
+  // for add modal
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleAddButtonClick = () => {
     onOpen();
-    // You can perform additional logic here if needed
   };
   const [newTaskName, setNewTaskName] = useState('');
   const [newTo, setNewTo] = useState('');
   const [newFrom, setNewFrom] = useState('');
   const [newDate, setNewDate] = useState('');
-  // changed
+  // for error modal
+  const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
   const {
     tasks,
     addEmptyTask,
@@ -102,67 +102,70 @@ function Column({ column }: { column: ColumnType }) {
       <button className='send-button' onClick={handleAddButtonClick}>Send A Task!</button>
       <Modal isOpen={isOpen} onClose={onClose} size="md">
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent pb={3.5}>
           <ModalHeader>Add Task</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton color='black'/>
           <ModalBody>
             {/* Add your modal content here */}
             {/* For example, you can include a form to add a new task */}
-            Task Name
-            {/* <FormControl isInvalid={newTaskName === ''}> */}
+            <FormControl isRequired>
+              <FormLabel>First name</FormLabel>
               <Input
                 mb={4}
                 placeholder="Task Name"
                 value={newTaskName}
                 onChange={(e) => setNewTaskName(e.target.value)}
               />
-              {/* {!(newTaskName === '') ? ('') : (
-                  <FormErrorMessage pt={0} mt={0}>Task name is required.</FormErrorMessage>
-                )}
-            </FormControl> */}
-            Department To:
-            <Select
-                mb={4}
-                placeholder="Select To"
-                value={newTo}
-                onChange={(e) => setNewTo(e.target.value)}
-            >
-                <option value="IT">IT</option>
-                <option value="HR">HR</option>
-                <option value="Corporate Relations">Corporate Relations</option>
-                <option value="English Department">English Department</option>
-                <option value="Chinese Department">Chinese Department</option>
-                <option value="Finance">Finance</option>
-                <option value="Events">Events</option>
-                <option value="Prez">Prez</option>
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Department To:</FormLabel>
+              <Select
+                  mb={4}
+                  placeholder="Select To"
+                  value={newTo}
+                  onChange={(e) => setNewTo(e.target.value)}
+              >
+                  <option value="IT">IT</option>
+                  <option value="HR">HR</option>
+                  <option value="Corporate Relations">Corporate Relations</option>
+                  <option value="English Department">English Department</option>
+                  <option value="Chinese Department">Chinese Department</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Events">Events</option>
+                  <option value="Prez">Prez</option>
 
-            </Select>
-            Department From:
-            <Select
+              </Select>
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Department From</FormLabel>
+              <Select
+                  mb={4}
+                  placeholder="Select From"
+                  value={newFrom}
+                  onChange={(e) => setNewFrom(e.target.value)}
+              >
+                  <option value="IT">IT</option>
+                  <option value="HR">HR</option>
+                  <option value="Corporate Relations">Corporate Relations</option>
+                  <option value="English Department">English Department</option>
+                  <option value="Chinese Department">Chinese Department</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Events">Events</option>
+                  <option value="Prez">Prez</option>
+              </Select>
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Deadline</FormLabel>
+              <Input
                 mb={4}
-                placeholder="Select From"
-                value={newFrom}
-                onChange={(e) => setNewFrom(e.target.value)}
-            >
-                <option value="IT">IT</option>
-                <option value="HR">HR</option>
-                <option value="Corporate Relations">Corporate Relations</option>
-                <option value="English Department">English Department</option>
-                <option value="Chinese Department">Chinese Department</option>
-                <option value="Finance">Finance</option>
-                <option value="Events">Events</option>
-                <option value="Prez">Prez</option>
-            </Select>
-            Deadline
-            <Input
-              mb={4}
-              type='date'
-              placeholder="Deadline"
-              onChange={(e) => setNewDate(e.target.value)}
-            />
+                type='date'
+                placeholder="Deadline"
+                onChange={(e) => setNewDate(e.target.value)}
+              />
+            </FormControl>
             <Button colorScheme="blue" onClick={() => {
               if (newTaskName.trim() === '' || newTo.trim() === '' || newFrom.trim() === '' || newDate.trim() === '') {
-                  alert("Please fill in all fields");
+                  openModal();
               } else {
                 addEmptyTask({
                   id: uuidv4(),
@@ -173,6 +176,11 @@ function Column({ column }: { column: ColumnType }) {
                   from: newFrom,
                   deadline: newDate,
                 }); onClose();
+                // resets parameters
+                setNewTaskName('');
+                setNewTo('');
+                setNewFrom('');
+                setNewDate('');
               }}}
             >
               Add Task
@@ -180,6 +188,18 @@ function Column({ column }: { column: ColumnType }) {
           </ModalBody>
         </ModalContent>
       </Modal>
+      {/* error modal */}
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <ModalOverlay/>
+        <ModalContent pb={4}>
+          <ModalHeader pb={0}>Error</ModalHeader>
+          <ModalCloseButton color='black'/>
+          <ModalBody>
+            Please fill in all fields.
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
       <Stack
         ref={dropRef}
         direction={{ base: 'row', md: 'column' }}
