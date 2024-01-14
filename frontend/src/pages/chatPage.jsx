@@ -48,7 +48,7 @@ const ChatContent = ({ chatUser, loading }) => {
 
 
     const chatProps = useMultiChatLogic(
-        '96035d14-d8b9-4c56-bfd6-d64fd0fdd566',
+        '9b450ef8-df3b-4f82-989e-e20635e902bd', // CHATENGINE PROJECT ID
         chatUser.email,
         chatUser.email
     );
