@@ -33,6 +33,7 @@ const deleteTaskById = (taskId: TaskModel['id']) => {
 }
 
 const update = (task: TaskModel) => {
+  console.log("reached");
   taskQueryById(task.id)
       .get()
       .then(snapshot => {
@@ -100,7 +101,6 @@ function useColumnTasks(column: ColumnType) {
       debug(`Updating task ${id} with ${JSON.stringify(updateTask)}`);
       setTasks((allTasks) => {
         const columnTasks = allTasks[column];
-
         columnTasks.map((task) =>
           update(task),
         )

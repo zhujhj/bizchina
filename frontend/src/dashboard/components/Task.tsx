@@ -1,10 +1,13 @@
 import { DeleteIcon } from '@chakra-ui/icons';
-import { Box, IconButton, ScaleFade, Text } from '@chakra-ui/react';
+import { EditIcon } from '@chakra-ui/icons';
+import { Box, IconButton, ScaleFade, Text, useDisclosure, Modal, ModalBody, ModalHeader, ModalContent, ModalOverlay, ModalCloseButton, Select, FormLabel, Input, Button } from '@chakra-ui/react';
 import _ from 'lodash';
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { useTaskDragAndDrop } from '../hooks/useTaskDragAndDrop.ts';
+import useColumnTasks from '../hooks/useColumnTasks.ts';
 import { TaskModel } from '../utils/models';
 import { AutoResizeTextarea } from './AutoResizeTextArea.tsx';
+import { Dropdown } from 'react-chat-engine-advanced';
 
 type TaskProps = {
   index: number;
@@ -31,9 +34,23 @@ function Task({
     handleUpdate(task.id, { ...task, title: newTitle });
   };
 
+  const handleEdit = (to: string, from: string, deadline) => {
+    console.log("handle edit");
+    handleUpdate(task.id, { ...task, to: to, from: from, deadline: deadline });
+  };
+
   const handleDeleteClick = () => {
     handleDelete(task.id);
   };
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const handleUpdateButton = () => {
+    onOpen();
+  };
+
+  const [newTo, setNewTo] = useState('');
+  const [newFrom, setNewFrom] = useState('');
+  const [newDate, setNewDate] = useState('');
 
   return (
     <ScaleFade in={true} unmountOnExit>
@@ -70,6 +87,22 @@ function Task({
             opacity: 1,
           }}
           onClick={handleDeleteClick}
+        />
+        <IconButton
+          position="absolute"
+          bottom={0}
+          right={0}
+          zIndex={100}
+          aria-label="delete-task"
+          size="md"
+          colorScheme="solid"
+          color={'gray.700'}
+          icon={<EditIcon />}
+          opacity={0}
+          _groupHover={{
+            opacity: 1,
+          }}
+          onClick={handleUpdateButton}
         />
         <AutoResizeTextarea
           value={task.title}
@@ -120,6 +153,61 @@ function Task({
             {/* Date: {task.deadline.toString()} */}
             Deadline: {task.deadline.toString()}
         </Text>
+        {/* Edit modal */}
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay/>
+            <ModalContent pb={3.5}>
+              <ModalHeader pb={0}>Edit Task</ModalHeader>
+              <ModalCloseButton color='black'/>
+              <ModalBody>
+              <FormLabel>Department To:</FormLabel>
+                <Select
+                    mb={4}
+                    placeholder="Select To"
+                    value={newTo}
+                    onChange={(e) => setNewTo(e.target.value)}
+                >
+                    <option value="IT">IT</option>
+                    <option value="HR">HR</option>
+                    <option value="Corporate Relations">Corporate Relations</option>
+                    <option value="English Department">English Department</option>
+                    <option value="Chinese Department">Chinese Department</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Events">Events</option>
+                    <option value="Prez">Prez</option>
+                </Select>
+                <FormLabel>Department From:</FormLabel>
+                <Select
+                    mb={4}
+                    placeholder="Select From"
+                    value={newFrom}
+                    onChange={(e) => setNewFrom(e.target.value)}
+                >
+                    <option value="IT">IT</option>
+                    <option value="HR">HR</option>
+                    <option value="Corporate Relations">Corporate Relations</option>
+                    <option value="English Department">English Department</option>
+                    <option value="Chinese Department">Chinese Department</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Events">Events</option>
+                    <option value="Prez">Prez</option>
+                </Select>
+                <FormLabel>Deadline</FormLabel>
+                  <Input
+                    mb={4}
+                    type='date'
+                    placeholder="Deadline"
+                    onChange={(e) => setNewDate(e.target.value)}
+                  />
+                <Button colorScheme="blue" onClick={() => {
+                  handleEdit(newTo, newFrom, newDate); onClose()}
+                }
+                >
+                  Confirm
+                </Button>
+              </ModalBody>
+            </ModalContent>
+        </Modal>
       </Box>
     </ScaleFade>
   );
