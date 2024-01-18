@@ -49,6 +49,7 @@ function Column({ column }: { column: ColumnType }) {
   const [newTo, setNewTo] = useState('');
   const [newFrom, setNewFrom] = useState('');
   const [newDate, setNewDate] = useState('');
+  const [description, setNewDescription] = useState('');
   // for error modal
   const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
   const {
@@ -117,6 +118,10 @@ function Column({ column }: { column: ColumnType }) {
                 onChange={(e) => setNewTaskName(e.target.value)}
               />
             </FormControl>
+              <FormControl isRequired>
+                  <FormLabel>Description</FormLabel>
+                  <textarea className='text' value = {description} onChange={(e) => setNewDescription(e.target.value)}> </textarea>
+              </FormControl>
             <FormControl isRequired>
               <FormLabel>Department To:</FormLabel>
               <Select
@@ -171,6 +176,7 @@ function Column({ column }: { column: ColumnType }) {
                   id: uuidv4(),
                   column,
                   title: newTaskName,
+                    dsc: description,
                   color: pickChakraRandomColor('.300'),
                   to: newTo,
                   from: newFrom,

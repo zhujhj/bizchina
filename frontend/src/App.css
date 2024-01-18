@@ -102,3 +102,8 @@ p {
   background: #e5e5ea;
   color: black;
 }
+.text {
+  width: 400px;
+  border: 1px solid #dde;
+  border-radius: 5px;
+}
