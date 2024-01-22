@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { MultiChatSocket, MultiChatWindow, useMultiChatLogic } from 'react-chat-engine-advanced';
+import {MultiChatSocket, MultiChatWindow, PeopleSettings, useMultiChatLogic} from 'react-chat-engine-advanced';
 import { getAuth } from 'firebase/auth';
 import './chatPage.css';
 import { useParams } from 'react-router-dom';
 import firebase from 'firebase/compat/app';
+
 
 const ChatPage = () => {
     const [chatUser, setUser] = useState(null);
@@ -56,7 +57,24 @@ const ChatContent = ({ chatUser, loading }) => {
     return (
         <div style={{ height: '100vh' }}>
             <MultiChatSocket {...chatProps} />
-            <MultiChatWindow {...chatProps} style={{ height: '100%' }} />
+            <MultiChatWindow {...chatProps} style={{ height: '100%' }} renderPeopleSettings={(chat)=> {
+                return <PeopleSettings
+                    canDelete
+                    onInvitePersonClick={function test(chat){console.log(chat);}}
+                    onPersonAdd={function noRefCheck(){}}
+                    onRemovePersonClick={function noRefCheck(){}}
+
+                    peopleToInvite={[
+                        {
+                            username: 'IT'
+                        },{
+                            username: 'HR'
+                        }
+                    ]}
+
+
+                />
+            } }/>
         </div>
     );
 };
