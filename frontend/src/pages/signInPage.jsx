@@ -11,7 +11,7 @@ import 'firebase/compat/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import logo from '../images/logo.png';
 
-import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, signInWithPopup,signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 const auth = getAuth();
@@ -21,7 +21,6 @@ const SignIn = (props) => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [user] = useAuthState(auth);
 
     const signInWithGoogle = (props) => {
         const provider = new firebase.auth.GoogleAuthProvider();
@@ -56,26 +55,30 @@ const SignIn = (props) => {
         });
     }
 
-    const signUpWithEmailAndPassword = () => {
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed up
-                let user = userCredential.user;
-                axios.post(
-                    'http://localhost:3001/authenticate',
-                    {username: user.email}
-                )
-                    .then(r => props.onAuth({ ...r.data, secret: user.email}))
-                    .catch(e => console.log('error', e))
-                // ...
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                // ..
-            });
 
-    };
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed up
+            const user = userCredential.user;
+            navigate(`/dashboard/${user.uid}`);// ...
+        })
+        .catch((err) => {
+            if (err.code === "auth/email-already-in-use"){
+                signInWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        // Signed in
+                        const user = userCredential.user;
+                        navigate(`/dashboard/${user.uid}`);
+                    })
+                    .catch((err) => {
+                        console.log(err.code);
+                        console.log(err.message);
+                    });
+            }
+            console.log(err.code);
+            console.log(err.message);
+        });
+
     
     return (
         <div id="signInContainer">
@@ -94,13 +97,13 @@ const SignIn = (props) => {
             <input
                 className="userInput"
                 type="password"
-                placeholder="Password"
+                placeholder="Password (min 6 characters)"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
 
             {/* Sign in buttons */}
-            <button id="login" onClick={signUpWithEmailAndPassword}>Sign in</button>
+            <button id="login" onClick={createUserWithEmailAndPassword}>Sign in</button>
             <button id="signinGoogle" onClick={signInWithGoogle}>Sign in with Google</button>
         </div>
     )
