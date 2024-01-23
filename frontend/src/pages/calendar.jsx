@@ -20,10 +20,23 @@ import {
   prevMonth
 } from "../calendar/utils";
 
+
+import 'firebase/compat/analytics';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+
+import { getAuth } from "firebase/auth";
+
+const auth = getAuth();
+const firestore = firebase.firestore();
+
+const usersRef = firestore.collection('users');
+
 export const Calendar = () => {
-  const firestore = firebase.firestore();
+
   const [tasks, setTasks] = useState([]); // Renamed to tasks for clarity
   const [loading, setLoading] = useState(true);
+
 
   const collection = firestore.collection("tasks");
   useEffect(() => {
@@ -53,34 +66,73 @@ const CalendarContent = ({ tasks, loading }) => {
   const dragDateRef = useRef();
   const dragIndexRef = useRef();
   const [showPortal, setShowPortal] = useState(false);
+  const firestore = firebase.firestore();
   const [portalData, setPortalData] = useState({});
+  const citiesRef = firestore.collection('tasks');
+  const usersRef = firestore.collection('users');
+  const [currentDepartment, setCurrentDepartment] = useState('');
+
+  var email = "";
+  
+
+  
+
 
   useEffect(() => {
-    setEvents(MOCKAPPS); // Update events if MOCKAPPS changes
-  }, [MOCKAPPS]);
-
-  useEffect(() => {
-    // Add events from tasks here to prevent duplicate additions
-    tasks.forEach(task => {
-      console.log(task);
-      addDashboardEvent(new Date(task.deadline), task.title, task.color);
+    // Fetch user's department first
+    usersRef.get().then(snapshot => {
+      if (snapshot.empty) {
+        console.log('No matching documents.');
+      } else {
+        snapshot.docs.forEach(doc => {
+          if (doc.data().email === email) {
+            console.log("3");
+            console.log(doc.data().department);
+            setCurrentDepartment(doc.data().department);
+          }
+        });
+      }
+    }).then(() => {
+      // This will run after the above async operation is completed
+      tasks.forEach(task => {
+        console.log(task.to); 
+        console.log("4");
+        console.log(currentDepartment);
+        if (task.to === currentDepartment) {
+          addDashboardEvent(new Date(task.deadline), task.title, task.color);
+        }
+      });
     });
   }, [tasks]);
 
+  
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user && user.email) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/v8/firebase.User
+      email = user.email;
+      // console.log("hello " + user.email);
+      // console.log("user is signed in")
+      // ...
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
+
+
+  
+
+  
+
   const addDashboardEvent = (date, description, color) => {
-    // if (!event.target.classList.contains("StyledEvent")) {
-    //   const text = window.prompt("name");
-      // if (text) {
-      //   date.setHours(0);
-      //   date.setSeconds(0);
-      //   date.setMilliseconds(0);
-      console.log(color);
+    
+      // console.log(color);
         setEvents((prev) => [
           ...prev,
           { date, title: description, color: "green"}
         ]);
-      // }
-    // }
+      
   };
 
   const addEvent = (date, event) => {
@@ -168,22 +220,6 @@ const CalendarContent = ({ tasks, loading }) => {
     return <div>Loading...</div>;
   }
 
-//   if (!task) {
-//     return null;
-//   }
-
-//   const theArray = task[0];
-
-//   theArray.map((theArray) => {
-//     console.log(theArray);
-//     addEvent(new Date(theArray.date), theArray.title, theArray.color);
-//   });
-
-  
-
-// console.log(task);
-
-
 
 return (
   <Wrapper>
@@ -261,13 +297,12 @@ return (
                     day
                   )
                 ) && (
-                  <StyledEvent
+                  <StyledEvent key={`${ev.title}-${index}`} //
                     onDragStart={(e) => drag(index, e)}
                     onClick={() => handleOnClickEvent(ev)}
                     draggable
                     className="StyledEvent"
                     id={`${ev.color} ${ev.title}`}
-                    key={ev.title}
                     bgColor={ev.color}
                   >
                     {ev.title}
