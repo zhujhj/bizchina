@@ -20,10 +20,31 @@ import {
   prevMonth
 } from "../calendar/utils";
 
+import {
+  Badge,
+  Box,
+  Button,
+  Heading,
+  IconButton,
+  Input,
+  FormControl,
+  FormLabel,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Stack,
+  useColorModeValue,
+  useDisclosure,
+  Select
+} from '@chakra-ui/react';
 
 import 'firebase/compat/analytics';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import './dashboard.css'
 
 import { getAuth } from "firebase/auth";
 
@@ -56,7 +77,136 @@ export const Calendar = () => {
   }, []); // Empty dependency array ensures this runs only once
 
   return (
-    <CalendarContent tasks={tasks} loading={loading} />
+    <>
+      <CalendarContent tasks={tasks} loading={loading} />
+      <AddEventForm />
+    </>
+  );
+};
+
+const AddEventForm = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const handleAddButtonClick = () => {
+    onOpen();
+  };
+  const [newTaskName, setNewTaskName] = useState('');
+  const [newTo, setNewTo] = useState('');
+  const [newFrom, setNewFrom] = useState('');
+  const [newDate, setNewDate] = useState('');
+  const [description, setNewDescription] = useState('');
+  // for error modal
+  const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
+
+  return (
+    <Box>
+      <button className='send-button' onClick={handleAddButtonClick} style={{marginBottom: 10, marginRight: 5}}>Send A Task!</button>
+      
+      <Modal isOpen={isOpen} onClose={onClose} size="md">
+      <ModalOverlay />
+      <ModalContent pb={3.5}>
+        <ModalHeader>Add Task</ModalHeader>
+        <ModalCloseButton color='black'/>
+        <ModalBody>
+          {/* Add your modal content here */}
+          {/* For example, you can include a form to add a new task */}
+          <FormControl isRequired>
+            <FormLabel>First name</FormLabel>
+            <Input
+              mb={4}
+              placeholder="Task Name"
+              value={newTaskName}
+              onChange={(e) => setNewTaskName(e.target.value)}
+            />
+          </FormControl>
+            <FormControl isRequired>
+                <FormLabel>Description</FormLabel>
+                <textarea className='text' value = {description} onChange={(e) => setNewDescription(e.target.value)}> </textarea>
+            </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Department To:</FormLabel>
+            <Select
+                mb={4}
+                placeholder="Select To"
+                value={newTo}
+                onChange={(e) => setNewTo(e.target.value)}
+            >
+                <option value="IT">IT</option>
+                <option value="HR">HR</option>
+                <option value="Corporate Relations">Corporate Relations</option>
+                <option value="English Department">English Department</option>
+                <option value="Chinese Department">Chinese Department</option>
+                <option value="Finance">Finance</option>
+                <option value="Events">Events</option>
+                <option value="Prez">Prez</option>
+
+            </Select>
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Department From</FormLabel>
+            <Select
+                mb={4}
+                placeholder="Select From"
+                value={newFrom}
+                onChange={(e) => setNewFrom(e.target.value)}
+            >
+                <option value="IT">IT</option>
+                <option value="HR">HR</option>
+                <option value="Corporate Relations">Corporate Relations</option>
+                <option value="English Department">English Department</option>
+                <option value="Chinese Department">Chinese Department</option>
+                <option value="Finance">Finance</option>
+                <option value="Events">Events</option>
+                <option value="Prez">Prez</option>
+            </Select>
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Deadline</FormLabel>
+            <Input
+              mb={4}
+              type='date'
+              placeholder="Deadline"
+              onChange={(e) => setNewDate(e.target.value)}
+            />
+          </FormControl>
+          <Button colorScheme="blue" onClick={() => {
+            if (newTaskName.trim() === '' || newTo.trim() === '' || newFrom.trim() === '' || newDate.trim() === '') {
+                openModal();
+            } else {
+              addEmptyTask({
+                id: uuidv4(),
+                column,
+                title: newTaskName,
+                  dsc: description,
+                color: pickChakraRandomColor('.300'),
+                to: newTo,
+                from: newFrom,
+                deadline: newDate,
+              }); onClose();
+              // resets parameters
+              setNewTaskName('');
+              setNewTo('');
+              setNewFrom('');
+              setNewDate('');
+            }}}
+          >
+            Add Task
+          </Button>
+        </ModalBody>
+      </ModalContent>
+      </Modal>
+      {/* error modal */}
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <ModalOverlay/>
+        <ModalContent pb={4}>
+          <ModalHeader pb={0}>Error</ModalHeader>
+          <ModalCloseButton color='black'/>
+          <ModalBody>
+            Please fill in all fields.
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+    </Box>
   );
 };
 
@@ -73,10 +223,6 @@ const CalendarContent = ({ tasks, loading }) => {
   const [currentDepartment, setCurrentDepartment] = useState('');
 
   var email = "";
-  
-
-  
-
 
   useEffect(() => {
     // Fetch user's department first
@@ -120,10 +266,6 @@ const CalendarContent = ({ tasks, loading }) => {
     }
   });
 
-
-  
-
-  
 
   const addDashboardEvent = (date, description, color) => {
     
@@ -326,4 +468,5 @@ return (
 
 
 )}
+
 export default Calendar;

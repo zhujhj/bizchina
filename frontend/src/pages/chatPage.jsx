@@ -57,24 +57,7 @@ const ChatContent = ({ chatUser, loading }) => {
     return (
         <div style={{ height: '100vh' }}>
             <MultiChatSocket {...chatProps} />
-            <MultiChatWindow {...chatProps} style={{ height: '100%' }} renderPeopleSettings={(chat)=> {
-                return <PeopleSettings
-                    canDelete
-                    onInvitePersonClick={function test(chat){console.log(chat);}}
-                    onPersonAdd={function noRefCheck(){}}
-                    onRemovePersonClick={function noRefCheck(){}}
-
-                    peopleToInvite={[
-                        {
-                            username: 'IT'
-                        },{
-                            username: 'HR'
-                        }
-                    ]}
-
-
-                />
-            } }/>
+            <MultiChatWindow {...chatProps} style={{ height: '100%' }} />
         </div>
     );
 };
