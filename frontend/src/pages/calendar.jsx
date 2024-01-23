@@ -85,15 +85,17 @@ export const Calendar = () => {
 
 const AddEventForm = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const handleAddButtonClick = () => {
-    onOpen();
-
-  };
   const [newEventName, setNewEventName] = useState('');
   const [description, setNewDescription] = useState('');
   const [newDate, setNewDate] = useState('');
   // for error modal
   const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
+
+  const handleAddButtonClick = (date, name, color) => {
+    onOpen();
+    // addDashboardEvent(new Date(task.deadline), task.title, task.color);
+    // addDashboardEvent(date, name, color);
+  };
 
   return (
     <Box>
@@ -114,7 +116,7 @@ const AddEventForm = () => {
               mb={4}
               placeholder="Name"
               value={newEventName}
-              onChange={(e) => setNewTaskName(e.target.value)}
+              onChange={(e) => setNewEventName(e.target.value)}
             />
           </FormControl>
 
@@ -134,7 +136,7 @@ const AddEventForm = () => {
           </FormControl>
           
           <Button colorScheme="blue" onClick={() => {
-            if (newEventName.trim() === '' || newDate.trim() === '') {
+            if (newEventName.trim() === '' || description.trim() === '' || newDate.trim() === '') {
                 openModal();
             } else {
               addEmptyTask({
@@ -144,9 +146,11 @@ const AddEventForm = () => {
                 dsc: description,
                 color: pickChakraRandomColor('.300'),
                 deadline: newDate
-              }); onClose();
+              });
+              onClose();
               // resets parameters
               setNewEventName('');
+              setNewDescription('');
               setNewDate('');
             }}}
           >

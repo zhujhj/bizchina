@@ -169,7 +169,7 @@ function Column({ column }: { column: ColumnType }) {
               />
             </FormControl>
             <Button colorScheme="blue" onClick={() => {
-              if (newTaskName.trim() === '' || newTo.trim() === '' || newFrom.trim() === '' || newDate.trim() === '') {
+              if (newTaskName.trim() === '' || description.trim() === '' || newTo.trim() === '' || newFrom.trim() === '' || newDate.trim() === '') {
                   openModal();
               } else {
                 addEmptyTask({
@@ -184,6 +184,7 @@ function Column({ column }: { column: ColumnType }) {
                 }); onClose();
                 // resets parameters
                 setNewTaskName('');
+                setNewDescription('');
                 setNewTo('');
                 setNewFrom('');
                 setNewDate('');
