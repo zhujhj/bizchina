@@ -1,5 +1,4 @@
 # BizChina Internal Task Management Tool
-## BizChina Tech Department
 
 This internal task management tool is a hub for BizChina club members to communicate and efficiently distribute tasks.
 Some features include but are not limited to:
