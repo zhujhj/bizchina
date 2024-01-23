@@ -32,12 +32,6 @@ const SignIn = (props) => {
                 // The signed-in user info.
                 const user = result.user;
                 // console.log(user);
-                await axios.post(
-                    'http://localhost:3001/authenticate',
-                    {username: user.email}
-                )
-                .then(r => props.onAuth({...r.data, secret: user.email}))
-                .catch(e => console.log('error', e))
                 // to be changed, hoping to use navigate.push for optimal performance.
                 navigate(`/dashboard/${user.uid}`);
 
@@ -57,7 +51,7 @@ const SignIn = (props) => {
 
 
     createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
             // Signed up
             const user = userCredential.user;
             navigate(`/dashboard/${user.uid}`);// ...
@@ -65,7 +59,7 @@ const SignIn = (props) => {
         .catch((err) => {
             if (err.code === "auth/email-already-in-use"){
                 signInWithEmailAndPassword(auth, email, password)
-                    .then((userCredential) => {
+                    .then(async (userCredential) => {
                         // Signed in
                         const user = userCredential.user;
                         navigate(`/dashboard/${user.uid}`);
