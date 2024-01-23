@@ -21,11 +21,8 @@ import {
 } from "../calendar/utils";
 
 import {
-  Badge,
   Box,
   Button,
-  Heading,
-  IconButton,
   Input,
   FormControl,
   FormLabel,
@@ -35,12 +32,12 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Stack,
-  useColorModeValue,
   useDisclosure,
-  Select
+  Select,
+  ChakraProvider
 } from '@chakra-ui/react';
 
+import theme from '../dashboard/config/theme.ts';
 import 'firebase/compat/analytics';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
@@ -67,7 +64,7 @@ export const Calendar = () => {
         const querySnapshot = await collection.get();
         const newTasks = querySnapshot.docs.map(doc => doc.data());
         setTasks(newTasks); // Correctly update tasks state
-      } catch (error) {
+      } catch (error) {h
         console.error("Error fetching tasks:", error);
       }
       setLoading(false);
@@ -79,7 +76,9 @@ export const Calendar = () => {
   return (
     <>
       <CalendarContent tasks={tasks} loading={loading} />
-      <AddEventForm />
+      <ChakraProvider theme={theme}>
+        <AddEventForm />
+      </ChakraProvider>
     </>
   );
 };

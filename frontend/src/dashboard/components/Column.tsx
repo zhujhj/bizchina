@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import '../../pages/dashboard.css';
+import '../../pages/dashboard.css'; 
 import useColumnDrop from '../hooks/useColumnDrop.ts';
 import useColumnTasks from '../hooks/useColumnTasks.ts';
 import { ColumnType } from '../utils/enums.ts';
@@ -76,7 +76,6 @@ function Column({ column }: { column: ColumnType }) {
 
   return (
     <Box>
-      <button className='send-button' onClick={handleAddButtonClick}>Send A Task!</button>
       <Heading fontSize="md" mb={4} letterSpacing="wide">
         <Badge
           px={2}
@@ -101,7 +100,7 @@ function Column({ column }: { column: ColumnType }) {
         aria-label="add-task"
         icon={<AddIcon />}
       />
-      {/* <button className='send-button' onClick={handleAddButtonClick}>Send A Task!</button> */}
+      <button className='send-button' onClick={handleAddButtonClick}>Send A Task!</button>
       <Modal isOpen={isOpen} onClose={onClose} size="md">
         <ModalOverlay />
         <ModalContent pb={3.5}>
