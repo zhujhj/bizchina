@@ -87,12 +87,11 @@ const AddEventForm = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleAddButtonClick = () => {
     onOpen();
+
   };
-  const [newTaskName, setNewTaskName] = useState('');
-  const [newTo, setNewTo] = useState('');
-  const [newFrom, setNewFrom] = useState('');
-  const [newDate, setNewDate] = useState('');
+  const [newEventName, setNewEventName] = useState('');
   const [description, setNewDescription] = useState('');
+  const [newDate, setNewDate] = useState('');
   // for error modal
   const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
 
@@ -106,85 +105,48 @@ const AddEventForm = () => {
         <ModalHeader>Add Task</ModalHeader>
         <ModalCloseButton color='black'/>
         <ModalBody>
+
           {/* Add your modal content here */}
           {/* For example, you can include a form to add a new task */}
           <FormControl isRequired>
-            <FormLabel>First name</FormLabel>
+            <FormLabel>Event Name</FormLabel>
             <Input
               mb={4}
-              placeholder="Task Name"
-              value={newTaskName}
+              placeholder="Name"
+              value={newEventName}
               onChange={(e) => setNewTaskName(e.target.value)}
             />
           </FormControl>
-            <FormControl isRequired>
-                <FormLabel>Description</FormLabel>
-                <textarea className='text' value = {description} onChange={(e) => setNewDescription(e.target.value)}> </textarea>
-            </FormControl>
-          <FormControl isRequired>
-            <FormLabel>Department To:</FormLabel>
-            <Select
-                mb={4}
-                placeholder="Select To"
-                value={newTo}
-                onChange={(e) => setNewTo(e.target.value)}
-            >
-                <option value="IT">IT</option>
-                <option value="HR">HR</option>
-                <option value="Corporate Relations">Corporate Relations</option>
-                <option value="English Department">English Department</option>
-                <option value="Chinese Department">Chinese Department</option>
-                <option value="Finance">Finance</option>
-                <option value="Events">Events</option>
-                <option value="Prez">Prez</option>
 
-            </Select>
-          </FormControl>
           <FormControl isRequired>
-            <FormLabel>Department From</FormLabel>
-            <Select
-                mb={4}
-                placeholder="Select From"
-                value={newFrom}
-                onChange={(e) => setNewFrom(e.target.value)}
-            >
-                <option value="IT">IT</option>
-                <option value="HR">HR</option>
-                <option value="Corporate Relations">Corporate Relations</option>
-                <option value="English Department">English Department</option>
-                <option value="Chinese Department">Chinese Department</option>
-                <option value="Finance">Finance</option>
-                <option value="Events">Events</option>
-                <option value="Prez">Prez</option>
-            </Select>
+                  <FormLabel>Description</FormLabel>
+                  <textarea className='text' value = {description} onChange={(e) => setNewDescription(e.target.value)}> </textarea>
           </FormControl>
+
           <FormControl isRequired>
-            <FormLabel>Deadline</FormLabel>
+            <FormLabel>Date</FormLabel>
             <Input
               mb={4}
               type='date'
-              placeholder="Deadline"
+              placeholder="Date"
               onChange={(e) => setNewDate(e.target.value)}
             />
           </FormControl>
+          
           <Button colorScheme="blue" onClick={() => {
-            if (newTaskName.trim() === '' || newTo.trim() === '' || newFrom.trim() === '' || newDate.trim() === '') {
+            if (newEventName.trim() === '' || newDate.trim() === '') {
                 openModal();
             } else {
               addEmptyTask({
                 id: uuidv4(),
-                column,
-                title: newTaskName,
-                  dsc: description,
+                // column,
+                title: newEventName,
+                dsc: description,
                 color: pickChakraRandomColor('.300'),
-                to: newTo,
-                from: newFrom,
-                deadline: newDate,
+                deadline: newDate
               }); onClose();
               // resets parameters
-              setNewTaskName('');
-              setNewTo('');
-              setNewFrom('');
+              setNewEventName('');
               setNewDate('');
             }}}
           >
@@ -193,6 +155,7 @@ const AddEventForm = () => {
         </ModalBody>
       </ModalContent>
       </Modal>
+
       {/* error modal */}
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <ModalOverlay/>
