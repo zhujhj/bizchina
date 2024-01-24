@@ -128,8 +128,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
       });
 
       events2.forEach(event => {
-        console.log("EVENT:", new Date(event.date*25));
-          addDashboardEvent(new Date(event.date*25), event.title, event.color);
+        addDashboardEvent(new Date(event.date), event.title, event.color);
       });
     });
   }, [tasks, events2]);
@@ -172,7 +171,8 @@ const CalendarContent = ({ tasks, events2, loading }) => {
           { date, title: text, color: getDarkColor() }
         ]);
 
-        eventsCollection.add({ date, title: text, dsc: ''}) // adds event to firestore
+        const formattedDate = new Date(date).toLocaleDateString('fr-CA'); // changes date to YYYY-MM-DD
+        eventsCollection.add({ date: formattedDate, title: text, dsc: ''}) // adds event to firestore
       }
     }
   };
