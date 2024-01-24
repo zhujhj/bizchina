@@ -48,7 +48,8 @@ import { getAuth } from "firebase/auth";
 const auth = getAuth();
 const firestore = firebase.firestore();
 
-const usersRef = firestore.collection('users');
+const eventsCollection = firestore.collection('events');
+
 
 export const Calendar = () => {
 
@@ -64,7 +65,7 @@ export const Calendar = () => {
         const querySnapshot = await collection.get();
         const newTasks = querySnapshot.docs.map(doc => doc.data());
         setTasks(newTasks); // Correctly update tasks state
-      } catch (error) {h
+      } catch (error) {
         console.error("Error fetching tasks:", error);
       }
       setLoading(false);
@@ -88,7 +89,7 @@ const AddEventForm = () => {
   const [newEventName, setNewEventName] = useState('');
   const [description, setNewDescription] = useState('');
   const [newDate, setNewDate] = useState('');
-  const [events, setEvents] = useState(MOCKAPPS);
+  // const [events, setEvents] = useState(MOCKAPPS);
 
   // for error modal
   const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
@@ -186,14 +187,14 @@ const CalendarContent = ({ tasks, loading }) => {
   const firestore = firebase.firestore();
   const [portalData, setPortalData] = useState({});
   const citiesRef = firestore.collection('tasks');
-  const usersRef = firestore.collection('users');
+  const usersCollection = firestore.collection('users');
   const [currentDepartment, setCurrentDepartment] = useState('');
 
   var email = "";
 
   useEffect(() => {
     // Fetch user's department first
-    usersRef.get().then(snapshot => {
+    usersCollection.get().then(snapshot => {
       if (snapshot.empty) {
         console.log('No matching documents.');
       } else {
@@ -255,6 +256,8 @@ const CalendarContent = ({ tasks, loading }) => {
           ...prev,
           { date, title: text, color: getDarkColor() }
         ]);
+
+        eventsCollection.add({ date, title: text, dsc: ''}) 
       }
     }
   };
@@ -375,6 +378,7 @@ return (
                 currentDate.getMonth(),
                 day
               ),
+              
               e
             )
           }
