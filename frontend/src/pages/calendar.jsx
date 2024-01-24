@@ -88,23 +88,23 @@ const AddEventForm = () => {
   const [newEventName, setNewEventName] = useState('');
   const [description, setNewDescription] = useState('');
   const [newDate, setNewDate] = useState('');
+  const [events, setEvents] = useState(MOCKAPPS);
+
   // for error modal
   const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
 
-  const handleAddButtonClick = (date, name, color) => {
+  const handleAddButtonClick = () => {
     onOpen();
-    // addDashboardEvent(new Date(task.deadline), task.title, task.color);
-    // addDashboardEvent(date, name, color);
   };
 
   return (
     <Box>
-      <button className='send-button' onClick={handleAddButtonClick} style={{marginBottom: 10, marginRight: 5}}>Send A Task!</button>
+      <button className='send-button' onClick={handleAddButtonClick} style={{marginBottom: 10, marginRight: 5}}>Send An Event!</button>
       
       <Modal isOpen={isOpen} onClose={onClose} size="md">
       <ModalOverlay />
       <ModalContent pb={3.5}>
-        <ModalHeader>Add Task</ModalHeader>
+        <ModalHeader>Add Event</ModalHeader>
         <ModalCloseButton color='black'/>
         <ModalBody>
 
@@ -139,15 +139,16 @@ const AddEventForm = () => {
             if (newEventName.trim() === '' || description.trim() === '' || newDate.trim() === '') {
                 openModal();
             } else {
-              addEmptyTask({
-                id: uuidv4(),
-                // column,
-                title: newEventName,
-                dsc: description,
-                color: pickChakraRandomColor('.300'),
-                deadline: newDate
-              });
+              // addEmptyTask({
+              //   id: uuidv4(),
+              //   // column,
+              //   title: newEventName,
+              //   dsc: description,
+              //   color: pickChakraRandomColor('.300'),
+              //   deadline: newDate
+              // });
               onClose();
+
               // resets parameters
               setNewEventName('');
               setNewDescription('');
