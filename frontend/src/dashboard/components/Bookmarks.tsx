@@ -1,5 +1,5 @@
-import { AddIcon } from '@chakra-ui/icons';
-import { Box, Stack, IconButton, useColorModeValue, AbsoluteCenter, useDisclosure, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Image, Text, Flex, Link} from '@chakra-ui/react';
+import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { Box, Stack, IconButton, useColorModeValue, AbsoluteCenter, useDisclosure, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Image, LinkOverlay, LinkBox, Spacer} from '@chakra-ui/react';
 import React from 'react';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -45,14 +45,45 @@ function Bookmarks() {
     }
 
     const bookmarkElements = bookmarks.map((bookmark, index) => (
-        <Box key={bookmark.id} w="auto" pt="2" ml="1" pl={index === 0 ? '2' : '0'}>
-            <Flex align="center">
-                <Link href={"https://" + bookmark.linkInput}>
-                    <Image src={bookmark.icon} alt="Website Icon" boxSize="24px" />
-                    <Text color='black'>{bookmark.titleInput}</Text>
-                </Link>
-            </Flex>
-        </Box>
+        <LinkBox>
+            <Box key={bookmark.id} w="auto" pt="2" ml="1" pl={index === 0 ? '2' : '0'}>
+                <LinkOverlay href={'https://' + bookmark.linkInput}>
+                    <Button leftIcon={<Image src={bookmark.icon}/>}>
+                        {bookmark.titleInput}
+                    </Button>
+                </LinkOverlay>
+                <IconButton
+                    position="absolute"
+                    top={0}
+                    right={0}
+                    zIndex={100}
+                    aria-label="delete-task"
+                    size="md"
+                    colorScheme="solid"
+                    color={'gray.700'}
+                    icon={<DeleteIcon />}
+                    opacity={0}
+                    _groupHover={{
+                        opacity: 1,
+                    }}
+                    />
+                <IconButton
+                    position="absolute"
+                    bottom={0}
+                    right={0}
+                    zIndex={100}
+                    aria-label="delete-task"
+                    size="md"
+                    colorScheme="solid"
+                    color={'gray.700'}
+                    icon={<EditIcon />}
+                    opacity={0}
+                    _groupHover={{
+                        opacity: 1,
+                    }}
+                    />
+            </Box>
+        </LinkBox>
     ));
 
     return (
