@@ -8,6 +8,7 @@ import DarkModeIconButton from '../dashboard/components/DarkModeIconButton.tsx';
 import { ColumnType } from '../dashboard/utils/enums.ts';
 import './dashboard.css';
 import {useParams} from "react-router-dom";
+import Bookmarks from '../dashboard/components/Bookmarks.tsx';
 
 function Dashboard() {
     let { user } = useParams();
@@ -28,6 +29,7 @@ function Dashboard() {
         BizChina Dashboard
       </Heading>
       <DarkModeIconButton position="absolute" top={0} right={2} />
+      <Bookmarks />
       <DndProvider backend={HTML5Backend}>
         <Container maxWidth="container.lg" px={4} py={10}>
           <SimpleGrid

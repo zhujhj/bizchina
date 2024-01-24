@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Wrapper = styled.div`
   border: 1px solid;
-  height: 99vh;
+  height: calc(99vh - 60px); /* Adjust the 60px to your DateControls height */
 `;
 
 export const StyledEvent = styled.span`
@@ -17,13 +17,25 @@ export const StyledEvent = styled.span`
   text-transform: capitalize;
 `;
 
+export const HeadDays = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px; // Or whatever height your cells are
+  background: darkolivegreen;
+  color: white;// Ensure it's a block-level element to fill the width
+  width: 100%; // Stretch to the full width of the grid column
+  box-sizing: border-box; // Ensure padding and border are included in the width
+  
+`;
+
+
 export const SevenColGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(${props => props.is28Days ? 5 : 6}, minmax(120px, auto)); // Increase the minimum size
   ${(props) => props.fullheight && `height: calc(100% - 75px);`}
-  ${(props) =>
-    props.fullheight &&
-    `grid-template-rows: repeat(${props.is28Days ? 4 : 5}, 1fr);`}
+  
   div {
     display: grid;
     border: 1px solid;
@@ -52,14 +64,14 @@ export const SevenColGrid = styled.div`
   }
 `;
 
-export const HeadDays = styled.span`
-  text-align: center;
-  border: 1px solid;
-  height: 30px;
-  padding: 5px;
-  background: darkolivegreen;
-  color: white;
-`;
+// export const HeadDays = styled.span`
+//   text-align: center;
+//   border: 1px solid;
+//   height: 30px;
+//   padding: 5px;
+//   background: darkolivegreen;
+//   color: white;
+// `;
 
 export const DateControls = styled.div`
   width: 100%;

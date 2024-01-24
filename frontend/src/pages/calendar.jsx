@@ -1,6 +1,6 @@
 import firebase from "firebase/compat/app";
 import { useEffect, useRef, useState } from "react";
-import { DAYS, MOCKAPPS } from "../calendar/conts";
+import { DAYS } from "../calendar/conts";
 import {
   DateControls,
   HeadDays,
@@ -8,7 +8,7 @@ import {
   SeeMore,
   SevenColGrid,
   StyledEvent,
-  Wrapper
+  Wrapper,
 } from "../calendar/styled";
 import {
   datesAreOnSameDay,
@@ -60,6 +60,7 @@ export const Calendar = () => {
 
   const collection = firestore.collection("tasks");
   useEffect(() => {
+
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -91,7 +92,7 @@ export const Calendar = () => {
 
 const CalendarContent = ({ tasks, events2, loading }) => {
   const [currentDate, setCurrentDate] = useState(new Date(2023, 12, 1));
-  const [events, setEvents] = useState(MOCKAPPS);
+  const [events, setEvents] = useState([]);
   const dragDateRef = useRef();
   const dragIndexRef = useRef();
   const [showPortal, setShowPortal] = useState(false);
@@ -103,6 +104,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
 
   var email = "";
   useEffect(() => {
+
     // Fetch user's department first
     usersCollection.get().then(snapshot => {
       if (snapshot.empty) {
@@ -119,10 +121,10 @@ const CalendarContent = ({ tasks, events2, loading }) => {
     }).then(() => {
       // This will run after the above async operation is completed
       tasks.forEach(task => {
-        console.log(task.to); 
-        console.log("4");
-        console.log(currentDepartment);
+
         if (task.to === currentDepartment) {
+          console.log(task.deadline);
+          console.log(task.deadline);
           addDashboardEvent(new Date(task.deadline), task.title, task.color);
         }
       });
@@ -147,6 +149,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
       // ...
     }
   });
+
 
 
   const addDashboardEvent = (date, description, color) => {
@@ -175,6 +178,26 @@ const CalendarContent = ({ tasks, events2, loading }) => {
         eventsCollection.add({ date: formattedDate, title: text, dsc: ''}) // adds event to firestore
       }
     }
+  };
+
+  const addDashboardEvent = (date, description, color) => {
+
+    setEvents((prev) => {
+      // Check if the event already exists in the array to prevent duplicates
+      const exists = prev.some(ev => ev.title === description && datesAreOnSameDay(ev.date, date));
+      if (!exists) {
+        console.log(date);
+        return [...prev, { date, title: description, color: "green" }];
+      }
+      return prev; // Return the previous state if the event already exists
+    });
+  };
+
+  const isToday = (someDate) => {
+    const today = new Date();
+    return someDate.getDate() === today.getDate() &&
+        someDate.getMonth() === today.getMonth() &&
+        someDate.getFullYear() === today.getFullYear();
   };
 
   const drag = (index, e) => {
@@ -261,26 +284,29 @@ return (
         name="arrow-forward-circle-outline"
       ></ion-icon>
     </DateControls>
-    <SevenColGrid>
+
+    <HeadDays>
       {DAYS.map((day) => (
-        <HeadDays className="nonDRAG">{day}</HeadDays>
+          <HeadDays className="nonDRAG">{day}</HeadDays>
       ))}
-    </SevenColGrid>
+    </HeadDays>
+
 
     <SevenColGrid
       $fullheight={true}
       $is28Days={getDaysInMonth(currentDate) === 28}
     >
+
       {getSortedDays(currentDate).map((day) => (
         <div
           id={`${currentDate.getFullYear()}/${currentDate.getMonth()}/${day}`}
           onDragEnter={(e) =>
             onDragEnter(
-              new Date(
-                currentDate.getFullYear(),
-                currentDate.getMonth(),
-                day
-              ),
+                new Date(Date.UTC(
+                    currentDate.getFullYear(),
+                    currentDate.getMonth(),
+                    day
+                )),
               e
             )
           }
@@ -288,42 +314,33 @@ return (
           onDragEnd={drop}
           onClick={(e) =>
             addEvent(
-              new Date(
-                currentDate.getFullYear(),
-                currentDate.getMonth(),
-                day
-              ),
-              
+                new Date(Date.UTC(
+                    currentDate.getFullYear(),
+                    currentDate.getMonth(),
+                    day
+                )),
               e
             )
           }
         >
+
           <span
-            className={`nonDRAG ${
-              datesAreOnSameDay(
-                new Date(),
-                new Date(
-                  currentDate.getFullYear(),
-                  currentDate.getMonth(),
-                  day
-                )
-              )
-                ? "active"
-                : ""
-            }`}
+              className={`nonDRAG ${
+                  isToday(new Date(currentDate.getFullYear(), currentDate.getMonth(), day)) ? "active" : ""
+              }`}
           >
-            {day}
+              {day}
           </span>
           <EventWrapper>
             {events?.map(
               (ev, index) =>
                 datesAreOnSameDay(
                   ev.date,
-                  new Date(
-                    currentDate.getFullYear(),
-                    currentDate.getMonth(),
-                    day
-                  )
+                    new Date(Date.UTC(
+                        currentDate.getFullYear(),
+                        currentDate.getMonth(),
+                        day
+                    )),
                 ) && (
                   <StyledEvent key={`${ev.title}-${index}`} //
                     onDragStart={(e) => drag(index, e)}

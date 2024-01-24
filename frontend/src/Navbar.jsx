@@ -44,7 +44,7 @@ function Navbar({ user }) {
                   </li>
 
                   <li className='nav-item'>
-                    <Link to='/calendar' className='nav-links' onClick={closeMobileMenu}>
+                    <Link to={`/calendar/${user}`} className='nav-links' onClick={closeMobileMenu}>
                       Calendar
                     </Link>
                   </li>

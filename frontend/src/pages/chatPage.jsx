@@ -4,6 +4,7 @@ import { getAuth } from 'firebase/auth';
 import './chatPage.css';
 import { useParams } from 'react-router-dom';
 import firebase from 'firebase/compat/app';
+import axios from "axios";
 
 
 const ChatPage = () => {
@@ -24,6 +25,12 @@ const ChatPage = () => {
                 }
 
                 const userData = doc.data();
+                await axios.post(
+                    'http://localhost:3001/authenticate',
+                    {username: userData.name}
+                )
+                    .then(r => props.onAuth({...r.data, secret: userData.name}))
+                    .catch(e => console.log('error', e))
                 setUser(userData);
                 setLoading(false);
             } catch (error) {
