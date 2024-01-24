@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import '../../pages/dashboard.css';
+import '../../pages/dashboard.css'; 
 import useColumnDrop from '../hooks/useColumnDrop.ts';
 import useColumnTasks from '../hooks/useColumnTasks.ts';
 import { ColumnType } from '../utils/enums.ts';
@@ -169,7 +169,7 @@ function Column({ column }: { column: ColumnType }) {
               />
             </FormControl>
             <Button colorScheme="blue" onClick={() => {
-              if (newTaskName.trim() === '' || newTo.trim() === '' || newFrom.trim() === '' || newDate.trim() === '') {
+              if (newTaskName.trim() === '' || description.trim() === '' || newTo.trim() === '' || newFrom.trim() === '' || newDate.trim() === '') {
                   openModal();
               } else {
                 addEmptyTask({
@@ -184,6 +184,7 @@ function Column({ column }: { column: ColumnType }) {
                 }); onClose();
                 // resets parameters
                 setNewTaskName('');
+                setNewDescription('');
                 setNewTo('');
                 setNewFrom('');
                 setNewDate('');

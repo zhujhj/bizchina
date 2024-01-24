@@ -20,21 +20,41 @@ import {
   prevMonth
 } from "../calendar/utils";
 
+// import {
+//   Box,
+//   Button,
+//   Input,
+//   FormControl,
+//   FormLabel,
+//   Modal,
+//   ModalBody,
+//   ModalCloseButton,
+//   ModalContent,
+//   ModalHeader,
+//   ModalOverlay,
+//   useDisclosure,
+//   Select,
+//   ChakraProvider
+// } from '@chakra-ui/react';
 
+import theme from '../dashboard/config/theme.ts';
 import 'firebase/compat/analytics';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import './dashboard.css'
 
 import { getAuth } from "firebase/auth";
 
 const auth = getAuth();
 const firestore = firebase.firestore();
 
-const usersRef = firestore.collection('users');
+const eventsCollection = firestore.collection('events');
+
 
 export const Calendar = () => {
 
   const [tasks, setTasks] = useState([]); // Renamed to tasks for clarity
+  const [events, setEvents] = useState([]); 
   const [loading, setLoading] = useState(true);
 
 
@@ -47,6 +67,10 @@ export const Calendar = () => {
         const querySnapshot = await collection.get();
         const newTasks = querySnapshot.docs.map(doc => doc.data());
         setTasks(newTasks); // Correctly update tasks state
+
+        const eventsSnapshot = await eventsCollection.get();
+        const newEvents = eventsSnapshot.docs.map(doc => doc.data());
+        setEvents(newEvents); // Correctly update events state
       } catch (error) {
         console.error("Error fetching tasks:", error);
       }
@@ -57,11 +81,16 @@ export const Calendar = () => {
   }, []); // Empty dependency array ensures this runs only once
 
   return (
-    <CalendarContent tasks={tasks} loading={loading} />
+    <>
+      <CalendarContent tasks={tasks} events2={events} loading={loading} />
+      {/* <ChakraProvider theme={theme}>
+        <AddEventForm />
+      </ChakraProvider> */}
+    </>
   );
 };
 
-const CalendarContent = ({ tasks, loading }) => {
+const CalendarContent = ({ tasks, events2, loading }) => {
   const [currentDate, setCurrentDate] = useState(new Date(2023, 12, 1));
   const [events, setEvents] = useState([]);
   const dragDateRef = useRef();
@@ -70,19 +99,14 @@ const CalendarContent = ({ tasks, loading }) => {
   const firestore = firebase.firestore();
   const [portalData, setPortalData] = useState({});
   const citiesRef = firestore.collection('tasks');
-  const usersRef = firestore.collection('users');
+  const usersCollection = firestore.collection('users');
   const [currentDepartment, setCurrentDepartment] = useState('');
 
   var email = "";
-  
-
-  
-
-
   useEffect(() => {
 
     // Fetch user's department first
-    usersRef.get().then(snapshot => {
+    usersCollection.get().then(snapshot => {
       if (snapshot.empty) {
         console.log('No matching documents.');
       } else {
@@ -104,8 +128,12 @@ const CalendarContent = ({ tasks, loading }) => {
           addDashboardEvent(new Date(task.deadline), task.title, task.color);
         }
       });
+
+      events2.forEach(event => {
+        addDashboardEvent(new Date(event.date), event.title, event.color);
+      });
     });
-  }, [tasks]);
+  }, [tasks, events2]);
 
   
   firebase.auth().onAuthStateChanged((user) => {
@@ -122,6 +150,18 @@ const CalendarContent = ({ tasks, loading }) => {
     }
   });
 
+
+
+  const addDashboardEvent = (date, description, color) => {
+    
+      // console.log(color);
+        setEvents((prev) => [
+          ...prev,
+          { date, title: description, color: "green"}
+        ]);
+      
+  };
+
   const addEvent = (date, event) => {
     if (!event.target.classList.contains("StyledEvent")) {
       const text = window.prompt("name");
@@ -133,6 +173,9 @@ const CalendarContent = ({ tasks, loading }) => {
           ...prev,
           { date, title: text, color: getDarkColor() }
         ]);
+
+        const formattedDate = new Date(date).toLocaleDateString('fr-CA'); // changes date to YYYY-MM-DD
+        eventsCollection.add({ date: formattedDate, title: text, dsc: ''}) // adds event to firestore
       }
     }
   };
@@ -324,8 +367,101 @@ return (
     )}
     
   </Wrapper>
-  
-
-
 )}
+
+
+// const AddEventForm = () => {
+//   const { isOpen, onOpen, onClose } = useDisclosure();
+//   const [newEventName, setNewEventName] = useState('');
+//   const [description, setNewDescription] = useState('');
+//   const [newDate, setNewDate] = useState('');
+//   // const [events, setEvents] = useState(MOCKAPPS);
+
+//   // for error modal
+//   const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
+
+//   const handleAddButtonClick = () => {
+//     onOpen();
+//   };
+
+//   return (
+//     <Box>
+//       <button className='send-button' onClick={handleAddButtonClick} style={{marginBottom: 10, marginRight: 5}}>Send An Event!</button>
+      
+//       <Modal isOpen={isOpen} onClose={onClose} size="md">
+//       <ModalOverlay />
+//       <ModalContent pb={3.5}>
+//         <ModalHeader>Add Event</ModalHeader>
+//         <ModalCloseButton color='black'/>
+//         <ModalBody>
+
+//           {/* Add your modal content here */}
+//           {/* For example, you can include a form to add a new task */}
+//           <FormControl isRequired>
+//             <FormLabel>Event Name</FormLabel>
+//             <Input
+//               mb={4}
+//               placeholder="Name"
+//               value={newEventName}
+//               onChange={(e) => setNewEventName(e.target.value)}
+//             />
+//           </FormControl>
+
+//           <FormControl isRequired>
+//                   <FormLabel>Description</FormLabel>
+//                   <textarea className='text' value = {description} onChange={(e) => setNewDescription(e.target.value)}> </textarea>
+//           </FormControl>
+
+//           <FormControl isRequired>
+//             <FormLabel>Date</FormLabel>
+//             <Input
+//               mb={4}
+//               type='date'
+//               placeholder="Date"
+//               onChange={(e) => setNewDate(e.target.value)}
+//             />
+//           </FormControl>
+          
+//           <Button colorScheme="blue" onClick={() => {
+//             if (newEventName.trim() === '' || description.trim() === '' || newDate.trim() === '') {
+//                 openModal();
+//             } else {
+//               // addEmptyTask({
+//               //   id: uuidv4(),
+//               //   // column,
+//               //   title: newEventName,
+//               //   dsc: description,
+//               //   color: pickChakraRandomColor('.300'),
+//               //   deadline: newDate
+//               // });
+//               onClose();
+
+//               // resets parameters
+//               setNewEventName('');
+//               setNewDescription('');
+//               setNewDate('');
+//             }}}
+//           >
+//             Add Task
+//           </Button>
+//         </ModalBody>
+//       </ModalContent>
+//       </Modal>
+
+//       {/* error modal */}
+//       <Modal isOpen={isModalOpen} onClose={closeModal}>
+//         <ModalOverlay/>
+//         <ModalContent pb={4}>
+//           <ModalHeader pb={0}>Error</ModalHeader>
+//           <ModalCloseButton color='black'/>
+//           <ModalBody>
+//             Please fill in all fields.
+//           </ModalBody>
+//         </ModalContent>
+//       </Modal>
+
+//     </Box>
+//   );
+// };
+
 export default Calendar;
