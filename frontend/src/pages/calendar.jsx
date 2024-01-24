@@ -152,15 +152,15 @@ const CalendarContent = ({ tasks, events2, loading }) => {
 
 
 
-  const addDashboardEvent = (date, description, color) => {
+  // const addDashboardEvent = (date, description, color) => {
     
-      // console.log(color);
-        setEvents((prev) => [
-          ...prev,
-          { date, title: description, color: "green"}
-        ]);
+  //     // console.log(color);
+  //       setEvents((prev) => [
+  //         ...prev,
+  //         { date, title: description, color: "green"}
+  //       ]);
       
-  };
+  // };
 
   const addEvent = (date, event) => {
     if (!event.target.classList.contains("StyledEvent")) {
