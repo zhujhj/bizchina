@@ -20,22 +20,13 @@ import {
   prevMonth
 } from "../calendar/utils";
 
-// import {
-//   Box,
-//   Button,
-//   Input,
-//   FormControl,
-//   FormLabel,
-//   Modal,
-//   ModalBody,
-//   ModalCloseButton,
-//   ModalContent,
-//   ModalHeader,
-//   ModalOverlay,
-//   useDisclosure,
-//   Select,
-//   ChakraProvider
-// } from '@chakra-ui/react';
+import Navbar from '../Navbar.jsx';
+
+
+import 'firebase/compat/analytics';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+
 
 import theme from '../dashboard/config/theme.ts';
 import 'firebase/compat/analytics';
@@ -43,13 +34,15 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import './dashboard.css'
 
+
 import { getAuth } from "firebase/auth";
 
 const auth = getAuth();
 const firestore = firebase.firestore();
 
-const eventsCollection = firestore.collection('events');
 
+const usersCollection = firestore.collection('users');
+const eventsCollection = firestore.collection('events');
 
 export const Calendar = () => {
 
@@ -71,6 +64,7 @@ export const Calendar = () => {
         const eventsSnapshot = await eventsCollection.get();
         const newEvents = eventsSnapshot.docs.map(doc => doc.data());
         setEvents(newEvents); // Correctly update events state
+
       } catch (error) {
         console.error("Error fetching tasks:", error);
       }
@@ -99,6 +93,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
   const firestore = firebase.firestore();
   const [portalData, setPortalData] = useState({});
   const citiesRef = firestore.collection('tasks');
+
   const usersCollection = firestore.collection('users');
   const [currentDepartment, setCurrentDepartment] = useState('');
 
@@ -107,6 +102,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
 
     // Fetch user's department first
     usersCollection.get().then(snapshot => {
+
       if (snapshot.empty) {
         console.log('No matching documents.');
       } else {
@@ -125,12 +121,13 @@ const CalendarContent = ({ tasks, events2, loading }) => {
         if (task.to === currentDepartment) {
           console.log(task.deadline);
           console.log(task.deadline);
-          addDashboardEvent(new Date(task.deadline), task.title, task.color);
+          
+          addDashboardEvent(new Date(task.deadline), task.title, task.color, task.dsc);
         }
       });
 
       events2.forEach(event => {
-        addDashboardEvent(new Date(event.date), event.title, event.color);
+        addDashboardEvent(new Date(event.date), event.title, event.color, '');
       });
     });
   }, [tasks, events2]);
@@ -150,18 +147,6 @@ const CalendarContent = ({ tasks, events2, loading }) => {
     }
   });
 
-
-
-  // const addDashboardEvent = (date, description, color) => {
-    
-  //     // console.log(color);
-  //       setEvents((prev) => [
-  //         ...prev,
-  //         { date, title: description, color: "green"}
-  //       ]);
-      
-  // };
-
   const addEvent = (date, event) => {
     if (!event.target.classList.contains("StyledEvent")) {
       const text = window.prompt("name");
@@ -171,6 +156,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
         date.setMilliseconds(0);
         setEvents((prev) => [
           ...prev,
+
           { date, title: text, color: getDarkColor() }
         ]);
 
@@ -180,14 +166,18 @@ const CalendarContent = ({ tasks, events2, loading }) => {
     }
   };
 
-  const addDashboardEvent = (date, description, color) => {
+  const addDashboardEvent = (date, description, color, dsc) => {
+    // Assuming date is a Date object with the correct date and no time component
+    date.setHours(0, 0, 0, 0); // Reset the time component to avoid timezone issues
 
     setEvents((prev) => {
       // Check if the event already exists in the array to prevent duplicates
       const exists = prev.some(ev => ev.title === description && datesAreOnSameDay(ev.date, date));
       if (!exists) {
-        console.log(date);
-        return [...prev, { date, title: description, color: "green" }];
+
+        console.log(color);
+        return [...prev, {date, title: description, color: "#f0948d", dsc: dsc}];
+
       }
       return prev; // Return the previous state if the event already exists
     });
@@ -200,27 +190,6 @@ const CalendarContent = ({ tasks, events2, loading }) => {
         someDate.getFullYear() === today.getFullYear();
   };
 
-  const drag = (index, e) => {
-    dragIndexRef.current = { index, target: e.target };
-  };
-
-  const onDragEnter = (date, e) => {
-    e.preventDefault();
-    dragDateRef.current = { date, target: e.target.id };
-  };
-
-  const drop = (ev) => {
-    ev.preventDefault();
-
-    setEvents((prev) =>
-      prev.map((ev, index) => {
-        if (index === dragIndexRef.current.index) {
-          ev.date = dragDateRef.current.date;
-        }
-        return ev;
-      })
-    );
-  };
 
   const handleOnClickEvent = (event) => {
     setShowPortal(true);
@@ -229,146 +198,132 @@ const CalendarContent = ({ tasks, events2, loading }) => {
 
   const handlePotalClose = () => setShowPortal(false);
 
-  const handleDelete = () => {
-    setEvents((prevEvents) =>
-      prevEvents.filter((ev) => ev.title !== portalData.title)
-    );
-    handlePotalClose();
-  };
 
-  const Portal = ({ title, date, handleDelete, handlePotalClose }) => {
+  // const handleDelete = () => {
+  //   setEvents((prevEvents) =>
+  //       prevEvents.filter((ev) => ev.title !== portalData.title)
+  //   );
+  //   handlePotalClose();
+  // };
+
+  const Portal = ({title, date, handleDelete, handlePotalClose, color, dsc}) => {
+    // toLocaleDateString can be adjusted with options for different locales and display options
+    const dateString = date.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+
     return (
-      <PortalWrapper>
-        <h2>{title}</h2>
-        <p>{date.toDateString()}</p>
-        <ion-icon onClick={handleDelete} name="trash-outline"></ion-icon>
-        <ion-icon onClick={handlePotalClose} name="close-outline"></ion-icon>
-      </PortalWrapper>
+        <PortalWrapper>
+          <h2>{dsc}</h2>
+          <p>{dateString}</p>
+          <ion-icon onClick={handlePotalClose} name="close-outline"></ion-icon>
+        </PortalWrapper>
     );
   };
-
-  const EventWrapper = ({ children }) => {
+  const EventWrapper = ({children}) => {
     if (children.filter((child) => child).length)
       return (
-        <>
-          {children}
-          {children.filter((child) => child).length > 2 && (
-            <SeeMore
-              onClick={(e) => {
-                e.stopPropagation();
-                console.log("clicked p");
-              }}
-            >
-              see more...
-            </SeeMore>
-          )}
-        </>
+          <>
+            {children}
+            {children.filter((child) => child).length > 2 && (
+                <SeeMore
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      console.log("clicked p");
+                    }}
+                >
+                  see more...
+                </SeeMore>
+            )}
+          </>
       );
   };
-  
+
   if (loading) {
     return <div>Loading...</div>;
   }
 
 
-return (
-  <Wrapper>
-    <DateControls>
-      <ion-icon
-        onClick={() => prevMonth(currentDate, setCurrentDate)}
-        name="arrow-back-circle-outline"
-      ></ion-icon>
-      {getMonthYear(currentDate)}
-      <ion-icon
-        onClick={() => nextMonth(currentDate, setCurrentDate)}
-        name="arrow-forward-circle-outline"
-      ></ion-icon>
-    </DateControls>
+  return (
+      <Wrapper>
+        <DateControls>
+          <ion-icon
+              onClick={() => prevMonth(currentDate, setCurrentDate)}
+              name="arrow-back-circle-outline"
+          ></ion-icon>
+          {getMonthYear(currentDate)}
+          <ion-icon
+              onClick={() => nextMonth(currentDate, setCurrentDate)}
+              name="arrow-forward-circle-outline"
+          ></ion-icon>
+        </DateControls>
 
-    <HeadDays>
-      {DAYS.map((day) => (
-          <HeadDays className="nonDRAG">{day}</HeadDays>
-      ))}
-    </HeadDays>
+        <HeadDays>
+          {DAYS.map((day) => (
+              <HeadDays>{day}</HeadDays>
+          ))}
+        </HeadDays>
 
-
-    <SevenColGrid
-      $fullheight={true}
-      $is28Days={getDaysInMonth(currentDate) === 28}
-    >
-
-      {getSortedDays(currentDate).map((day) => (
-        <div
-          id={`${currentDate.getFullYear()}/${currentDate.getMonth()}/${day}`}
-          onDragEnter={(e) =>
-            onDragEnter(
-                new Date(Date.UTC(
-                    currentDate.getFullYear(),
-                    currentDate.getMonth(),
-                    day
-                )),
-              e
-            )
-          }
-          onDragOver={(e) => e.preventDefault()}
-          onDragEnd={drop}
-          onClick={(e) =>
-            addEvent(
-                new Date(Date.UTC(
-                    currentDate.getFullYear(),
-                    currentDate.getMonth(),
-                    day
-                )),
-              e
-            )
-          }
+        <SevenColGrid
+            $fullheight={true}
+            $is28Days={getDaysInMonth(currentDate) === 28}
         >
-
+          {getSortedDays(currentDate).map((day) => (
+              <div
+                  key={`${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}`}
+                  onClick={(e) =>
+                      addEvent(
+                          new Date(Date.UTC(
+                              currentDate.getFullYear(),
+                              currentDate.getMonth(),
+                              day
+                          )),
+                          e
+                      )
+                  }
+              >
+              
           <span
               className={`nonDRAG ${
                   isToday(new Date(currentDate.getFullYear(), currentDate.getMonth(), day)) ? "active" : ""
               }`}
           >
-              {day}
-          </span>
-          <EventWrapper>
-            {events?.map(
-              (ev, index) =>
-                datesAreOnSameDay(
-                  ev.date,
-                    new Date(Date.UTC(
-                        currentDate.getFullYear(),
-                        currentDate.getMonth(),
-                        day
-                    )),
-                ) && (
-                  <StyledEvent key={`${ev.title}-${index}`} //
-                    onDragStart={(e) => drag(index, e)}
-                    onClick={() => handleOnClickEvent(ev)}
-                    draggable
-                    className="StyledEvent"
-                    id={`${ev.color} ${ev.title}`}
-                    bgColor={ev.color}
-                  >
-                    {ev.title}
-                  </StyledEvent>
-                )
-            )}
-          </EventWrapper>
-        </div>
-      ))}
-    </SevenColGrid>
-    {showPortal && (
-      <Portal
-        {...portalData}
-        handleDelete={handleDelete}
-        handlePotalClose={handlePotalClose}
-      />
-    )}
-    
-  </Wrapper>
-)}
 
+            {day}
+          </span>
+                <EventWrapper>
+                  {events?.map(
+                      (ev, index) =>
+                          datesAreOnSameDay(
+                              ev.date,
+                              new Date(Date.UTC(
+                                  currentDate.getFullYear(),
+                                  currentDate.getMonth(),
+                                  day
+                              )),
+                          ) && (
+                              <StyledEvent
+                                  key={`${ev.title}-${index}`}
+                                  onClick={() => handleOnClickEvent(ev)}
+                                  className="StyledEvent"
+                                  bgColor={ev.color}
+                              >
+                                {ev.title}
+                              </StyledEvent>
+                          )
+                  )}
+                </EventWrapper>
+              </div>
+          ))}
+        </SevenColGrid>
+        {showPortal && (
+            <Portal
+                {...portalData}
+                // handleDelete={handleDelete}
+                handlePotalClose={handlePotalClose}
+            />
+        )}
+      </Wrapper>
+  );
+}
 
 // const AddEventForm = () => {
 //   const { isOpen, onOpen, onClose } = useDisclosure();
