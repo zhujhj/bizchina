@@ -1,5 +1,6 @@
+import axios from 'axios';
 import React, { useState } from 'react';
-import '../signInPage.css';
+import './signInPage.css';
 
 import '../firebaseConfig.js';
 
@@ -10,31 +11,30 @@ import 'firebase/compat/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import logo from '../images/logo.png';
 
-import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, signInWithPopup,signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 const auth = getAuth();
 
-
-
-
-function SignIn() {
+// function SignIn(props) {
+const SignIn = (props) => {
     const navigate = useNavigate();
-    const [user] = useAuthState(auth);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const signInWithGoogle = () => {
+    const signInWithGoogle = (props) => {
         const provider = new firebase.auth.GoogleAuthProvider();
         signInWithPopup(auth, provider)
-            .then((result) => {
+            .then(async (result) => {
                 // This gives you a Google Access Token. You can use it to access the Google API.
                 const credential = GoogleAuthProvider.credentialFromResult(result);
                 const token = credential.accessToken;
                 // The signed-in user info.
                 const user = result.user;
+                // console.log(user);
                 // to be changed, hoping to use navigate.push for optimal performance.
-                window.location.href = "/dashboard";
+                navigate(`/dashboard/${user.uid}`);
+
                 // IdP data available using getAdditionalUserInfo(result)
                 // ...
             }).catch((error) => {
@@ -48,46 +48,57 @@ function SignIn() {
             // ...
         });
     }
-    const signUpWithEmailAndPassword = () => {
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed up
-                const user = userCredential.user;
-                // ...
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                // ..
-            });
 
-    };
+
+    createUserWithEmailAndPassword(auth, email, password)
+        .then(async (userCredential) => {
+            // Signed up
+            const user = userCredential.user;
+            navigate(`/dashboard/${user.uid}`);// ...
+        })
+        .catch((err) => {
+            if (err.code === "auth/email-already-in-use"){
+                signInWithEmailAndPassword(auth, email, password)
+                    .then(async (userCredential) => {
+                        // Signed in
+                        const user = userCredential.user;
+                        navigate(`/dashboard/${user.uid}`);
+                    })
+                    .catch((err) => {
+                        console.log(err.code);
+                        console.log(err.message);
+                    });
+            }
+            console.log(err.code);
+            console.log(err.message);
+        });
+
     
     return (
         <div id="signInContainer">
-            <img src={logo} className="logo"></img>
-            <div id="signIn">Sign in</div>
+            <a href="https://www.ubcchinaforum.com/"> <img src={logo} id="logo"></img> </a>
+            <div id="signInTitle">Sign In</div>
             <div id="manage">Log in to start managing your tasks!</div>
 
             {/* Email and Password inputs */}
             <input
+                className="userInput"
                 type="text"
                 placeholder="Email"
-                className="inputBox"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
             />
             <input
+                className="userInput"
                 type="password"
-                placeholder="Password"
-                className="inputBox"
+                placeholder="Password (min 6 characters)"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
 
             {/* Sign in buttons */}
-            <button id="login" onClick={signUpWithEmailAndPassword}>Login</button>
-            <button id="sign-in" onClick={signInWithGoogle}>Sign in with Google</button>
+            <button id="login" onClick={createUserWithEmailAndPassword}>Sign in</button>
+            <button id="signinGoogle" onClick={signInWithGoogle}>Sign in with Google</button>
         </div>
     )
 

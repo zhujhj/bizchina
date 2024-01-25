@@ -3,13 +3,22 @@ import { Container, Heading, SimpleGrid } from '@chakra-ui/react';
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import Column from './components/Column';
-import DarkModeIconButton from './components/DarkModeIconButton';
-import { ColumnType } from './utils/enums';
+import Navbar from '../Navbar.jsx';
+import Column from '../dashboard/components/Column.tsx';
+import DarkModeIconButton from '../dashboard/components/DarkModeIconButton.tsx';
+import { ColumnType } from '../dashboard/utils/enums.ts';
+import './dashboard.css';
+import {useParams} from "react-router-dom";
 
-function App() {
+function Dashboard() {
+    let { user } = useParams();
+    
   return (
     <main>
+      <div className='navbar-container'>
+          <Navbar user={user} />
+      </div>
+      
       <Heading
         fontSize={{ base: '4xl', sm: '5xl', md: '6xl' }}
         fontWeight="bold"
@@ -38,4 +47,4 @@ function App() {
   );
 }
 
-export default App;
+export default Dashboard;

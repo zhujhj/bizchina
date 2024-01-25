@@ -1,0 +1,103 @@
+/* General styling for the sign-in container */
+#signInContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: rgb(247, 223, 223);
+    background: linear-gradient(to left, rgb(247, 223, 223), #e02929);
+}
+
+/* Styling for the sign-in title */
+#signInTitle {
+    font-size: 2em;
+    color: black;
+    margin-bottom: 10px;
+    font-family:'Courier New', Courier, monospace;
+    /* background: linear-gradient(to left, #7928CA, #FF0080);
+    -webkit-text-fill-color: transparent; 
+    -webkit-background-clip: text;  */
+}
+
+/* Subtitle text */
+#manage {
+    font-size: 1em;
+    color: black;
+    margin-bottom: 20px;
+    font-family:'Courier New', Courier, monospace;
+    /* font-weight: bold; */
+    /* background: linear-gradient(to left, #7928CA, #FF0080);
+    -webkit-text-fill-color: transparent; 
+    -webkit-background-clip: text;  */
+}
+
+/* Styles for input fields */
+.userInput {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    /* border-radius: 4px; */
+    width: 300px;
+
+    font-size: 1.5rem;
+    background: rgb(58, 58, 58);
+    color: white;
+    outline: none;
+    line-height: 1.5;
+}
+
+button {
+    color: white;
+    border: none;
+    /* border-radius: 20px; */
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.25rem;
+}
+
+button:hover {
+    cursor: pointer;
+    opacity: 80%;
+    transform: scale(1.1);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Style for the default log in button */
+#login {
+    background-color: #982929;
+    margin-bottom: 10px;
+}
+
+/* Style for the Google sign in button */
+#signinGoogle {
+    background-color: #db4437;
+}
+
+/* Style for the sign-out button */
+.sign-out {
+    padding: 10px 20px;
+    background-color: #f4b400;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#logo {
+    position: relative;
+    height: 80px;
+    width: 80px;
+    margin-bottom: 10px;
+}
+
+#logo:hover {
+    opacity: 80%;
+    transform: scale(1.1);
+}

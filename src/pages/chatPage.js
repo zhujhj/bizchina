@@ -22,6 +22,8 @@ function ChatRoom() {
 
     const [messages] = useCollectionData(query, { idField: 'id' });
 
+    console.log("messages " + messages[0]['id'])
+
     const [formValue, setFormValue] = useState('');
 
 
