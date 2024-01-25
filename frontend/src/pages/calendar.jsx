@@ -77,9 +77,6 @@ export const Calendar = () => {
   return (
     <>
       <CalendarContent tasks={tasks} events2={events} loading={loading} />
-      {/* <ChakraProvider theme={theme}>
-        <AddEventForm />
-      </ChakraProvider> */}
     </>
   );
 };
@@ -119,15 +116,13 @@ const CalendarContent = ({ tasks, events2, loading }) => {
       tasks.forEach(task => {
 
         if (task.to === currentDepartment) {
-          console.log(task.deadline);
-          console.log(task.deadline);
-          
           addDashboardEvent(new Date(task.deadline), task.title, task.color, task.dsc);
         }
       });
 
       events2.forEach(event => {
-        addDashboardEvent(new Date(event.date), event.title, event.color, '');
+        // console.log("Retrieved from FB: ", new Date(event.date));
+        addDashboardEvent(new Date(event.date), event.title, event.color, "Event Placeholder");
       });
     });
   }, [tasks, events2]);
@@ -159,8 +154,9 @@ const CalendarContent = ({ tasks, events2, loading }) => {
 
           { date, title: text, color: getDarkColor() }
         ]);
-
-        const formattedDate = new Date(date).toLocaleDateString('fr-CA'); // changes date to YYYY-MM-DD
+        
+        const formattedDate = new Date(date).toLocaleDateString('en-US'); // changes date to MM/DD/YYYY
+        console.log("FORMATTED: ", formattedDate);
         eventsCollection.add({ date: formattedDate, title: text, dsc: ''}) // adds event to firestore
       }
     }
@@ -176,7 +172,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
       if (!exists) {
 
         console.log(color);
-        return [...prev, {date, title: description, color: "#f0948d", dsc: dsc}];
+        return [...prev, {date, title: description, color: getDarkColor(), dsc: dsc}];
 
       }
       return prev; // Return the previous state if the event already exists
@@ -324,99 +320,5 @@ const CalendarContent = ({ tasks, events2, loading }) => {
       </Wrapper>
   );
 }
-
-// const AddEventForm = () => {
-//   const { isOpen, onOpen, onClose } = useDisclosure();
-//   const [newEventName, setNewEventName] = useState('');
-//   const [description, setNewDescription] = useState('');
-//   const [newDate, setNewDate] = useState('');
-//   // const [events, setEvents] = useState(MOCKAPPS);
-
-//   // for error modal
-//   const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
-
-//   const handleAddButtonClick = () => {
-//     onOpen();
-//   };
-
-//   return (
-//     <Box>
-//       <button className='send-button' onClick={handleAddButtonClick} style={{marginBottom: 10, marginRight: 5}}>Send An Event!</button>
-      
-//       <Modal isOpen={isOpen} onClose={onClose} size="md">
-//       <ModalOverlay />
-//       <ModalContent pb={3.5}>
-//         <ModalHeader>Add Event</ModalHeader>
-//         <ModalCloseButton color='black'/>
-//         <ModalBody>
-
-//           {/* Add your modal content here */}
-//           {/* For example, you can include a form to add a new task */}
-//           <FormControl isRequired>
-//             <FormLabel>Event Name</FormLabel>
-//             <Input
-//               mb={4}
-//               placeholder="Name"
-//               value={newEventName}
-//               onChange={(e) => setNewEventName(e.target.value)}
-//             />
-//           </FormControl>
-
-//           <FormControl isRequired>
-//                   <FormLabel>Description</FormLabel>
-//                   <textarea className='text' value = {description} onChange={(e) => setNewDescription(e.target.value)}> </textarea>
-//           </FormControl>
-
-//           <FormControl isRequired>
-//             <FormLabel>Date</FormLabel>
-//             <Input
-//               mb={4}
-//               type='date'
-//               placeholder="Date"
-//               onChange={(e) => setNewDate(e.target.value)}
-//             />
-//           </FormControl>
-          
-//           <Button colorScheme="blue" onClick={() => {
-//             if (newEventName.trim() === '' || description.trim() === '' || newDate.trim() === '') {
-//                 openModal();
-//             } else {
-//               // addEmptyTask({
-//               //   id: uuidv4(),
-//               //   // column,
-//               //   title: newEventName,
-//               //   dsc: description,
-//               //   color: pickChakraRandomColor('.300'),
-//               //   deadline: newDate
-//               // });
-//               onClose();
-
-//               // resets parameters
-//               setNewEventName('');
-//               setNewDescription('');
-//               setNewDate('');
-//             }}}
-//           >
-//             Add Task
-//           </Button>
-//         </ModalBody>
-//       </ModalContent>
-//       </Modal>
-
-//       {/* error modal */}
-//       <Modal isOpen={isModalOpen} onClose={closeModal}>
-//         <ModalOverlay/>
-//         <ModalContent pb={4}>
-//           <ModalHeader pb={0}>Error</ModalHeader>
-//           <ModalCloseButton color='black'/>
-//           <ModalBody>
-//             Please fill in all fields.
-//           </ModalBody>
-//         </ModalContent>
-//       </Modal>
-
-//     </Box>
-//   );
-// };
 
 export default Calendar;
