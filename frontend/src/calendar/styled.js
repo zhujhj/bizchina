@@ -94,39 +94,57 @@ export const SeeMore = styled.p`
 `;
 
 export const PortalWrapper = styled.div`
-  background: white;
-  position: absolute;
-  width: 60%;
-  height: 200px;
-  top: 50%;
-  left: 50%;
-  /* border: 1px solid; */
+background: #f9f9f9; // A softer background color
+position: absolute;
+width: 60%;
+height: 200px;
+top: 50%;
+left: 50%;
+border-radius: 10px; // Slightly larger border radius for a softer look
+transform: translate(-50%, -50%);
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // A softer shadow
+padding: 20px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+transition: all 0.3s ease; // Smooth transition for hover effects
+
+&:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); // Enhanced shadow on hover
+  transform: translate(-50%, -48%);
+}
+
+h2 {
+  font-size: 2rem; // Adjusted for better readability
+  color: #333; // Darker color for better contrast
+  margin-bottom: 10px;
+}
+
+ion-icon {
+  font-size: 1.5rem;
+  color: #fff;
+  background: #007bff; // A more modern blue
+  padding: 8px 16px;
   border-radius: 6px;
-  transform: translate(-50%, -50%);
-  box-shadow: 10px 10px 20px black;
-  padding: 40px;
+  cursor: pointer; // Cursor changes to pointer to indicate it's clickable
+  margin: 5px;
 
-  h2 {
-    font-size: 3rem;
+  &:hover {
+    background: #0056b3; // Darker shade on hover
   }
+}
 
-  ion-icon {
-    font-size: 2rem;
-    color: red;
-    background: lightblue;
-    padding: 10px 20px;
-    border-radius: 6px;
-  }
+ion-icon[name="close-outline"] {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #dc3545; // A standard red color for close buttons
+  color: #fff;
+}
 
-  p {
-    margin-bottom: 15px;
-  }
-
-  ion-icon[name="close-outline"] {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: red;
-    color: lightblue;
-  }
+p {
+  color: #666; // Slightly darker for better readability
+  margin-bottom: 15px;
+}
 `;

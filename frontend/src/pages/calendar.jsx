@@ -20,19 +20,10 @@ import {
   prevMonth
 } from "../calendar/utils";
 
-import Navbar from '../Navbar.jsx';
-
-
 import 'firebase/compat/analytics';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-
-
-import theme from '../dashboard/config/theme.ts';
-import 'firebase/compat/analytics';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
-import './dashboard.css'
+import './dashboard.css';
 
 
 import { getAuth } from "firebase/auth";
@@ -162,17 +153,17 @@ const CalendarContent = ({ tasks, events2, loading }) => {
     }
   };
 
-  const addDashboardEvent = (date, description, color, dsc) => {
+  const addDashboardEvent = (date, title, color, dsc) => {
     // Assuming date is a Date object with the correct date and no time component
     date.setHours(0, 0, 0, 0); // Reset the time component to avoid timezone issues
 
     setEvents((prev) => {
       // Check if the event already exists in the array to prevent duplicates
-      const exists = prev.some(ev => ev.title === description && datesAreOnSameDay(ev.date, date));
+      const exists = prev.some(ev => ev.title === title && datesAreOnSameDay(ev.date, date));
       if (!exists) {
 
         console.log(color);
-        return [...prev, {date, title: description, color: getDarkColor(), dsc: dsc}];
+        return [...prev, {date, title: title, color: getDarkColor(), dsc: dsc}];
 
       }
       return prev; // Return the previous state if the event already exists
@@ -264,7 +255,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
         >
           {getSortedDays(currentDate).map((day) => (
               <div
-                  key={`${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}`}
+                  key={`key placeholder`}
                   onClick={(e) =>
                       addEvent(
                           new Date(Date.UTC(
