@@ -10,6 +10,13 @@ export interface TaskModel {
   deadline: Date;
 }
 
+export interface BookmarkModel {
+  id: string;
+  titleInput: string;
+  linkInput: string;
+  icon: string;
+}
+
 export interface DragItem {
   index: number;
   id: TaskModel['id'];
