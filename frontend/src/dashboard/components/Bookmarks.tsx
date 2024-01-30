@@ -88,7 +88,7 @@ function Bookmarks() {
         <LinkBox>
             <Box key={bookmark.id} w="auto" pt="2" ml="1" pl={index === 0 ? '2' : '0'}>
                 <LinkOverlay href={'https://' + bookmark.linkInput}>
-                    <Button leftIcon={<Image src={bookmark.icon}/>}>
+                    <Button padding={5} leftIcon={<Image src={bookmark.icon}/>}>
                         {bookmark.titleInput}
                     </Button>
                 </LinkOverlay>
@@ -133,8 +133,8 @@ function Bookmarks() {
                     <Stack direction={['column', 'row']} spacing='24px'>
                         <IconButton
                             size="xs"
-                            w="40px"
-                            h="60px"
+                            w="50px"
+                            h="70px"
                             color={useColorModeValue('gray.500', 'gray.400')}
                             bgColor={useColorModeValue('gray.100', 'gray.700')}
                             _hover={{ bgColor: useColorModeValue('gray.200', 'gray.600') }}
@@ -148,7 +148,7 @@ function Bookmarks() {
                         <Stack
                             direction={{ base: 'column', md: 'row' }}
                             w={{ base: 300, md: 600 }}
-                            h="60px"
+                            h="70px"
                             bgColor={useColorModeValue('gray.50', 'gray.900')}
                             rounded="lg"
                             boxShadow="md"

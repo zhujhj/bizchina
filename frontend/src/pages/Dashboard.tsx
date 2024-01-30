@@ -18,7 +18,7 @@ function Dashboard() {
           <Navbar user={user} />
       </div>
       
-      <Heading
+      {/* <Heading
         fontSize={{ base: '4xl', sm: '5xl', md: '6xl' }}
         fontWeight="bold"
         textAlign="center"
@@ -27,7 +27,7 @@ function Dashboard() {
         mt={4}
       >
         BizChina Dashboard
-      </Heading>
+      </Heading> */}
       <DarkModeIconButton position="absolute" top={0} right={2} />
       <Bookmarks />
       <DndProvider backend={HTML5Backend}>
