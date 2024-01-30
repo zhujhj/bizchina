@@ -1,24 +1,20 @@
 import firebase from "firebase/compat/app";
 import { useEffect, useRef, useState } from "react";
 import { DAYS } from "../calendar/conts";
+
 import {
-  DateControls,
-  HeadDays,
-  PortalWrapper,
-  SeeMore,
-  SevenColGrid,
-  StyledEvent,
-  Wrapper,
+  DateControls, HeadDays, PortalWrapper, SeeMore, SevenColGrid, StyledEvent, Wrapper,
 } from "../calendar/styled";
+
 import {
-  datesAreOnSameDay,
-  getDarkColor,
-  getDaysInMonth,
-  getMonthYear,
-  getSortedDays,
-  nextMonth,
-  prevMonth
+  datesAreOnSameDay, getDarkColor, getDaysInMonth, getMonthYear, getSortedDays, nextMonth, prevMonth
 } from "../calendar/utils";
+
+import {
+  Box, Button, Input, FormControl, FormLabel, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, ChakraProvider
+} from '@chakra-ui/react';
+
+import theme from '../dashboard/config/theme.ts';
 
 import 'firebase/compat/analytics';
 import 'firebase/compat/auth';
@@ -31,8 +27,6 @@ import { getAuth } from "firebase/auth";
 const auth = getAuth();
 const firestore = firebase.firestore();
 
-
-const usersCollection = firestore.collection('users');
 const eventsCollection = firestore.collection('events');
 
 export const Calendar = () => {
@@ -66,24 +60,34 @@ export const Calendar = () => {
   }, []); // Empty dependency array ensures this runs only once
 
   return (
-    <>
       <CalendarContent tasks={tasks} events2={events} loading={loading} />
-    </>
   );
 };
 
 const CalendarContent = ({ tasks, events2, loading }) => {
   const [currentDate, setCurrentDate] = useState(new Date(2023, 12, 1));
   const [events, setEvents] = useState([]);
-  const dragDateRef = useRef();
-  const dragIndexRef = useRef();
   const [showPortal, setShowPortal] = useState(false);
   const firestore = firebase.firestore();
   const [portalData, setPortalData] = useState({});
-  const citiesRef = firestore.collection('tasks');
 
   const usersCollection = firestore.collection('users');
   const [currentDepartment, setCurrentDepartment] = useState('');
+
+  // -=-=- For Modal/Form when adding event upon clicking a date -=-=-
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [newEventName, setNewEventName] = useState('');
+  const [description, setNewDescription] = useState('');
+  const [newDate, setNewDate] = useState('');
+  const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure(); // for error modal
+
+  const handleAddEventClick = (date, event) => {
+    if (!event.target.classList.contains("StyledEvent")) { // if clicking on an event and not an empty spot on calendar, DONT open modal/form
+      onOpen(); // open modal/form
+      setNewDate(date);
+    }
+  };
+  // -=-=-=-=-=-
 
   var email = "";
   useEffect(() => {
@@ -107,13 +111,12 @@ const CalendarContent = ({ tasks, events2, loading }) => {
       tasks.forEach(task => {
 
         if (task.to === currentDepartment) {
-          addDashboardEvent(new Date(task.deadline), task.title, task.color, task.dsc);
+          addDashboardEvent(new Date(task.deadline), task.title, task.dsc);
         }
       });
 
       events2.forEach(event => {
-        // console.log("Retrieved from FB: ", new Date(event.date));
-        addDashboardEvent(new Date(event.date), event.title, event.color, "Event Placeholder");
+        addDashboardEvent(new Date(event.date), event.title, event.dsc);
       });
     });
   }, [tasks, events2]);
@@ -133,27 +136,18 @@ const CalendarContent = ({ tasks, events2, loading }) => {
     }
   });
 
-  const addEvent = (date, event) => {
-    if (!event.target.classList.contains("StyledEvent")) {
-      const text = window.prompt("name");
-      if (text) {
-        date.setHours(0);
-        date.setSeconds(0);
-        date.setMilliseconds(0);
-        setEvents((prev) => [
-          ...prev,
-
-          { date, title: text, color: getDarkColor() }
-        ]);
+  const addEvent = () => {
+      setEvents((prev) => [
+        ...prev,
         
-        const formattedDate = new Date(date).toLocaleDateString('en-US'); // changes date to MM/DD/YYYY
-        console.log("FORMATTED: ", formattedDate);
-        eventsCollection.add({ date: formattedDate, title: text, dsc: ''}) // adds event to firestore
-      }
-    }
-  };
+        { date: newDate, title: newEventName, dsc: description, color: getDarkColor() }
+      ]);
 
-  const addDashboardEvent = (date, title, color, dsc) => {
+      const formattedDate = new Date(newDate).toLocaleDateString('en-US'); // changes date to MM/DD/YYYY
+      eventsCollection.add({ date: formattedDate, title: newEventName, dsc: description}) // adds event to firestore
+  }
+
+  const addDashboardEvent = (date, title, dsc) => {
     // Assuming date is a Date object with the correct date and no time component
     date.setHours(0, 0, 0, 0); // Reset the time component to avoid timezone issues
 
@@ -162,7 +156,6 @@ const CalendarContent = ({ tasks, events2, loading }) => {
       const exists = prev.some(ev => ev.title === title && datesAreOnSameDay(ev.date, date));
       if (!exists) {
 
-        console.log(color);
         return [...prev, {date, title: title, color: getDarkColor(), dsc: dsc}];
 
       }
@@ -256,8 +249,8 @@ const CalendarContent = ({ tasks, events2, loading }) => {
           {getSortedDays(currentDate).map((day) => (
               <div
                   key={`key placeholder`}
-                  onClick={(e) =>
-                      addEvent(
+                     onClick={(e) =>
+                      handleAddEventClick(
                           new Date(Date.UTC(
                               currentDate.getFullYear(),
                               currentDate.getMonth(),
@@ -308,7 +301,68 @@ const CalendarContent = ({ tasks, events2, loading }) => {
                 handlePotalClose={handlePotalClose}
             />
         )}
-      </Wrapper>
+
+      {/* Modal/Form for adding event when clicking on a date */}
+      <ChakraProvider theme={theme}>
+        <Box>
+          <Modal isOpen={isOpen} onClose={onClose} size="md">
+          <ModalOverlay />
+            <ModalContent pb={3.5}>
+              <ModalHeader>Add Event</ModalHeader>
+              <ModalCloseButton color='black'/>
+              <ModalBody>
+
+                {/* Add your modal content here */}
+                {/* For example, you can include a form to add a new task */}
+                <FormControl isRequired>
+                  <FormLabel>Event Name</FormLabel>
+                  <Input
+                    mb={4}
+                    placeholder="Name"
+                    value={newEventName}
+                    onChange={(e) => setNewEventName(e.target.value)}
+                  />
+                </FormControl>
+
+                <FormControl isRequired>
+                        <FormLabel>Description</FormLabel>
+                        <textarea className='text' value = {description} onChange={(e) => setNewDescription(e.target.value)}> </textarea>
+                </FormControl>
+
+                <Button colorScheme="blue" onClick={() => {
+                  if (newEventName.trim() === '' || description.trim() === '') { // open error pop up if an input is empty
+                      openModal();
+                  } else {
+                    addEvent();
+                    onClose(); // close modal
+
+                    // resets parameters
+                    setNewEventName('');
+                    setNewDescription('');
+                    setNewDate('');
+                  }}}
+                >
+                  Add Task
+                </Button>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+
+        {/* error modal */}
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <ModalOverlay/>
+          <ModalContent pb={4}>
+            <ModalHeader pb={0}>Error</ModalHeader>
+            <ModalCloseButton color='black'/>
+            <ModalBody>
+              Please fill in all fields.
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+
+        </Box>
+      </ChakraProvider>
+    </Wrapper>
   );
 }
 
