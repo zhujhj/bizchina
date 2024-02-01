@@ -17,12 +17,16 @@ export const StyledEvent = styled.span`
   text-transform: capitalize;
 `;
 
+export const calendarWrapper = styled.div`
+  padding-top: 80px;
+  `;
+
 export const HeadDays = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 50px; // Or whatever height your cells are
-  background: darkolivegreen;
+  background: maroon;
   color: white;// Ensure it's a block-level element to fill the width
   width: 100%; // Stretch to the full width of the grid column
   box-sizing: border-box; // Ensure padding and border are included in the width
