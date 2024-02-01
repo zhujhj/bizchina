@@ -17,10 +17,6 @@ export const StyledEvent = styled.span`
   text-transform: capitalize;
 `;
 
-export const calendarWrapper = styled.div`
-  padding-top: 80px;
-  `;
-
 export const HeadDays = styled.span`
   display: flex;
   justify-content: center;

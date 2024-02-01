@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import './Navbar.css';
+import {getAuth} from "firebase/auth";
 
 function Navbar({ user }) {
   const [click, setClick] = useState(false);
@@ -25,7 +26,7 @@ function Navbar({ user }) {
     <>
         <nav className="navbar">
             <div className="navbar-container">
-                <Link to="/dashboard/${user}" className="navbar-logo" onClick={closeMobileMenu}>
+                <Link to="/dashboard" className="navbar-logo" onClick={closeMobileMenu}>
                   
                   <p><i class="fa-solid fa-code"></i>&nbsp;
                         BizChina   &nbsp;
