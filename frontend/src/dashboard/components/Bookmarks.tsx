@@ -86,13 +86,14 @@ function Bookmarks() {
 
     const bookmarkElements = bookmarkModels.map((bookmark, index) => (
         <LinkBox>
-            <Box key={bookmark.id} w="auto" pt="2" ml="1" pl={index === 0 ? '2' : '0'}>
+            <Box key={bookmark.id} w="auto" pt="2" ml="1" my="2" pl={index === 0 ? '2' : '0'}>
                 <LinkOverlay href={'https://' + bookmark.linkInput}>
                     <Button padding={5} leftIcon={<Image src={bookmark.icon}/>}>
                         {bookmark.titleInput}
                     </Button>
                 </LinkOverlay>
                 <IconButton
+                    onClick={() => {deleteBookmark(bookmark.id)}}
                     position="absolute"
                     top={0}
                     right={0}
