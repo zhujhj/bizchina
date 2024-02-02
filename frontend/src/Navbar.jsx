@@ -25,7 +25,7 @@ function Navbar({ user }) {
     <>
         <nav className="navbar">
             <div className="navbar-container">
-                <Link to="/dashboard/${user}" className="navbar-logo" onClick={closeMobileMenu}>
+                <Link to={`/dashboard/${user}`} className="navbar-logo" onClick={closeMobileMenu}>
                   
                   <p><i class="fa-solid fa-code"></i>&nbsp;
                         BizChina   &nbsp;
