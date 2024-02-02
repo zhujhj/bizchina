@@ -236,8 +236,8 @@ const CalendarContent = ({ tasks, events2, loading }) => {
 
   return (
 
-      //  borderBottom none gets rid of weird horizontal line going across screen 
-      <Wrapper style={{borderBottom:"none"}}> 
+      //  border none gets rid of weird horizontal line going across screen and lines sticking out of calendar grid 
+      <Wrapper style={{border:"none", borderRight: "none"}}> 
         <div className='navbar-container'>
             <Navbar user={user} />
         </div>
