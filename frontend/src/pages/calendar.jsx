@@ -1,5 +1,7 @@
 import firebase from "firebase/compat/app";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import Navbar from "../Navbar.jsx";
 import { DAYS } from "../calendar/conts";
 
 import {
@@ -11,7 +13,11 @@ import {
 } from "../calendar/utils";
 
 import {
-  Box, Button, Input, FormControl, FormLabel, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, ChakraProvider
+  Box, Button,
+  ChakraProvider,
+  FormControl, FormLabel,
+  Input,
+  Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure
 } from '@chakra-ui/react';
 
 import theme from '../dashboard/config/theme.ts';
@@ -19,6 +25,7 @@ import theme from '../dashboard/config/theme.ts';
 import 'firebase/compat/analytics';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import './calendar.css';
 import './dashboard.css';
 
 
@@ -65,7 +72,8 @@ export const Calendar = () => {
 };
 
 const CalendarContent = ({ tasks, events2, loading }) => {
-  const [currentDate, setCurrentDate] = useState(new Date(2023, 12, 1));
+  let { user } = useParams();
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [events, setEvents] = useState([]);
   const [showPortal, setShowPortal] = useState(false);
   const firestore = firebase.firestore();
@@ -179,21 +187,25 @@ const CalendarContent = ({ tasks, events2, loading }) => {
   const handlePotalClose = () => setShowPortal(false);
 
 
-  // const handleDelete = () => {
-  //   setEvents((prevEvents) =>
-  //       prevEvents.filter((ev) => ev.title !== portalData.title)
-  //   );
-  //   handlePotalClose();
-  // };
+  const handleDelete = () => {
+    setEvents((prevEvents) =>
+        prevEvents.filter((ev) => ev.title !== portalData.title)
+    );
+    handlePotalClose();
+  };
 
   const Portal = ({title, date, handleDelete, handlePotalClose, color, dsc}) => {
+    let dummyDate = date;
+    dummyDate.setDate(date.getDate() + 1); // to avoid timezone issues
     // toLocaleDateString can be adjusted with options for different locales and display options
-    const dateString = date.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+    const dateString = dummyDate.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+    date.setDate(date.getDate() - 1); // reset date to original value (to avoid timezone issues
 
     return (
         <PortalWrapper>
           <h2>{dsc}</h2>
-          <p>{dateString}</p>
+          <p>{dateString}</p> 
+          {/* <ion-icon onClick={handleDelete} name="trash-outline"></ion-icon> */}
           <ion-icon onClick={handlePotalClose} name="close-outline"></ion-icon>
         </PortalWrapper>
     );
@@ -223,8 +235,14 @@ const CalendarContent = ({ tasks, events2, loading }) => {
 
 
   return (
-      <Wrapper>
-        <DateControls>
+
+      //  border none gets rid of weird horizontal line going across screen and lines sticking out of calendar grid 
+      <Wrapper style={{border:"none", borderRight: "none"}}> 
+        <div className='navbar-container'>
+            <Navbar user={user} />
+        </div>
+        <div className='calendar-container'>
+        <DateControls className="mt-[100px">
           <ion-icon
               onClick={() => prevMonth(currentDate, setCurrentDate)}
               name="arrow-back-circle-outline"
@@ -297,7 +315,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
         {showPortal && (
             <Portal
                 {...portalData}
-                // handleDelete={handleDelete}
+                handleDelete={handleDelete}
                 handlePotalClose={handlePotalClose}
             />
         )}
@@ -362,6 +380,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
 
         </Box>
       </ChakraProvider>
+      </div>
     </Wrapper>
   );
 }

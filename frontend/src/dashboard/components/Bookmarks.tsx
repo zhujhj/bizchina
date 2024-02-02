@@ -87,7 +87,7 @@ function Bookmarks() {
     const bookmarkElements = bookmarkModels.map((bookmark, index) => (
         <LinkBox>
             <Box key={bookmark.id} w="auto" pt="2" ml="1" my="2" pl={index === 0 ? '2' : '0'}>
-                <LinkOverlay href={'https://' + bookmark.linkInput}>
+                <LinkOverlay href={'https://' + bookmark.linkInput} target='_blank'>
                     <Button padding={5} leftIcon={<Image src={bookmark.icon}/>}>
                         {bookmark.titleInput}
                     </Button>
