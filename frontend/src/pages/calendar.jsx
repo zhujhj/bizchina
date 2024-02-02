@@ -73,7 +73,7 @@ export const Calendar = () => {
 
 const CalendarContent = ({ tasks, events2, loading }) => {
   let { user } = useParams();
-  const [currentDate, setCurrentDate] = useState(new Date(2023, 12, 1));
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [events, setEvents] = useState([]);
   const [showPortal, setShowPortal] = useState(false);
   const firestore = firebase.firestore();
@@ -187,12 +187,12 @@ const CalendarContent = ({ tasks, events2, loading }) => {
   const handlePotalClose = () => setShowPortal(false);
 
 
-  // const handleDelete = () => {
-  //   setEvents((prevEvents) =>
-  //       prevEvents.filter((ev) => ev.title !== portalData.title)
-  //   );
-  //   handlePotalClose();
-  // };
+  const handleDelete = () => {
+    setEvents((prevEvents) =>
+        prevEvents.filter((ev) => ev.title !== portalData.title)
+    );
+    handlePotalClose();
+  };
 
   const Portal = ({title, date, handleDelete, handlePotalClose, color, dsc}) => {
     let dummyDate = date;
@@ -204,7 +204,8 @@ const CalendarContent = ({ tasks, events2, loading }) => {
     return (
         <PortalWrapper>
           <h2>{dsc}</h2>
-          <p>{dateString}</p>
+          <p>{dateString}</p> 
+          {/* <ion-icon onClick={handleDelete} name="trash-outline"></ion-icon> */}
           <ion-icon onClick={handlePotalClose} name="close-outline"></ion-icon>
         </PortalWrapper>
     );
@@ -235,8 +236,8 @@ const CalendarContent = ({ tasks, events2, loading }) => {
 
   return (
 
-    
-      <Wrapper>
+      //  borderBottom none gets rid of weird horizontal line going across screen 
+      <Wrapper style={{borderBottom:"none"}}> 
         <div className='navbar-container'>
             <Navbar user={user} />
         </div>
@@ -314,7 +315,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
         {showPortal && (
             <Portal
                 {...portalData}
-                // handleDelete={handleDelete}
+                handleDelete={handleDelete}
                 handlePotalClose={handlePotalClose}
             />
         )}
