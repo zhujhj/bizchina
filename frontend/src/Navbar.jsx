@@ -22,18 +22,18 @@ function Navbar({ user }) {
   window.addEventListener('resize', showButton);
 
   return (
-    <>
-        <nav className="navbar">
+    <nav className="navbar">
             <div className="navbar-container">
                 <Link to={`/dashboard/${user}`} className="navbar-logo" onClick={closeMobileMenu}>
                   
-                  <p><i class="fa-solid fa-code"></i>&nbsp;
+                  <p> 
                         BizChina   &nbsp;
-                        <i class="fa-solid fa-code"></i>
+                        
                   </p>
                 </Link>
                 <div className="menu-icon" onClick={handleClick}>
-                  <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
+                <ion-icon name="grid-outline" color="light"></ion-icon>
+
                 </div>
                 <ul className={click ? 'nav-menu active': 'nav-menu'}>
                   <li className='nav-item'>
@@ -53,8 +53,5 @@ function Navbar({ user }) {
                   
             </div>
         </nav>
-    </>
-  );
-}
-
+  )};
 export default Navbar
