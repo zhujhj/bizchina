@@ -5,7 +5,7 @@ import Navbar from "../Navbar.jsx";
 import { DAYS } from "../calendar/conts";
 
 import {
-  DateControls, HeadDays, PortalWrapper, SeeMore, SevenColGrid, StyledEvent, Wrapper,
+  DateControls, HeadDays, TaskWrapper, SeeMore, SevenColGrid, StyledEvent, Wrapper,
 } from "../calendar/styled";
 
 import {
@@ -202,15 +202,16 @@ const CalendarContent = ({ tasks, events2, loading }) => {
     date.setDate(date.getDate() - 1); // reset date to original value (to avoid timezone issues
 
     return (
-        <PortalWrapper>
+        <TaskWrapper>
           <h2>{dsc}</h2>
           <p>{dateString}</p> 
-          {/* <ion-icon onClick={handleDelete} name="trash-outline"></ion-icon> */}
+          <ion-icon onClick={handleDelete} name="trash-outline"></ion-icon>
           <ion-icon onClick={handlePotalClose} name="close-outline"></ion-icon>
-        </PortalWrapper>
+        </TaskWrapper>
     );
   };
-  const EventWrapper = ({children}) => {
+
+  const DisplayWrapper = ({children}) => {
     if (children.filter((child) => child).length)
       return (
           <>
@@ -287,7 +288,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
 
             {day}
           </span>
-                <EventWrapper>
+                <DisplayWrapper>
                   {events?.map(
                       (ev, index) =>
                           datesAreOnSameDay(
@@ -308,7 +309,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
                               </StyledEvent>
                           )
                   )}
-                </EventWrapper>
+                </DisplayWrapper>
               </div>
           ))}
         </SevenColGrid>
