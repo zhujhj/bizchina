@@ -218,14 +218,13 @@ function Column({ column,user }: { column: ColumnType, user:string }) {
                     placeholder="Select To"
                     onChange={(e) => setNewTo(e.target.value)}
                 >
-                  <option value="IT">IT</option>
-                  <option value="HR">HR</option>
-                  <option value="Corporate Relations">Corporate Relations</option>
-                  <option value="English Department">English Department</option>
-                  <option value="Chinese Department">Chinese Department</option>
-                  <option value="Finance">Finance</option>
-                  <option value="Events">Events</option>
-                  <option value="Prez">Prez</option>
+                  {["IT", "HR", "Corporate Relations", "English Department", "Chinese Department", "Finance", "Events", "Prez"]
+                      .filter((option) => option !== chatUser.department)
+                      .map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                      ))}
                 </Select>
               </FormControl>
               <FormControl isRequired>
