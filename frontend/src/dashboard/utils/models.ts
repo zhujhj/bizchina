@@ -4,6 +4,7 @@ export interface TaskModel {
   id: string;
   title: string;
   column: ColumnType;
+  dsc: string
   color: string;
   to: string;
   from: string;
