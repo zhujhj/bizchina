@@ -97,7 +97,7 @@ export const SeeMore = styled.p`
   cursor: pointer;
 `;
 
-export const PortalWrapper = styled.div`
+export const TaskWrapper = styled.div`
 background: #f9f9f9; // A softer background color
 position: absolute;
 width: 60%;
