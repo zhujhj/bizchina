@@ -64,6 +64,7 @@ function Column({ column,user }: { column: ColumnType, user:string }) {
   // for error modal
   const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
   const firestore = firebase.firestore();
+  const tasksCollection = firestore.collection('tasks');
   const {
     tasks,
     addEmptyTask,
@@ -240,16 +241,16 @@ function Column({ column,user }: { column: ColumnType, user:string }) {
                 if (newTaskName.trim() === '' || description.trim() === ''|| newDate.trim() === '') {
                   openModal();
                 } else {
-                  addEmptyTask({
+                  tasksCollection.add({
                     id: uuidv4(),
-                    column,
+                    column:'Todo',
                     title: newTaskName,
                     dsc: description,
                     color: pickChakraRandomColor('.300'),
                     to: newTo,
                     from: chatUser.department,
                     deadline: newDate,
-                  }); closeAddTaskModal();
+                  }); closeSendTaskModal();
                   // resets parameters
                   setNewTaskName('');
                   setNewDescription('');

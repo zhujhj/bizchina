@@ -130,6 +130,7 @@ function useColumnTasks(column: ColumnType) {
             id: movingTask.id,
             column: column,
             title: movingTask.title,
+            dsc: movingTask.dsc,
             color: movingTask.color,
             to: movingTask.to,
             from: movingTask.from,
