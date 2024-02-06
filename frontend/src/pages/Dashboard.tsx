@@ -36,10 +36,10 @@ function Dashboard() {
             columns={{ base: 1, md: 4 }}
             spacing={{ base: 16, md: 4 }}
           >
-            <Column column={ColumnType.TO_DO} />
-            <Column column={ColumnType.IN_PROGRESS} />
-            <Column column={ColumnType.BLOCKED} />
-            <Column column={ColumnType.COMPLETED} />
+            <Column column={ColumnType.TO_DO} user = {user}/>
+            <Column column={ColumnType.IN_PROGRESS} user = {user}/>
+            <Column column={ColumnType.BLOCKED} user = {user}/>
+            <Column column={ColumnType.COMPLETED} user = {user}/>
           </SimpleGrid>
         </Container>
       </DndProvider>
