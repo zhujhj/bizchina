@@ -43,9 +43,8 @@ const update = (task: TaskModel) => {
   });
 }
 
-function useColumnTasks(column: ColumnType) {
-  localStorage.clear();
-  const [tasks, setTasks] = useTaskCollection();
+function useColumnTasks(column: ColumnType,chatUser:any) {
+  const [tasks, setTasks] = useTaskCollection(column,chatUser);
 
   const columnTasks = tasks[column];
 
