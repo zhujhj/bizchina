@@ -129,7 +129,7 @@ function Bookmarks() {
 
     return (
         <>
-            <Box position='relative' h='100px'>
+            <Box position='relative' h='100px' margin='auto' w='1000px'>
                 <AbsoluteCenter p='4' color='black' axis='both'>
                     <Stack direction={['column', 'row']} spacing='24px'>
                         <IconButton
