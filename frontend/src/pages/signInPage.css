@@ -45,7 +45,7 @@
     width: 300px;
 
     font-size: 1.5rem;
-    background: rgba(218, 142, 142, 0);
+    background: rgb(57, 52, 52);
     color: white;
     outline: none;
     line-height: 1;
@@ -97,7 +97,7 @@ button {
     color: grey;
     border: none;
     /* border-radius: 20px; */
-    width: 200px;
+    
     padding: 10px;
     text-align: center;
     text-decoration: none;
@@ -106,6 +106,7 @@ button {
     border-radius: 15px;
     
 }
+
 
 button:hover {
     cursor: pointer;
@@ -120,6 +121,7 @@ button:disabled {
 
 /* Style for the default log in button */
 #login {
+    width: 200px;
     background-color: #ffffff;
     margin-bottom: 10px;
 }
@@ -144,7 +146,7 @@ button:disabled {
     height: 80px;
     width: 80px;
     margin-bottom: 10px;
-    border-radius: 30%;
+    border-radius: 20%;
 }
 
 #logo:hover {
