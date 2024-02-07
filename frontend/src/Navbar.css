@@ -13,6 +13,8 @@
 }
 
 .navbar-container {
+  /* background: maroon; */
+  background: black;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,12 +40,18 @@
   display: flex;
 }
 
+#bizchinalogo {
+  width: 50%;
+  height: 50%;
+}
+
 .fa-typo3 {
   margin-left: 0.5rem;
   font-size: 1.8rem;
 }
 
 .nav-menu {
+  /* background-color: maroon; */
   display: grid;
   grid-template-columns: repeat(4, auto);
   grid-gap: 10px;
@@ -55,6 +63,7 @@
 }
 
 .nav-item {
+  /* background-color: maroon; */
   height: 80px;
 }
 
@@ -68,7 +77,7 @@
 }
 
 .nav-links:hover {
-  
+  background-color: maroon;
   color: #fff;
   border-radius: 4px; /* Rounded corners for a modern look */
   transition: background-color 0.3s ease-in-out;
@@ -104,7 +113,8 @@
   }
 
   .nav-menu.active {
-    background: #242222;
+    /* background: #242222; */
+    background: maroon;
     left: 0;
     opacity: 1;
     transition: all 0.5s ease;
@@ -125,6 +135,7 @@
   }
 
   .navbar-logo {
+    background: maroon;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* More modern font */
     font-weight: bold; /* Make the logo bold */
     position: absolute;
