@@ -34,19 +34,15 @@ function useTaskCollection(column:ColumnType,chatUser:any) {
         switch (column){
           case ColumnType.TO_DO:
             todoTaskModels = tasksArray;
-            console.log(tasksArray);
             break;
           case ColumnType.IN_PROGRESS:
             inProgressTaskModels = tasksArray;
-            console.log(tasksArray);
             break;
           case ColumnType.BLOCKED:
             blockedTaskModels = tasksArray;
-            console.log(tasksArray);
             break;
           case ColumnType.COMPLETED:
             completedTaskModels = tasksArray;
-            console.log(tasksArray);
             break;
         }
         setLoading(false);

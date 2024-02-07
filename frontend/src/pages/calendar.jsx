@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../Navbar.jsx";
 import { DAYS } from "../calendar/conts";
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   DateControls, HeadDays, TaskWrapper, SeeMore, SevenColGrid, StyledEvent, Wrapper,
@@ -108,7 +109,6 @@ const CalendarContent = ({ tasks, events2, loading }) => {
       } else {
         snapshot.docs.forEach(doc => {
           if (doc.data().email === email) {
-            console.log("3");
             console.log(doc.data().department);
             setCurrentDepartment(doc.data().department);
           }
@@ -119,12 +119,12 @@ const CalendarContent = ({ tasks, events2, loading }) => {
       tasks.forEach(task => {
 
         if (task.to === currentDepartment) {
-          addDashboardEvent(new Date(task.deadline), task.title, task.dsc);
+          addDashboardEvent(new Date(task.deadline), task.title, task.dsc, 'task');
         }
       });
 
       events2.forEach(event => {
-        addDashboardEvent(new Date(event.date), event.title, event.dsc);
+        addDashboardEvent(new Date(event.date), event.title, event.dsc, event.id);
       });
     });
   }, [tasks, events2]);
@@ -145,17 +145,19 @@ const CalendarContent = ({ tasks, events2, loading }) => {
   });
 
   const addEvent = () => {
+      let identifier = uuidv4();
+
       setEvents((prev) => [
         ...prev,
         
-        { date: newDate, title: newEventName, dsc: description, color: getDarkColor() }
+        { date: newDate, title: newEventName, dsc: description, color: getDarkColor(), id: identifier }
       ]);
 
       const formattedDate = new Date(newDate).toLocaleDateString('en-US'); // changes date to MM/DD/YYYY
-      eventsCollection.add({ date: formattedDate, title: newEventName, dsc: description}) // adds event to firestore
+      eventsCollection.add({ date: formattedDate, title: newEventName, dsc: description, id: identifier}) // adds event to firestore
   }
 
-  const addDashboardEvent = (date, title, dsc) => {
+  const addDashboardEvent = (date, title, dsc, id) => {
     // Assuming date is a Date object with the correct date and no time component
     date.setHours(0, 0, 0, 0); // Reset the time component to avoid timezone issues
 
@@ -163,8 +165,8 @@ const CalendarContent = ({ tasks, events2, loading }) => {
       // Check if the event already exists in the array to prevent duplicates
       const exists = prev.some(ev => ev.title === title && datesAreOnSameDay(ev.date, date));
       if (!exists) {
-
-        return [...prev, {date, title: title, color: getDarkColor(), dsc: dsc}];
+        console.log("ID: ", id);
+        return [...prev, {date, title: title, color: getDarkColor(), dsc: dsc, id: id}];
 
       }
       return prev; // Return the previous state if the event already exists
@@ -186,11 +188,30 @@ const CalendarContent = ({ tasks, events2, loading }) => {
 
   const handlePotalClose = () => setShowPortal(false);
 
+  const eventsQueryById = (id) => eventsCollection.where('id', '==', id);
 
   const handleDelete = () => {
-    setEvents((prevEvents) =>
-        prevEvents.filter((ev) => ev.title !== portalData.title)
-    );
+    // Users can NOT delete a task from the calendar page, but CAN delete an event
+    // the delete button seems to work on firebase but for some reason, the filter code below which removes
+    // the event/task from the calendar breaks the code
+
+    // setEvents((prevEvents) => {
+    //     // portalData is the current portal we are clicked on
+    //     prevEvents.filter((ev) => ev.title !== portalData.title)
+    //   }
+    // ); 
+
+    if (portalData.id === 'task') {
+      alert("Error: Attempted to delete task from calendar page!");
+    } else {
+      eventsQueryById(portalData.id)
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => doc.ref.delete());
+        console.log(`event deleted: ${portalData.id}`);
+      });
+    }
+
     handlePotalClose();
   };
 
@@ -210,8 +231,8 @@ const CalendarContent = ({ tasks, events2, loading }) => {
         </TaskWrapper>
     );
   };
-
-  const DisplayWrapper = ({children}) => {
+  
+  const EventWrapper = ({children}) => {
     if (children.filter((child) => child).length)
       return (
           <>
@@ -288,7 +309,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
 
             {day}
           </span>
-                <DisplayWrapper>
+                <EventWrapper>
                   {events?.map(
                       (ev, index) =>
                           datesAreOnSameDay(
@@ -300,7 +321,8 @@ const CalendarContent = ({ tasks, events2, loading }) => {
                               )),
                           ) && (
                               <StyledEvent
-                                  key={`${ev.title}-${index}`}
+                                  // key={`${ev.title}-${index}`}
+                                  key = {ev.id}
                                   onClick={() => handleOnClickEvent(ev)}
                                   className="StyledEvent"
                                   bgColor={ev.color}
@@ -309,7 +331,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
                               </StyledEvent>
                           )
                   )}
-                </DisplayWrapper>
+                </EventWrapper>
               </div>
           ))}
         </SevenColGrid>
