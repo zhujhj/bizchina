@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
-import logo from './images/logo.png';
+import logo from './images/bizchinalogo.webp';
 
 function Navbar({ user }) {
   const [click, setClick] = useState(false);
@@ -27,10 +27,7 @@ function Navbar({ user }) {
             <div className="navbar-container">
                 <Link to={`/dashboard/${user}`} className="navbar-logo" onClick={closeMobileMenu}>
                   
-                  <p> 
-                        BizChina   &nbsp;
-                        
-                  </p>
+                  <img src={logo} id='bizchinalogo'></img>
                 </Link>
                 <div className="menu-icon" onClick={handleClick}>
                 <ion-icon name="grid-outline" color="light"></ion-icon>
