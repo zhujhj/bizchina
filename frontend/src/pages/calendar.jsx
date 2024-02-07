@@ -113,14 +113,6 @@ const CalendarContent = ({ tasks, events2, loading,department }) => {
       });
   }, [tasks, events2]);
 
-  const handleAddEventClick = (date, event) => {
-    if (!event.target.classList.contains("StyledEvent")) { // if clicking on an event and not an empty spot on calendar, DONT open modal/form
-      onOpen(); // open modal/form
-      setNewDate(date);
-    }
-  };
-  // -=-=-=-=-=-
-
   const addEvent = () => {
       let identifier = uuidv4();
 
@@ -172,14 +164,13 @@ const CalendarContent = ({ tasks, events2, loading,department }) => {
     // the delete button seems to work on firebase but for some reason, the filter code below which removes
     // the event/task from the calendar breaks the code
 
-    // setEvents((prevEvents) => 
-    //     // portalData is the current portal we are clicked on
-    //     prevEvents.filter((ev) => ev.title !== portalData.title)
-    // ); 
-
     if (portalData.id === 'task') {
       alert("Error: Attempted to delete task from calendar page!");
     } else {
+      setEvents((prevEvents) => 
+        // portalData is the current portal we are clicked on
+        prevEvents.filter((ev) => ev.title !== portalData.title)
+      ); 
       eventsQueryById(portalData.id)
       .get()
       .then(snapshot => {
