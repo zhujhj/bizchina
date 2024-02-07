@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../Navbar.jsx";
 import { DAYS } from "../calendar/conts";
-import { v4 as uuidv4 } from 'uuid';
 
 import {
   DateControls, HeadDays, TaskWrapper, SeeMore, SevenColGrid, StyledEvent, Wrapper,
@@ -38,26 +37,28 @@ const firestore = firebase.firestore();
 const eventsCollection = firestore.collection('events');
 
 export const Calendar = () => {
-
+  let {user} = useParams();
   const [tasks, setTasks] = useState([]); // Renamed to tasks for clarity
   const [events, setEvents] = useState([]); 
   const [loading, setLoading] = useState(true);
-
-
+  const [currentDepartment, setCurrentDepartment] = useState('');
+  const usersCollection = firestore.collection('users').doc(user);
   const collection = firestore.collection("tasks");
   useEffect(() => {
 
     const fetchData = async () => {
       setLoading(true);
       try {
-        const querySnapshot = await collection.get();
+        let doc = await usersCollection.get();
+        const userData = doc.data();
+        setCurrentDepartment(userData.department);
+        const querySnapshot = await collection.where("to","==",userData.department).get();
         const newTasks = querySnapshot.docs.map(doc => doc.data());
         setTasks(newTasks); // Correctly update tasks state
-
         const eventsSnapshot = await eventsCollection.get();
         const newEvents = eventsSnapshot.docs.map(doc => doc.data());
         setEvents(newEvents); // Correctly update events state
-
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching tasks:", error);
       }
@@ -68,27 +69,40 @@ export const Calendar = () => {
   }, []); // Empty dependency array ensures this runs only once
 
   return (
-      <CalendarContent tasks={tasks} events2={events} loading={loading} />
+      <CalendarContent tasks={tasks} events2={events} loading={loading} department ={currentDepartment}/>
   );
 };
 
-const CalendarContent = ({ tasks, events2, loading }) => {
-  let { user } = useParams();
+const CalendarContent = ({ tasks, events2, loading,department }) => {
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  let {user} = useParams();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [events, setEvents] = useState([]);
   const [showPortal, setShowPortal] = useState(false);
   const firestore = firebase.firestore();
   const [portalData, setPortalData] = useState({});
-
-  const usersCollection = firestore.collection('users');
-  const [currentDepartment, setCurrentDepartment] = useState('');
-
   // -=-=- For Modal/Form when adding event upon clicking a date -=-=-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [newEventName, setNewEventName] = useState('');
   const [description, setNewDescription] = useState('');
   const [newDate, setNewDate] = useState('');
   const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure(); // for error modal
+  console.log(tasks);
+
+  useEffect(() => {
+      tasks.forEach(task => {
+
+        if (task.to === department) {
+          addDashboardEvent(new Date(task.deadline), task.title, task.dsc);
+        }
+      });
+
+      events2.forEach(event => {
+        addDashboardEvent(new Date(event.date), event.title, event.dsc);
+      });
+  }, [tasks, events2]);
 
   const handleAddEventClick = (date, event) => {
     if (!event.target.classList.contains("StyledEvent")) { // if clicking on an event and not an empty spot on calendar, DONT open modal/form
@@ -98,66 +112,19 @@ const CalendarContent = ({ tasks, events2, loading }) => {
   };
   // -=-=-=-=-=-
 
-  var email = "";
-  useEffect(() => {
-
-    // Fetch user's department first
-    usersCollection.get().then(snapshot => {
-
-      if (snapshot.empty) {
-        console.log('No matching documents.');
-      } else {
-        snapshot.docs.forEach(doc => {
-          if (doc.data().email === email) {
-            console.log(doc.data().department);
-            setCurrentDepartment(doc.data().department);
-          }
-        });
-      }
-    }).then(() => {
-      // This will run after the above async operation is completed
-      tasks.forEach(task => {
-
-        if (task.to === currentDepartment) {
-          addDashboardEvent(new Date(task.deadline), task.title, task.dsc, 'task');
-        }
-      });
-
-      events2.forEach(event => {
-        addDashboardEvent(new Date(event.date), event.title, event.dsc, event.id);
-      });
-    });
-  }, [tasks, events2]);
-
-  
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user && user.email) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/v8/firebase.User
-      email = user.email;
-      // console.log("hello " + user.email);
-      // console.log("user is signed in")
-      // ...
-    } else {
-      // User is signed out
-      // ...
-    }
-  });
 
   const addEvent = () => {
-      let identifier = uuidv4();
-
       setEvents((prev) => [
         ...prev,
         
-        { date: newDate, title: newEventName, dsc: description, color: getDarkColor(), id: identifier }
+        { date: newDate, title: newEventName, dsc: description, color: getDarkColor() }
       ]);
 
       const formattedDate = new Date(newDate).toLocaleDateString('en-US'); // changes date to MM/DD/YYYY
-      eventsCollection.add({ date: formattedDate, title: newEventName, dsc: description, id: identifier}) // adds event to firestore
+      eventsCollection.add({ date: formattedDate, title: newEventName, dsc: description}) // adds event to firestore
   }
 
-  const addDashboardEvent = (date, title, dsc, id) => {
+  const addDashboardEvent = (date, title, dsc) => {
     // Assuming date is a Date object with the correct date and no time component
     date.setHours(0, 0, 0, 0); // Reset the time component to avoid timezone issues
 
@@ -165,8 +132,8 @@ const CalendarContent = ({ tasks, events2, loading }) => {
       // Check if the event already exists in the array to prevent duplicates
       const exists = prev.some(ev => ev.title === title && datesAreOnSameDay(ev.date, date));
       if (!exists) {
-        console.log("ID: ", id);
-        return [...prev, {date, title: title, color: getDarkColor(), dsc: dsc, id: id}];
+
+        return [...prev, {date, title: title, color: getDarkColor(), dsc: dsc}];
 
       }
       return prev; // Return the previous state if the event already exists
@@ -188,30 +155,11 @@ const CalendarContent = ({ tasks, events2, loading }) => {
 
   const handlePotalClose = () => setShowPortal(false);
 
-  const eventsQueryById = (id) => eventsCollection.where('id', '==', id);
 
   const handleDelete = () => {
-    // Users can NOT delete a task from the calendar page, but CAN delete an event
-    // the delete button seems to work on firebase but for some reason, the filter code below which removes
-    // the event/task from the calendar breaks the code
-
-    // setEvents((prevEvents) => {
-    //     // portalData is the current portal we are clicked on
-    //     prevEvents.filter((ev) => ev.title !== portalData.title)
-    //   }
-    // ); 
-
-    if (portalData.id === 'task') {
-      alert("Error: Attempted to delete task from calendar page!");
-    } else {
-      eventsQueryById(portalData.id)
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => doc.ref.delete());
-        console.log(`event deleted: ${portalData.id}`);
-      });
-    }
-
+    setEvents((prevEvents) =>
+        prevEvents.filter((ev) => ev.title !== portalData.title)
+    );
     handlePotalClose();
   };
 
@@ -231,8 +179,8 @@ const CalendarContent = ({ tasks, events2, loading }) => {
         </TaskWrapper>
     );
   };
-  
-  const EventWrapper = ({children}) => {
+
+  const DisplayWrapper = ({children}) => {
     if (children.filter((child) => child).length)
       return (
           <>
@@ -251,9 +199,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
       );
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+
 
 
   return (
@@ -309,7 +255,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
 
             {day}
           </span>
-                <EventWrapper>
+                <DisplayWrapper>
                   {events?.map(
                       (ev, index) =>
                           datesAreOnSameDay(
@@ -321,8 +267,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
                               )),
                           ) && (
                               <StyledEvent
-                                  // key={`${ev.title}-${index}`}
-                                  key = {ev.id}
+                                  key={`${ev.title}-${index}`}
                                   onClick={() => handleOnClickEvent(ev)}
                                   className="StyledEvent"
                                   bgColor={ev.color}
@@ -331,7 +276,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
                               </StyledEvent>
                           )
                   )}
-                </EventWrapper>
+                </DisplayWrapper>
               </div>
           ))}
         </SevenColGrid>
