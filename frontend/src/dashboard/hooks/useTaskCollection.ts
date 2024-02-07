@@ -13,49 +13,45 @@ import 'firebase/compat/firestore';
 import firestore = firebase.firestore;
 import {useEffect, useState} from "react";
 import axios from "axios";
+import Task from "../components/Task";
 
-function useTaskCollection(column:ColumnType,chatUser:any) {
+function useTaskCollection(column:ColumnType,chatUser:any,tasks:any[]) {
   let todoTaskModels =[];
   let inProgressTaskModels =[];
-  let blockedTaskModels =[];
+  let blockedTaskModels:TaskModel[] =[];
   let completedTaskModels =[];
-  const firestore = firebase.firestore();
-  const [loading, setLoading] = useState(true);
-  const tasksCollection = firestore.collection('tasks').where("to","==",chatUser.department).where("column","==",column);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const doc = await tasksCollection.get();
 
-        let tasksArray = [];
-        doc.forEach(task => {
-          tasksArray.push(task.data());
-        })
-        switch (column){
-          case ColumnType.TO_DO:
-            todoTaskModels = tasksArray;
-            console.log(tasksArray);
-            break;
-          case ColumnType.IN_PROGRESS:
-            inProgressTaskModels = tasksArray;
-            console.log(tasksArray);
-            break;
-          case ColumnType.BLOCKED:
-            blockedTaskModels = tasksArray;
-            console.log(tasksArray);
-            break;
-          case ColumnType.COMPLETED:
-            completedTaskModels = tasksArray;
-            console.log(tasksArray);
-            break;
+  switch (column) {
+    case ColumnType.IN_PROGRESS:
+      tasks.forEach(task =>{
+        if(task.column == column){
+          inProgressTaskModels.push(task);
         }
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+      })
+          break;
+    case ColumnType.TO_DO:
+      tasks.forEach(task =>{
+        if(task.column == column){
+          todoTaskModels.push(task);
+        }
+      })
+      break;
+    case ColumnType.COMPLETED:
+      tasks.forEach(task =>{
+        if(task.column == column){
+          completedTaskModels.push(task);
+        }
+      })
+      break;
+    case ColumnType.BLOCKED:
+      tasks.forEach(task =>{
+        if(task.column == column){
+          blockedTaskModels.push(task);
+        }
+      })
+        console.log(tasks)
+      break;
+  }
 
   return useLocalStorage<{
     [key in ColumnType]: TaskModel[];

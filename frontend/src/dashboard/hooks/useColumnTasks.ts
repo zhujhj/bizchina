@@ -43,9 +43,9 @@ const update = (task: TaskModel) => {
   });
 }
 
-function useColumnTasks(column: ColumnType,chatUser:any) {
-  const [tasks, setTasks] = useTaskCollection(column,chatUser);
-
+function useColumnTasks(column: ColumnType,chatUser:any, Alltasks:any) {
+  localStorage.clear();
+  const [tasks, setTasks] = useTaskCollection(column,chatUser,Alltasks);
   const columnTasks = tasks[column];
 
   const addEmptyTask = useCallback((newTaskParams) => {

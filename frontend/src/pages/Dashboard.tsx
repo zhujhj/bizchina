@@ -14,6 +14,7 @@ function Dashboard() {
     // for add modal
 
     const [chatUser, setUser] = useState(null);
+    const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
     // for error modal
     const firestore = firebase.firestore();
@@ -24,10 +25,13 @@ function Dashboard() {
             try {
                 const doc = await collection.get();
 
-                if (!doc.exists) {
-                    return;
-                }
                 const userData = doc.data();
+                const tasksCollection = await firestore.collection('tasks').where("to","==",userData.department).get();
+                let tasksArray = [];
+                tasksCollection.forEach(task => {
+                    tasksArray.push(task.data());
+                })
+                setTasks(tasksArray);
                 setUser(userData);
                 setLoading(false);
             } catch (error) {
@@ -37,10 +41,10 @@ function Dashboard() {
         fetchData();
     }, []);
     return (
-        <DashboardContent chatUser={chatUser} loading={loading} user={user} />
+        <DashboardContent chatUser={chatUser} loading={loading} user={user} tasks={tasks}/>
     );
 }
-function DashboardContent({ chatUser, loading,user}) {
+function DashboardContent({ chatUser, loading,user,tasks}) {
 
     if (loading) {
         return <div>Loading...</div>;
@@ -73,10 +77,10 @@ function DashboardContent({ chatUser, loading,user}) {
             columns={{ base: 1, md: 4 }}
             spacing={{ base: 16, md: 4 }}
           >
-            <Column column={ColumnType.TO_DO} chatUser={chatUser} />
-            <Column column={ColumnType.IN_PROGRESS} chatUser={chatUser} />
-            <Column column={ColumnType.BLOCKED} chatUser={chatUser} />
-            <Column column={ColumnType.COMPLETED} chatUser={chatUser}/>
+            <Column column={ColumnType.TO_DO} chatUser={chatUser} Alltasks={tasks}/>
+            <Column column={ColumnType.IN_PROGRESS} chatUser={chatUser} Alltasks={tasks}/>
+            <Column column={ColumnType.BLOCKED} chatUser={chatUser} Alltasks={tasks}/>
+            <Column column={ColumnType.COMPLETED} chatUser={chatUser} Alltasks={tasks}/>
           </SimpleGrid>
         </Container>
       </DndProvider>

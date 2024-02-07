@@ -42,7 +42,7 @@ const ColumnColorScheme: Record<ColumnType, string> = {
   Completed: 'green',
 };
 
-const Column = ({ column, chatUser}) => {
+const Column = ({ column, chatUser, Alltasks}) => {
   const { isOpen: isAddTaskModalOpen, onOpen: openAddTaskModal, onClose: closeAddTaskModal } = useDisclosure();
 
   // For "Send Task" modal
@@ -68,7 +68,7 @@ const Column = ({ column, chatUser}) => {
     dropTaskFrom,
     swapTasks,
     updateTask,
-  } = useColumnTasks(column,chatUser);
+  } = useColumnTasks(column,chatUser,Alltasks);
 
   const { dropRef, isOver } = useColumnDrop(column, dropTaskFrom);
 

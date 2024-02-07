@@ -41,8 +41,8 @@ export const Calendar = () => {
   const [tasks, setTasks] = useState([]); // Renamed to tasks for clarity
   const [events, setEvents] = useState([]); 
   const [loading, setLoading] = useState(true);
-
-
+  const {user} = useParams();
+  const usersCollection = firestore.collection('users');
   const collection = firestore.collection("tasks");
   useEffect(() => {
 
@@ -79,7 +79,7 @@ const CalendarContent = ({ tasks, events2, loading }) => {
   const firestore = firebase.firestore();
   const [portalData, setPortalData] = useState({});
 
-  const usersCollection = firestore.collection('users');
+
   const [currentDepartment, setCurrentDepartment] = useState('');
 
   // -=-=- For Modal/Form when adding event upon clicking a date -=-=-
