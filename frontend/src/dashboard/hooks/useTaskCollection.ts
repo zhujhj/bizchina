@@ -10,48 +10,144 @@ import 'firebase/compat/analytics';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-import firestore = firebase.firestore;
-import {useEffect, useState} from "react";
-import axios from "axios";
 
-function useTaskCollection(column:ColumnType,chatUser:any) {
-  let todoTaskModels =[];
-  let inProgressTaskModels =[];
-  let blockedTaskModels =[];
-  let completedTaskModels =[];
-  const firestore = firebase.firestore();
-  const [loading, setLoading] = useState(true);
-  const tasksCollection = firestore.collection('tasks').where("to","==",chatUser.department).where("column","==",column);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const doc = await tasksCollection.get();
+import { getAuth } from "firebase/auth";
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-        let tasksArray = [];
-        doc.forEach(task => {
-          tasksArray.push(task.data());
-        })
-        switch (column){
-          case ColumnType.TO_DO:
-            todoTaskModels = tasksArray;
-            break;
-          case ColumnType.IN_PROGRESS:
-            inProgressTaskModels = tasksArray;
-            break;
-          case ColumnType.BLOCKED:
-            blockedTaskModels = tasksArray;
-            break;
-          case ColumnType.COMPLETED:
-            completedTaskModels = tasksArray;
-            break;
-        }
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+const auth = getAuth();
+const firestore = firebase.firestore();
+
+const usersRef = firestore.collection('users');
+
+var email = "";
+
+firebase.auth().onAuthStateChanged((user) => {
+  if (user && user.email) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/v8/firebase.User
+    email = user.email;
+    console.log("hello " + user.email);
+    console.log("user is signed in")
+    // ...
+  } else {
+    // User is signed out
+    // ...
+  }
+});
+
+const ITUsers = await usersRef.where('department', '==', 'IT').get();
+ITUsers.forEach(user => {
+  console.log(user.data());
+});
+
+// finds current user in the firestore database
+const currentUser = await usersRef.where('email', '==', email).get();
+if (currentUser) {
+  console.log("user existsssss " + currentUser);
+} else {
+  console.log("user not found");
+}
+var currentDepartment = "";
+currentUser.forEach(doc => {
+  console.log('user exists');
+  console.log(doc.data());
+  currentDepartment = doc.data().department;
+});
+
+const citiesRef = firestore.collection('tasks');
+
+const todoTasks = await citiesRef.where('column', '==', 'Todo').where('to', '==', currentDepartment).get();
+if (todoTasks.empty) {
+  console.log('No matching documents.');
+}
+
+const todoTaskModels: TaskModel[] = []
+
+todoTasks.forEach(doc => {
+  console.log(doc.id, '=>', doc.data().column);
+  todoTaskModels.push({
+    id: doc.data().id,
+    column: doc.data().column,
+    title: doc.data().title,
+    color: doc.data().color,
+    dsc: doc.data().dsc,
+    to: doc.data().to,
+    from: doc.data().from,
+    deadline: doc.data().deadline,
+  });
+});
+
+// gets all in progress tasks
+const inProgressTasks = await citiesRef.where('column', '==', 'In Progress').where('to', '==', currentDepartment).get();
+if (inProgressTasks.empty) {
+  console.log('No matching documents.');
+}
+
+const inProgressTaskModels: TaskModel[] = []
+
+inProgressTasks.forEach(doc => {
+  console.log(doc.id, '=>', doc.data().column);
+  inProgressTaskModels.push({
+    id: doc.data().id,
+    column: doc.data().column,
+    title: doc.data().title,
+    dsc: doc.data().dsc,
+    color: doc.data().color,
+    to: doc.data().to,
+    from: doc.data().from,
+    deadline: doc.data().deadline,
+  });
+});
+
+// gets all blocked tasks
+const blockedTasks = await citiesRef.where('column', '==', 'Blocked').where('to', '==', currentDepartment).get();
+if (blockedTasks.empty) {
+  console.log('No matching documents.');
+}
+
+const blockedTaskModels: TaskModel[] = []
+
+blockedTasks.forEach(doc => {
+  console.log(doc.id, '=>', doc.data().column);
+  blockedTaskModels.push({
+    id: doc.data().id,
+    column: doc.data().column,
+    title: doc.data().title,
+    dsc: doc.data().dsc,
+    color: doc.data().color,
+    to: doc.data().to,
+    from: doc.data().from,
+    deadline: doc.data().deadline,
+  });
+});
+
+// gets all completed tasks
+const completedTasks = await citiesRef.where('column', '==', 'Completed').where('to', '==', currentDepartment).get();
+if (completedTasks.empty) {
+  console.log('No matching documents.');
+}
+
+const completedTaskModels: TaskModel[] = []
+
+completedTasks.forEach(doc => {
+  console.log(doc.id, '=>', doc.data().column);
+  completedTaskModels.push({
+    id: doc.data().id,
+    column: doc.data().column,
+    title: doc.data().title,
+    dsc: doc.data().dsc,
+    color: doc.data().color,
+    to: doc.data().to,
+    from: doc.data().from,
+    deadline: doc.data().deadline,
+  });
+});
+
+const kanbanRef = firestore.collection('tasks');
+const query = kanbanRef.orderBy('id');
+const taskQueryByColumn = (column) => kanbanRef.where('column', '==', column);
+
+function useTaskCollection() {
 
   return useLocalStorage<{
     [key in ColumnType]: TaskModel[];

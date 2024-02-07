@@ -33,7 +33,6 @@ import {
 } from '@chakra-ui/react'
 import axios from "axios/index";
 import firebase from 'firebase/compat/app';
-import {MultiChatSocket, MultiChatWindow} from "react-chat-engine-advanced";
 
 const ColumnColorScheme: Record<ColumnType, string> = {
   Todo: 'gray',
@@ -42,7 +41,8 @@ const ColumnColorScheme: Record<ColumnType, string> = {
   Completed: 'green',
 };
 
-const Column = ({ column, chatUser}) => {
+function Column({ column,user }: { column: ColumnType, user:string }) {
+  // for add modal
   const { isOpen: isAddTaskModalOpen, onOpen: openAddTaskModal, onClose: closeAddTaskModal } = useDisclosure();
 
   // For "Send Task" modal
@@ -54,12 +54,16 @@ const Column = ({ column, chatUser}) => {
   const handleSendButtonClick = () => {
     openSendTaskModal();
   };
-  const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
-  const firestore = firebase.firestore();
   const [newTaskName, setNewTaskName] = useState('');
   const [newTo, setNewTo] = useState('');
+  const [newFrom, setNewFrom] = useState('');
   const [newDate, setNewDate] = useState('');
   const [description, setNewDescription] = useState('');
+  const [chatUser, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  // for error modal
+  const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
+  const firestore = firebase.firestore();
   const tasksCollection = firestore.collection('tasks');
   const {
     tasks,
@@ -68,7 +72,7 @@ const Column = ({ column, chatUser}) => {
     dropTaskFrom,
     swapTasks,
     updateTask,
-  } = useColumnTasks(column,chatUser);
+  } = useColumnTasks(column);
 
   const { dropRef, isOver } = useColumnDrop(column, dropTaskFrom);
 
@@ -82,6 +86,26 @@ const Column = ({ column, chatUser}) => {
           onDelete={deleteTask}
       />
   ));
+  const collection = firestore.collection('users').doc(user);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const doc = await collection.get();
+
+        if (!doc.exists) {
+          return;
+        }
+
+        const userData = doc.data();
+        setUser(userData);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [collection]);
   return (
       <Box>
         <Heading fontSize="md" mb={4} letterSpacing="wide">
@@ -158,6 +182,7 @@ const Column = ({ column, chatUser}) => {
                   setNewTaskName('');
                   setNewDescription('');
                   setNewTo('');
+                  setNewFrom('');
                   setNewDate('');
                 }}}
               >
@@ -194,7 +219,7 @@ const Column = ({ column, chatUser}) => {
                     onChange={(e) => setNewTo(e.target.value)}
                 >
                   {["IT", "HR", "Corporate Relations", "English Department", "Chinese Department", "Finance", "Events", "Prez"]
-                      .filter((option) => option!= chatUser.department)
+                      .filter((option) => option)
                       .map((option) => (
                           <option key={option} value={option}>
                             {option}
@@ -229,6 +254,7 @@ const Column = ({ column, chatUser}) => {
                   setNewTaskName('');
                   setNewDescription('');
                   setNewTo('');
+                  setNewFrom('');
                   setNewDate('');
                 }}}
               >
@@ -266,5 +292,6 @@ const Column = ({ column, chatUser}) => {
         </Stack>
       </Box>
   );
-};
+}
+
 export default Column;

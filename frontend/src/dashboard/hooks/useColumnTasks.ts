@@ -40,11 +40,12 @@ const update = (task: TaskModel) => {
         snapshot.forEach(doc => {
           doc.ref.update(task);
         })
-  });
+      });
 }
 
-function useColumnTasks(column: ColumnType,chatUser:any) {
-  const [tasks, setTasks] = useTaskCollection(column,chatUser);
+function useColumnTasks(column: ColumnType) {
+  localStorage.clear();
+  const [tasks, setTasks] = useTaskCollection();
 
   const columnTasks = tasks[column];
 
@@ -79,91 +80,91 @@ function useColumnTasks(column: ColumnType,chatUser:any) {
   }, [column, setTasks]);
 
   const deleteTask = useCallback(
-    (id: TaskModel['id']) => {
-      debug(`Removing task ${id}..`);
-      setTasks((allTasks) => {
-        const columnTasks = allTasks[column];
+      (id: TaskModel['id']) => {
+        debug(`Removing task ${id}..`);
+        setTasks((allTasks) => {
+          const columnTasks = allTasks[column];
 
-        deleteTaskById(id);
+          deleteTaskById(id);
 
-        return {
-          ...allTasks,
-          [column]: columnTasks.filter((task) => task.id !== id),
-        };
-      });
-    },
-    [column, setTasks],
+          return {
+            ...allTasks,
+            [column]: columnTasks.filter((task) => task.id !== id),
+          };
+        });
+      },
+      [column, setTasks],
   );
 
   const updateTask = useCallback(
-    (id: TaskModel['id'], updatedTask: Omit<Partial<TaskModel>, 'id'>) => {
-      debug(`Updating task ${id} with ${JSON.stringify(updateTask)}`);
-      setTasks((allTasks) => {
-        const columnTasks = allTasks[column];
-        columnTasks.map((task) =>
-          update(task),
-        )
-        
-        return {
-          ...allTasks,
-          [column]: columnTasks.map((task) =>
-            task.id === id ? { ...task, ...updatedTask } : task,
-          ),
-        };
-      });
-    },
-    [column, setTasks],
+      (id: TaskModel['id'], updatedTask: Omit<Partial<TaskModel>, 'id'>) => {
+        debug(`Updating task ${id} with ${JSON.stringify(updateTask)}`);
+        setTasks((allTasks) => {
+          const columnTasks = allTasks[column];
+          columnTasks.map((task) =>
+              update(task),
+          )
+
+          return {
+            ...allTasks,
+            [column]: columnTasks.map((task) =>
+                task.id === id ? { ...task, ...updatedTask } : task,
+            ),
+          };
+        });
+      },
+      [column, setTasks],
   );
 
   const dropTaskFrom = useCallback(
-    (from: ColumnType, id: TaskModel['id']) => {
-      setTasks((allTasks) => {
-        const fromColumnTasks = allTasks[from];
-        const toColumnTasks = allTasks[column];
-        const movingTask = fromColumnTasks.find((task) => task.id === id);
+      (from: ColumnType, id: TaskModel['id']) => {
+        setTasks((allTasks) => {
+          const fromColumnTasks = allTasks[from];
+          const toColumnTasks = allTasks[column];
+          const movingTask = fromColumnTasks.find((task) => task.id === id);
 
-        console.log(`Moving task ${movingTask?.id} from ${from} to ${column}`);
+          console.log(`Moving task ${movingTask?.id} from ${from} to ${column}`);
 
-        if (movingTask) {
-          update({
-            id: movingTask.id,
-            column: column,
-            title: movingTask.title,
-            dsc: movingTask.dsc,
-            color: movingTask.color,
-            to: movingTask.to,
-            from: movingTask.from,
-            deadline: movingTask.deadline,
-          });
-        }
+          if (movingTask) {
+            update({
+              id: movingTask.id,
+              column: column,
+              title: movingTask.title,
+              dsc: movingTask.dsc,
+              color: movingTask.color,
+              to: movingTask.to,
+              from: movingTask.from,
+              deadline: movingTask.deadline,
+            });
+          }
 
-        if (!movingTask) {
-          return allTasks;
-        }
+          if (!movingTask) {
+            return allTasks;
+          }
 
-        // remove the task from the original column and copy it within the destination column
-        return {
-          ...allTasks,
-          [from]: fromColumnTasks.filter((task) => task.id !== id),
-          [column]: [{ ...movingTask, column }, ...toColumnTasks],
-        };
-      });
-    },
-    [column, setTasks],
+          // remove the task from the original column and copy it within the destination column
+          return {
+            ...allTasks,
+            [from]: fromColumnTasks.filter((task) => task.id !== id),
+            [column]: [{ ...movingTask, column }, ...toColumnTasks],
+          };
+        });
+      },
+      [column, setTasks],
   );
 
   const swapTasks = useCallback(
-    (i: number, j: number) => {
-      debug(`Swapping task ${i} with ${j} in ${column} column`);
-      setTasks((allTasks) => {
-        const columnTasks = allTasks[column];
-        return {
-          ...allTasks,
-          [column]: swap(columnTasks, i, j),
-        };
-      });
-    },
-    [column, setTasks],
+      (i: number, j: number) => {
+        debug(`Swapping task ${i} with ${j} in ${column} column`);
+        setTasks((allTasks) => {
+          const columnTasks = allTasks[column];
+          return {
+            ...allTasks,
+            [column]: swap(columnTasks, i, j),
+          };
+        });
+      },
+      [column, setTasks],
   );
 
   return {
