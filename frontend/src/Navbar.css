@@ -15,7 +15,7 @@
 .navbar-container {
   /* background: maroon; */
   /* background: black; */
-  background: black;
+  background: white;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,19 +69,24 @@
 }
 
 .nav-links {
-  /* color: maroon; */
-  color: white;
+  color: maroon;
+  /* color: white; */
   display: flex;
   align-items: center;
   text-decoration: none;
   padding: 0.5rem 1rem;
+  margin-top: 15px;
   height: 100%;
+  border: solid maroon;
+  border-width: 1px;
+  border-radius: 25px;
+  height: 50px;
 }
 
-.nav-links:hover {
+.nav-links:hover {  
   background-color: maroon;
   color: #fff;
-  border-radius: 4px; /* Rounded corners for a modern look */
+  border-radius: 25px; /* Rounded corners for a modern look */
   transition: background-color 0.3s ease-in-out;
 }
 
@@ -121,13 +126,6 @@
     opacity: 1;
     transition: all 0.5s ease;
     z-index: 1;
-  }
-
-  .nav-links {
-    text-align: center;
-    padding: 2rem;
-    width: 100%;
-    display: table;
   }
 
   .nav-links:hover {

@@ -93,9 +93,8 @@ function Bookmarks() {
                     </Button>
                 </LinkOverlay>
                 <IconButton
-                    onClick={() => {deleteBookmark(bookmark.id)}}
+                    onClick={() => {deleteBookmark(bookmark.id); location.reload();}}
                     position="absolute"
-                    top={0}
                     right={0}
                     zIndex={100}
                     aria-label="delete-task"
@@ -103,21 +102,6 @@ function Bookmarks() {
                     colorScheme="solid"
                     color={'gray.700'}
                     icon={<DeleteIcon />}
-                    opacity={0}
-                    _groupHover={{
-                        opacity: 1,
-                    }}
-                    />
-                <IconButton
-                    position="absolute"
-                    bottom={0}
-                    right={0}
-                    zIndex={100}
-                    aria-label="delete-task"
-                    size="md"
-                    colorScheme="solid"
-                    color={'gray.700'}
-                    icon={<EditIcon />}
                     opacity={0}
                     _groupHover={{
                         opacity: 1,
@@ -192,7 +176,7 @@ function Bookmarks() {
                     </ModalBody>
         
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={(e) => { addBookmarks(e); closeEverything(); }} isDisabled={isLinkError || isTitleError}>
+                        <Button colorScheme='blue' mr={3} onClick={(e) => { addBookmarks(e); closeEverything(); location.reload();}} isDisabled={isLinkError || isTitleError}>
                             Add bookmark
                         </Button>
                     </ModalFooter>
