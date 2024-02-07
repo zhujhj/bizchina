@@ -5,8 +5,8 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background: rgb(247, 223, 223);
-    background: linear-gradient(to left, rgb(247, 223, 223), #e02929);
+    background: white;
+   
 }
 
 /* Styling for the sign-in title */
@@ -38,14 +38,14 @@
 /* Styles for input fields */
 .userInput {
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: 15px;
     /* border-radius: 4px; */
     width: 300px;
 
     font-size: 1.5rem;
-    background: rgb(57, 52, 52);
+    background: rgba(27, 27, 27, 0.84);
     color: white;
     outline: none;
     line-height: 1;
@@ -94,6 +94,7 @@
   }
 
 button {
+    
     color: grey;
     border: none;
     /* border-radius: 20px; */
@@ -121,9 +122,12 @@ button:disabled {
 
 /* Style for the default log in button */
 #login {
-    width: 200px;
-    background-color: #ffffff;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+    width: 300px;
+    background-color: rgb(255, 255, 255);
     margin-bottom: 10px;
+    border: 1px solid black;
+    font-size: small;
 }
 
 /* Style for the Google sign in button */
@@ -146,7 +150,8 @@ button:disabled {
     height: 80px;
     width: 80px;
     margin-bottom: 10px;
-    border-radius: 20%;
+    border-radius: 30%;
+    
 }
 
 #logo:hover {
@@ -155,6 +160,7 @@ button:disabled {
 }
 
 ::placeholder {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
     color: white;
     opacity: 1; /* Firefox */
     font-size: medium;
