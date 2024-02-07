@@ -52,6 +52,8 @@ function Task({
   const [newFrom, setNewFrom] = useState('');
   const [newDate, setNewDate] = useState('');
 
+  console.log(task.dsc);
+
   return (
     <ScaleFade in={true} unmountOnExit>
       <Box
@@ -152,6 +154,17 @@ function Task({
           align='left'>
             {/* Date: {task.deadline.toString()} */}
             Deadline: {task.deadline.toString()}
+        </Text>
+        <Text
+          fontWeight="semibold"
+          fontSize={14}
+          cursor="inherit"
+          border="none"
+          p={0}
+          m={0}
+          resize="none"
+          color="gray.700"
+          align='left'>Description: {task.dsc}
         </Text>
         {/* Edit modal */}
         <Modal isOpen={isOpen} onClose={onClose}>

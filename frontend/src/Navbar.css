@@ -1,5 +1,7 @@
+@charset "UTF-8";
 .navbar {
-  background: linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(26, 23, 23) 100%);
+  background: bei; /* Dark background for contrast */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Add shadow for depth */
   height: 80px;
   display: flex;
   justify-content: center;
@@ -27,6 +29,13 @@
   font-size: 2rem;
   display: flex;
   align-items: center;
+}
+
+.logo {
+  width: 20px;
+  top: 10px;
+  height: 0px;
+  display: flex;
 }
 
 .fa-typo3 {
@@ -59,8 +68,10 @@
 }
 
 .nav-links:hover {
-  border-bottom: 4px solid #fff;
-  transition: all 0.2s ease-out;
+  
+  color: #fff;
+  border-radius: 4px; /* Rounded corners for a modern look */
+  transition: background-color 0.3s ease-in-out;
 }
 
 .fa-bars {
@@ -114,6 +125,8 @@
   }
 
   .navbar-logo {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* More modern font */
+    font-weight: bold; /* Make the logo bold */
     position: absolute;
     top: 0;
     left: 0;

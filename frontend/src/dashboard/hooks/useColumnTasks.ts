@@ -43,9 +43,8 @@ const update = (task: TaskModel) => {
   });
 }
 
-function useColumnTasks(column: ColumnType) {
-  localStorage.clear();
-  const [tasks, setTasks] = useTaskCollection();
+function useColumnTasks(column: ColumnType,chatUser:any) {
+  const [tasks, setTasks] = useTaskCollection(column,chatUser);
 
   const columnTasks = tasks[column];
 
@@ -130,6 +129,7 @@ function useColumnTasks(column: ColumnType) {
             id: movingTask.id,
             column: column,
             title: movingTask.title,
+            dsc: movingTask.dsc,
             color: movingTask.color,
             to: movingTask.to,
             from: movingTask.from,

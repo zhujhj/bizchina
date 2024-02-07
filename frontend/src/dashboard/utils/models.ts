@@ -4,10 +4,18 @@ export interface TaskModel {
   id: string;
   title: string;
   column: ColumnType;
+  dsc: string
   color: string;
   to: string;
   from: string;
   deadline: Date;
+}
+
+export interface BookmarkModel {
+  id: string;
+  titleInput: string;
+  linkInput: string;
+  icon: string;
 }
 
 export interface DragItem {

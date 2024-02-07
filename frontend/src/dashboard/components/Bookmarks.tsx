@@ -1,8 +1,14 @@
 import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Box, Stack, IconButton, useColorModeValue, AbsoluteCenter, useDisclosure, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Image, LinkOverlay, LinkBox, Spacer} from '@chakra-ui/react';
+import firebase from 'firebase/compat/app';
 import React from 'react';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { BookmarkModel } from '../utils/models';
+
+const firestore = firebase.firestore();
+const bookmarksRef = firestore.collection('bookmarks');
+const bms = await bookmarksRef.get();
 
 function Bookmarks() {
     //modal open close
@@ -30,8 +36,42 @@ function Bookmarks() {
 
     const [bookmarks, setBookmarks] = useState<{ id: string; titleInput: string; linkInput: string; icon: string;}[]>([]);
 
+    const bookmarkQueryById = (id) => bookmarksRef.where('id', '==', id);
+
+    const bookmarkModels: BookmarkModel[] = [];
+
+    bms.forEach(doc => {
+        console.log(doc.id, '=>', doc.data().column);
+        bookmarkModels.push({
+          id: doc.data().id,
+          titleInput: doc.data().titleInput,
+          linkInput: doc.data().linkInput,
+          icon: doc.data().icon,
+        });
+      });
+
+    const saveBookmark = (bookmark: BookmarkModel) => {
+        bookmarksRef.add(bookmark)
+            .then(_ => console.log(`task added: ${bookmark.id}`));
+    }
+
+    const deleteBookmark = (bookmarkId: BookmarkModel['id']) => {
+        bookmarkQueryById(bookmarkId)
+            .get()
+            .then(snapshot => {
+              snapshot.forEach(doc => doc.ref.delete());
+              console.log(`task deleted: ${bookmarkId}`);
+            });
+    }
+
     const addBookmarks = (e) => {
        e.preventDefault();
+       saveBookmark({
+            id: uuidv4(),
+            titleInput: titleInput,
+            linkInput: linkInput,
+            icon: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://" + linkInput + "&size=24",
+       });
        setBookmarks(prevBookmarks => [
         ...prevBookmarks,
         {
@@ -44,15 +84,16 @@ function Bookmarks() {
        console.log(bookmarks)
     }
 
-    const bookmarkElements = bookmarks.map((bookmark, index) => (
+    const bookmarkElements = bookmarkModels.map((bookmark, index) => (
         <LinkBox>
-            <Box key={bookmark.id} w="auto" pt="2" ml="1" pl={index === 0 ? '2' : '0'}>
-                <LinkOverlay href={'https://' + bookmark.linkInput}>
-                    <Button leftIcon={<Image src={bookmark.icon}/>}>
+            <Box key={bookmark.id} w="auto" pt="2" ml="1" my="2" pl={index === 0 ? '2' : '0'}>
+                <LinkOverlay href={'https://' + bookmark.linkInput} target='_blank'>
+                    <Button padding={5} leftIcon={<Image src={bookmark.icon}/>}>
                         {bookmark.titleInput}
                     </Button>
                 </LinkOverlay>
                 <IconButton
+                    onClick={() => {deleteBookmark(bookmark.id)}}
                     position="absolute"
                     top={0}
                     right={0}
@@ -88,13 +129,13 @@ function Bookmarks() {
 
     return (
         <>
-            <Box position='relative' h='100px'>
+            <Box position='relative' h='100px' margin='auto' w='1000px'>
                 <AbsoluteCenter p='4' color='black' axis='both'>
                     <Stack direction={['column', 'row']} spacing='24px'>
                         <IconButton
                             size="xs"
-                            w="40px"
-                            h="60px"
+                            w="50px"
+                            h="70px"
                             color={useColorModeValue('gray.500', 'gray.400')}
                             bgColor={useColorModeValue('gray.100', 'gray.700')}
                             _hover={{ bgColor: useColorModeValue('gray.200', 'gray.600') }}
@@ -108,7 +149,7 @@ function Bookmarks() {
                         <Stack
                             direction={{ base: 'column', md: 'row' }}
                             w={{ base: 300, md: 600 }}
-                            h="60px"
+                            h="70px"
                             bgColor={useColorModeValue('gray.50', 'gray.900')}
                             rounded="lg"
                             boxShadow="md"
@@ -124,7 +165,7 @@ function Bookmarks() {
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Add Bookmarks</ModalHeader>
-                    <ModalCloseButton />
+                    <ModalCloseButton color='black'/>
                     <ModalBody>
                         <FormControl isInvalid={isTitleError} isRequired>
                             <FormLabel>Title:</FormLabel>

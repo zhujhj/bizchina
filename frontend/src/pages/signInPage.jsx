@@ -50,34 +50,36 @@ const SignIn = (props) => {
     }
 
 
-    createUserWithEmailAndPassword(auth, email, password)
-        .then(async (userCredential) => {
-            // Signed up
-            const user = userCredential.user;
-            navigate(`/dashboard/${user.uid}`);// ...
-        })
-        .catch((err) => {
-            if (err.code === "auth/email-already-in-use"){
-                signInWithEmailAndPassword(auth, email, password)
-                    .then(async (userCredential) => {
-                        // Signed in
-                        const user = userCredential.user;
-                        navigate(`/dashboard/${user.uid}`);
-                    })
-                    .catch((err) => {
-                        console.log(err.code);
-                        console.log(err.message);
-                    });
-            }
-            console.log(err.code);
-            console.log(err.message);
-        });
+    const handleCreateAccount = () => {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(async (userCredential) => {
+                // Signed up
+                const user = userCredential.user;
+                navigate(`/dashboard/${user.uid}`);
+            })
+            .catch((err) => {
+                console.log(err.code);
+                console.log(err.message);
+            });
+    }
 
+    const handleSignIn = () => {
+        signInWithEmailAndPassword(auth, email, password)
+            .then(async (userCredential) => {
+                // Signed in
+                const user = userCredential.user;
+                navigate(`/dashboard/${user.uid}`);
+            })
+            .catch((err) => {
+                console.log(err.code);
+                console.log(err.message);
+            });
+    }
     
     return (
         <div id="signInContainer">
             <a href="https://www.ubcchinaforum.com/"> <img src={logo} id="logo"></img> </a>
-            <div id="signInTitle">Sign In</div>
+            <div id="signInTitle">Welcome,</div>
             <div id="manage">Log in to start managing your tasks!</div>
 
             {/* Email and Password inputs */}
@@ -97,8 +99,9 @@ const SignIn = (props) => {
             />
 
             {/* Sign in buttons */}
-            <button id="login" onClick={createUserWithEmailAndPassword}>Sign in</button>
-            <button id="signinGoogle" onClick={signInWithGoogle}>Sign in with Google</button>
+            <button id="login" onClick={handleSignIn}>Sign in</button>
+            <button id="login" onClick={handleCreateAccount}>Create Account</button>
+            <button type="button" class="login-with-google-btn" onClick={signInWithGoogle}>Sign in with Google</button>
         </div>
     )
 
