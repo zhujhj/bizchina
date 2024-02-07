@@ -33,6 +33,7 @@ import {
 } from '@chakra-ui/react'
 import axios from "axios/index";
 import firebase from 'firebase/compat/app';
+import {MultiChatSocket, MultiChatWindow} from "react-chat-engine-advanced";
 
 const ColumnColorScheme: Record<ColumnType, string> = {
   Todo: 'gray',
@@ -41,8 +42,7 @@ const ColumnColorScheme: Record<ColumnType, string> = {
   Completed: 'green',
 };
 
-function Column({ column,user }: { column: ColumnType, user:string }) {
-  // for add modal
+const Column = ({ column, chatUser}) => {
   const { isOpen: isAddTaskModalOpen, onOpen: openAddTaskModal, onClose: closeAddTaskModal } = useDisclosure();
 
   // For "Send Task" modal
@@ -54,16 +54,12 @@ function Column({ column,user }: { column: ColumnType, user:string }) {
   const handleSendButtonClick = () => {
     openSendTaskModal();
   };
-  const [newTaskName, setNewTaskName] = useState('');
-  const [newTo, setNewTo] = useState('');
-  const [newFrom, setNewFrom] = useState('');
-  const [newDate, setNewDate] = useState('');
-  const [description, setNewDescription] = useState('');
-  const [chatUser, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  // for error modal
   const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
   const firestore = firebase.firestore();
+  const [newTaskName, setNewTaskName] = useState('');
+  const [newTo, setNewTo] = useState('');
+  const [newDate, setNewDate] = useState('');
+  const [description, setNewDescription] = useState('');
   const tasksCollection = firestore.collection('tasks');
   const {
     tasks,
@@ -72,7 +68,7 @@ function Column({ column,user }: { column: ColumnType, user:string }) {
     dropTaskFrom,
     swapTasks,
     updateTask,
-  } = useColumnTasks(column);
+  } = useColumnTasks(column,chatUser);
 
   const { dropRef, isOver } = useColumnDrop(column, dropTaskFrom);
 
@@ -86,26 +82,6 @@ function Column({ column,user }: { column: ColumnType, user:string }) {
           onDelete={deleteTask}
       />
   ));
-  const collection = firestore.collection('users').doc(user);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const doc = await collection.get();
-
-        if (!doc.exists) {
-          return;
-        }
-
-        const userData = doc.data();
-        setUser(userData);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [collection]);
   return (
       <Box>
         <Heading fontSize="md" mb={4} letterSpacing="wide">
@@ -182,7 +158,6 @@ function Column({ column,user }: { column: ColumnType, user:string }) {
                   setNewTaskName('');
                   setNewDescription('');
                   setNewTo('');
-                  setNewFrom('');
                   setNewDate('');
                 }}}
               >
@@ -219,7 +194,7 @@ function Column({ column,user }: { column: ColumnType, user:string }) {
                     onChange={(e) => setNewTo(e.target.value)}
                 >
                   {["IT", "HR", "Corporate Relations", "English Department", "Chinese Department", "Finance", "Events", "Prez"]
-                      .filter((option) => option)
+                      .filter((option) => option!= chatUser.department)
                       .map((option) => (
                           <option key={option} value={option}>
                             {option}
@@ -254,7 +229,6 @@ function Column({ column,user }: { column: ColumnType, user:string }) {
                   setNewTaskName('');
                   setNewDescription('');
                   setNewTo('');
-                  setNewFrom('');
                   setNewDate('');
                 }}}
               >
@@ -292,6 +266,5 @@ function Column({ column,user }: { column: ColumnType, user:string }) {
         </Stack>
       </Box>
   );
-}
-
+};
 export default Column;
