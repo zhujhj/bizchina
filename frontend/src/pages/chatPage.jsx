@@ -38,7 +38,7 @@ const ChatPage = () => {
             }
         };
         fetchData();
-    }, [collection]);
+    }, []);
 
     return (
         <ChatContent chatUser={chatUser} loading={loading} />
