@@ -131,6 +131,7 @@ function Bookmarks() {
                             colorScheme="black"
                             aria-label="add-task"
                             icon={<AddIcon />}
+                            className=''
                         />
                         <Stack
                             direction={{ base: 'column', md: 'row' }}
