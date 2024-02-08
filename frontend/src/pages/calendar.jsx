@@ -200,20 +200,9 @@ const CalendarContent = ({ tasks, events2, loading,department }) => {
   };
   
   const EventWrapper = ({children}) => {
-    if (children.filter((child) => child).length)
       return (
           <>
             {children}
-            {children.filter((child) => child).length > 2 && (
-                <SeeMore style={{color: "black", border: "1px solid gray" }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      console.log("clicked p");
-                    }}
-                >
-                  See More...
-                </SeeMore>
-            )}
           </>
       );
   };

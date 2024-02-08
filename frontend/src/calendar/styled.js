@@ -14,6 +14,7 @@ export const StyledEvent = styled.span`
   border-radius: 5px;
   font-size: 13px;
   cursor: pointer;
+  margin-bottom: 2px; // so the events wont touch
   overflow: auto; // makes sure long event names doesnt expand the event
 `;
 
@@ -44,9 +45,6 @@ export const SevenColGrid = styled.div`
     display: grid;
     border: 0.1px solid;
     ${StyledEvent} {
-      display: none;
-    }
-    ${StyledEvent}:nth-child(-n + 3) {
       display: block;
     }
 
