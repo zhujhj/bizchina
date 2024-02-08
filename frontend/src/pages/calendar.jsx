@@ -191,8 +191,8 @@ const CalendarContent = ({ tasks, events2, loading,department }) => {
 
     return (
         <TaskWrapper>
-          <h2>{dsc}</h2>
-          <p>{dateString}</p> 
+          <h2>{title}</h2>
+          <p>{dateString}<br></br><br></br>{dsc}</p>
           <ion-icon onClick={handleDelete} name="trash-outline"></ion-icon>
           <ion-icon onClick={handlePotalClose} name="close-outline"></ion-icon>
         </TaskWrapper>
