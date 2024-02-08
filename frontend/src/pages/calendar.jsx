@@ -346,7 +346,7 @@ const CalendarContent = ({ tasks, events2, loading,department }) => {
                     setNewDate('');
                   }}}
                 >
-                  Add Task
+                  Add Event
                 </Button>
               </ModalBody>
             </ModalContent>
