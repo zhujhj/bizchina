@@ -102,6 +102,7 @@ function Bookmarks() {
                     colorScheme="solid"
                     color={'gray.700'}
                     icon={<DeleteIcon />}
+                    
                     // delete icon hover
                     // opacity={0}
                     // _groupHover={{
