@@ -11,7 +11,7 @@ export const StyledEvent = styled.span`
   text-align: left !important;
   padding: 2px 10px;
   margin: 0 2px;
-  border-radius: 10px;
+  border-radius: 5px;
   font-size: 13px;
   cursor: move;
   text-transform: capitalize;
@@ -100,8 +100,8 @@ export const SeeMore = styled.p`
 export const TaskWrapper = styled.div`
 background: #f9f9f9; // A softer background color
 position: absolute;
-width: 60%;
-height: 200px;
+width: 40%;
+height: auto;
 top: 50%;
 left: 50%;
 border-radius: 10px; // Slightly larger border radius for a softer look
@@ -110,8 +110,8 @@ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // A softer shadow
 padding: 20px;
 display: flex;
 flex-direction: column;
-justify-content: center;
-align-items: center;
+justify-content: left;
+align-items: left;
 transition: all 0.3s ease; // Smooth transition for hover effects
 
 &:hover {
@@ -149,6 +149,8 @@ ion-icon[name="close-outline"] {
 
 p {
   color: #666; // Slightly darker for better readability
-  margin-bottom: 15px;
+  // margin-bottom: 15px;
+  text-align: left;
+  padding-left: 0px;
 }
 `;
