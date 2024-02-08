@@ -142,7 +142,7 @@ function Column({ column,user }: { column: ColumnType, user:string }) {
               {/* Add your modal content here */}
               {/* For example, you can include a form to add a new task */}
               <FormControl isRequired>
-                <FormLabel>First name</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <Input
                     mb={4}
                     placeholder="Task Name"
