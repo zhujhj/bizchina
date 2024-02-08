@@ -30,19 +30,24 @@ function Navbar({ user }) {
                   <img src={logo} id='bizchinalogo'></img>
                 </Link>
                 <div className="menu-icon" onClick={handleClick}>
-                <ion-icon name="grid-outline" color="light"></ion-icon>
+                <ion-icon name="grid-outline" color="danger"></ion-icon>
 
                 </div>
                 <ul className={click ? 'nav-menu active': 'nav-menu'}>
                   <li className='nav-item'>
                     <Link to={`/chat/${user}`} className='nav-links' onClick={closeMobileMenu}>
-                      Chat
+                      Chat &nbsp;
+                      <ion-icon name="chatbox-ellipses-outline"></ion-icon>
+
                     </Link>
                   </li>
 
                   <li className='nav-item'>
                     <Link to={`/calendar/${user}`} className='nav-links' onClick={closeMobileMenu}>
-                      Calendar
+                      Calendar &nbsp;
+                      <ion-icon name="calendar-outline"></ion-icon>
+
+
                     </Link>
                   </li>
 
