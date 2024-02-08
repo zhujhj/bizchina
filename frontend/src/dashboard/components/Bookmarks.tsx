@@ -88,7 +88,7 @@ function Bookmarks() {
         <LinkBox>
             <Box key={bookmark.id} w="auto" pt="2" ml="1" my="2" pl={index === 0 ? '2' : '0'}>
                 <LinkOverlay href={'https://' + bookmark.linkInput} target='_blank'>
-                    <Button padding={5} leftIcon={<Image src={bookmark.icon}/>}>
+                    <Button padding={5} paddingRight={10} leftIcon={<Image src={bookmark.icon}/>}>
                         {bookmark.titleInput}
                     </Button>
                 </LinkOverlay>
@@ -102,10 +102,11 @@ function Bookmarks() {
                     colorScheme="solid"
                     color={'gray.700'}
                     icon={<DeleteIcon />}
-                    opacity={0}
-                    _groupHover={{
-                        opacity: 1,
-                    }}
+                    // delete icon hover
+                    // opacity={0}
+                    // _groupHover={{
+                    //     opacity: 1,
+                    // }}
                     />
             </Box>
         </LinkBox>
