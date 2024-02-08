@@ -16,73 +16,52 @@ import { useNavigate } from "react-router-dom";
 
 const auth = getAuth();
 
-// function SignIn(props) {
 const SignIn = (props) => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState(""); // State variable to hold error message
 
-    const signInWithGoogle = (props) => {
+    const signInWithGoogle = () => {
         const provider = new firebase.auth.GoogleAuthProvider();
         signInWithPopup(auth, provider)
             .then(async (result) => {
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
-                // The signed-in user info.
                 const user = result.user;
-                // console.log(user);
-                // to be changed, hoping to use navigate.push for optimal performance.
                 navigate(`/dashboard/${user.uid}`);
-
-                // IdP data available using getAdditionalUserInfo(result)
-                // ...
-            }).catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.customData.email;
-            // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
-            // ...
-        });
+            })
+            .catch((error) => {
+                setError(error.message); // Set error message
+            });
     }
-
 
     const handleCreateAccount = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then(async (userCredential) => {
-                // Signed up
                 const user = userCredential.user;
                 navigate(`/dashboard/${user.uid}`);
             })
-            .catch((err) => {
-                console.log(err.code);
-                console.log(err.message);
+            .catch((error) => {
+                setError(formatErrorMessage(error.code)); // Set error message
             });
     }
 
     const handleSignIn = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then(async (userCredential) => {
-                // Signed in
                 const user = userCredential.user;
                 navigate(`/dashboard/${user.uid}`);
             })
-            .catch((err) => {
-                console.log(err.code);
-                console.log(err.message);
+            .catch((error) => {
+                setError(formatErrorMessage(error.code)); // Set error message
             });
     }
-    
+
     return (
         <div id="signInContainer">
-            <a href="https://www.ubcchinaforum.com/"> <img src={logo} id="logo"></img> </a>
-            <div id="signInTitle">Welcome</div>
+            <a href="https://www.ubcchinaforum.com/"> <img src={logo} id="logo" alt="Logo"></img> </a>
+            <div id="signInTitle">Welcome,</div>
             <div id="manage">Log in to start managing your tasks!</div>
 
-            {/* Email and Password inputs */}
             <input
                 className="userInput"
                 type="text"
@@ -97,20 +76,23 @@ const SignIn = (props) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
+            {/* Display error message if there's an error */}
+            {error && <div style={{ color: 'red', marginTop: '-10px' }}>{error}</div>}
 
-            {/* Sign in buttons */}
             <button id="login" onClick={handleSignIn}>Sign in</button>
             <button id="login" onClick={handleCreateAccount}>Create Account</button>
-            <button type="button" class="login-with-google-btn" onClick={signInWithGoogle}>Sign in with Google</button>
+            <button type="button" className="login-with-google-btn" onClick={signInWithGoogle}>Sign in with Google</button>
         </div>
-    )
-
+    );
+}
+const formatErrorMessage = (message) => {
+    return message.replace('auth/', '').replace(/-/g, ' ');
 }
 
 function SignOut() {
     return auth.currentUser && (
         <button className="sign-out" onClick={() => auth.signOut()}>Sign Out</button>
-    )
+    );
 }
 
 export default SignIn;
