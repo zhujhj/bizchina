@@ -41,7 +41,10 @@ const ChatPage = () => {
     }, []);
 
     return (
+        
+            
         <ChatContent chatUser={chatUser} loading={loading} />
+        
     );
 };
 

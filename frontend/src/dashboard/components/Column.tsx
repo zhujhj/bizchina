@@ -152,7 +152,7 @@ function Column({ column,chatUser }: { column: ColumnType, chatUser:any }) {
                     column,
                     title: newTaskName,
                     dsc: description,
-                    color: pickChakraRandomColor('.300'),
+                    color: pickChakraRandomColor('.100'),
                     to: chatUser.department,
                     from: chatUser.department,
                     deadline: newDate,
