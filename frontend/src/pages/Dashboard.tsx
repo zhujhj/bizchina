@@ -28,7 +28,7 @@ function Dashboard() {
       >
         BizChina Dashboard
       </Heading> */}
-            <DarkModeIconButton position="absolute" top={0} right={2} />
+            <DarkModeIconButton position="absolute" top={0} right={2} zIndex={100} />
             <Bookmarks />
             <DndProvider backend={HTML5Backend}>
                 <Container maxWidth="container.lg" px={4} py={10}>

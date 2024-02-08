@@ -42,7 +42,7 @@ export const SevenColGrid = styled.div`
   
   div {
     display: grid;
-    border: 1px solid;
+    border: 0.1px solid;
     ${StyledEvent} {
       display: none;
     }
