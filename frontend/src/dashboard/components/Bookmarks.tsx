@@ -14,8 +14,8 @@ function Bookmarks() {
     //modal open close
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    //close modal and reset form after adding bookmark 
-    const closeEverything = () => { 
+    //close modal and reset form after adding bookmark
+    const closeEverything = () => {
         onClose();
         setLinkInput('');
         setTitleInput('');
@@ -26,11 +26,11 @@ function Bookmarks() {
 
     //get bookmark link
     const [linkInput, setLinkInput] = useState('')
-  
+
     const handleTitleInputChange = (e) => setTitleInput(e.target.value)
-  
+
     const handleLinkInputChange = (e) => setLinkInput(e.target.value)
-  
+
     const isTitleError = titleInput === ''
     const isLinkError = linkInput === ''
 
@@ -93,7 +93,7 @@ function Bookmarks() {
                     </Button>
                 </LinkOverlay>
                 <IconButton
-                    onClick={() => {deleteBookmark(bookmark.id); location.reload();}}
+                    onClick={() => {deleteBookmark(bookmark.id); }}
                     position="absolute"
                     right={0}
                     zIndex={100}
@@ -102,7 +102,7 @@ function Bookmarks() {
                     colorScheme="solid"
                     color={'gray.700'}
                     icon={<DeleteIcon />}
-                    
+
                     // delete icon hover
                     // opacity={0}
                     // _groupHover={{
@@ -131,7 +131,6 @@ function Bookmarks() {
                             colorScheme="black"
                             aria-label="add-task"
                             icon={<AddIcon />}
-                            className=''
                         />
                         <Stack
                             direction={{ base: 'column', md: 'row' }}
@@ -147,7 +146,7 @@ function Bookmarks() {
                     </Stack>
                 </AbsoluteCenter>
             </Box>
-            
+
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -177,9 +176,9 @@ function Bookmarks() {
                                 )}
                         </FormControl>
                     </ModalBody>
-        
+
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={(e) => { addBookmarks(e); closeEverything(); location.reload();}} isDisabled={isLinkError || isTitleError}>
+                        <Button colorScheme='blue' mr={3} onClick={(e) => { addBookmarks(e); closeEverything(); }} isDisabled={isLinkError || isTitleError}>
                             Add bookmark
                         </Button>
                     </ModalFooter>
