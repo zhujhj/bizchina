@@ -41,7 +41,7 @@ const ColumnColorScheme: Record<ColumnType, string> = {
   Completed: 'green',
 };
 
-function Column({ column,user }: { column: ColumnType, user:string }) {
+function Column({ column,chatUser }: { column: ColumnType, chatUser:any }) {
   // for add modal
   const { isOpen: isAddTaskModalOpen, onOpen: openAddTaskModal, onClose: closeAddTaskModal } = useDisclosure();
 
@@ -59,9 +59,7 @@ function Column({ column,user }: { column: ColumnType, user:string }) {
   const [newFrom, setNewFrom] = useState('');
   const [newDate, setNewDate] = useState('');
   const [description, setNewDescription] = useState('');
-  const [chatUser, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  // for error modal
+
   const { isOpen: isModalOpen, onOpen: openModal, onClose: closeModal } = useDisclosure();
   const firestore = firebase.firestore();
   const tasksCollection = firestore.collection('tasks');
@@ -86,26 +84,7 @@ function Column({ column,user }: { column: ColumnType, user:string }) {
           onDelete={deleteTask}
       />
   ));
-  const collection = firestore.collection('users').doc(user);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const doc = await collection.get();
-
-        if (!doc.exists) {
-          return;
-        }
-
-        const userData = doc.data();
-        setUser(userData);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [collection]);
   return (
       <Box>
         <Heading fontSize="md" mb={4} letterSpacing="wide">
@@ -219,7 +198,7 @@ function Column({ column,user }: { column: ColumnType, user:string }) {
                     onChange={(e) => setNewTo(e.target.value)}
                 >
                   {["IT", "HR", "Corporate Relations", "English Marketing", "Chinese Marketing", "Finance", "Events", "Prez"]
-                      .filter((option) => option)
+                      .filter((option) => option!= chatUser.department)
                       .map((option) => (
                           <option key={option} value={option}>
                             {option}
