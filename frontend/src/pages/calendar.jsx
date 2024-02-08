@@ -165,7 +165,7 @@ const CalendarContent = ({ tasks, events2, loading,department }) => {
     // the event/task from the calendar breaks the code
 
     if (portalData.id === 'task') {
-      alert("Error: Attempted to delete a task from calendar page!");
+      alert("Error: Attempted to delete task from calendar page!");
     } else {
       setEvents((prevEvents) => 
         // portalData is the current portal we are clicked on
@@ -205,13 +205,13 @@ const CalendarContent = ({ tasks, events2, loading,department }) => {
           <>
             {children}
             {children.filter((child) => child).length > 2 && (
-                <SeeMore
+                <SeeMore style={{color: "black", border: "1px solid gray" }}
                     onClick={(e) => {
                       e.stopPropagation();
                       console.log("clicked p");
                     }}
                 >
-                  see more...
+                  See More...
                 </SeeMore>
             )}
           </>
@@ -248,7 +248,7 @@ const CalendarContent = ({ tasks, events2, loading,department }) => {
             $is28Days={getDaysInMonth(currentDate) === 28}
         >
           {getSortedDays(currentDate).map((day) => (
-              <div className="day" style={{overflow: "hidden"}} // if calendar event title is long, will hide the rest of the text
+              <div // this div is each day on the calendar
                   key={`key placeholder`}
                      onClick={(e) =>
                       handleAddEventClick(

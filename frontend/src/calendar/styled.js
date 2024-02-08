@@ -13,8 +13,8 @@ export const StyledEvent = styled.span`
   margin: 0 2px;
   border-radius: 5px;
   font-size: 13px;
-  cursor: move;
-  text-transform: capitalize;
+  cursor: pointer;
+  overflow: auto; // makes sure long event names doesnt expand the event
 `;
 
 export const calendarWrapper = styled.div`
