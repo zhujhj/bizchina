@@ -218,7 +218,7 @@ function Column({ column,user }: { column: ColumnType, user:string }) {
                     placeholder="Select To"
                     onChange={(e) => setNewTo(e.target.value)}
                 >
-                  {["IT", "HR", "Corporate Relations", "English Department", "Chinese Department", "Finance", "Events", "Prez"]
+                  {["IT", "HR", "Corporate Relations", "English Marketing", "Chinese Marketing", "Finance", "Events", "Prez"]
                       .filter((option) => option)
                       .map((option) => (
                           <option key={option} value={option}>
