@@ -78,6 +78,8 @@
         color: #fff;
         border-radius: 3px;
         transition: background-color 0.3s ease-in-out;
+        opacity: 100%;
+        transform: scale(1);
     }
     
     &:active {
@@ -116,18 +118,18 @@ button {
 }
 
 
-/* button:hover {
+button:hover {
     cursor: pointer;
     opacity: 80%;
     transform: scale(1.1);
-} */
-
-button:hover {  
-    background-color: maroon;
-    /* color: #fff; */
-    /* border-radius: 25px; Rounded corners for a modern look */
-    transition: background-color 0.3s ease-in-out;
 }
+
+/* button:hover {  
+    background-color: maroon;
+    color: #fff;
+    border-radius: 25px;
+    transition: background-color 0.3s ease-in-out;
+} */
 
 button:disabled {
     opacity: 0.5;
@@ -146,6 +148,8 @@ button:disabled {
           background-color: maroon;
           color: #fff;
           transition: background-color 0.3s ease-in-out;
+          opacity: 100%;
+          transform: scale(1);
       }
 }
 
