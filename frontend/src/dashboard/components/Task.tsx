@@ -34,6 +34,11 @@ function Task({
     handleUpdate(task.id, { ...task, title: newTitle });
   };
 
+  // const handleDscChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  //   const newDsc = e.target.value;
+  //   handleUpdate(task.id, { ...task, dsc: newDsc });
+  // };
+
   const handleEdit = (to: string, from: string, deadline) => {
     console.log("handle edit");
     handleUpdate(task.id, { ...task, to: to, from: from, deadline: deadline });
@@ -90,7 +95,7 @@ function Task({
           }}
           onClick={handleDeleteClick}
         />
-        <IconButton
+        {/* <IconButton
           position="absolute"
           bottom={0}
           right={0}
@@ -105,7 +110,7 @@ function Task({
             opacity: 1,
           }}
           onClick={handleUpdateButton}
-        />
+        /> */}
         <AutoResizeTextarea
           value={task.title}
           fontWeight="semibold"
@@ -166,6 +171,20 @@ function Task({
           color="gray.700"
           align='left'>Description: {task.dsc}
         </Text>
+        {/* <AutoResizeTextarea
+          value={task.dsc}
+          fontWeight="semibold"
+          cursor="inherit"
+          border="none"
+          p={0}
+          m={0}
+          resize="none"
+          minH={70}
+          maxH={200}
+          focusBorderColor="none"
+          color="gray.700"
+          onChange={handleDscChange}
+        /> */}
         {/* Edit modal */}
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay/>
