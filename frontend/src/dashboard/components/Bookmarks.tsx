@@ -50,39 +50,45 @@ function Bookmarks() {
         });
       });
 
-    const saveBookmark = (bookmark: BookmarkModel) => {
-        bookmarksRef.add(bookmark)
-            .then(_ => console.log(`task added: ${bookmark.id}`));
-    }
+      const saveBookmark = async (bookmark) => {
+        await firestore.collection('bookmarks').add(bookmark);
+      };
 
-    const deleteBookmark = (bookmarkId: BookmarkModel['id']) => {
-        bookmarkQueryById(bookmarkId)
-            .get()
-            .then(snapshot => {
-              snapshot.forEach(doc => doc.ref.delete());
-              console.log(`task deleted: ${bookmarkId}`);
+    const deleteBookmark = async (bookmarkId) => {
+        // Assuming bookmarkQueryById is an asynchronous function that fetches and then deletes the bookmark:
+        await bookmarkQueryById(bookmarkId).get().then(snapshot => {
+            snapshot.forEach(doc => {
+                doc.ref.delete().then(() => {
+                    console.log(`Bookmark deleted: ${bookmarkId}`);
+                    // Forcefully reload the page to reflect changes
+                    window.location.reload();
+                });
             });
-    }
+        }).catch(error => {
+            console.error("Error deleting bookmark:", error);
+            // Optionally handle any errors, perhaps showing an error message to the user
+        });
+    };
 
     const addBookmarks = (e) => {
-       e.preventDefault();
-       saveBookmark({
+        e.preventDefault();
+    
+        const newBookmark = {
             id: uuidv4(),
             titleInput: titleInput,
             linkInput: linkInput,
-            icon: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://" + linkInput + "&size=24",
-       });
-       setBookmarks(prevBookmarks => [
-        ...prevBookmarks,
-        {
-            id: uuidv4(),
-            titleInput: titleInput,
-            linkInput: linkInput,
-            icon: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://" + linkInput + "&size=24",
-        }
-       ]);
-       console.log(bookmarks)
-    }
+            icon: `https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://${linkInput}&size=24`,
+        };
+    
+        // Save the bookmark to Firestore
+        saveBookmark(newBookmark).then(() => {
+            // Use window.location.reload() to refresh the page after adding the bookmark
+            window.location.reload();
+        }).catch(error => {
+            console.error("Error saving the bookmark:", error);
+            // Optionally, handle the error (e.g., show an error message to the user)
+        });
+    };
 
     const bookmarkElements = bookmarkModels.map((bookmark, index) => (
         <LinkBox>
