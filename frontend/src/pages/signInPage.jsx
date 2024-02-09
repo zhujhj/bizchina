@@ -58,8 +58,8 @@ const SignIn = (props) => {
 
     return (
         <div id="signInContainer">
-            <a href="https://www.ubcchinaforum.com/"> <img src={logo} id="logo" alt="Logo"></img> </a>
-            <div id="signInTitle">Welcome,</div>
+            <a href="https://www.ubcchinaforum.com/" target="_blank"> <img src={logo} id="logo" alt="Logo"></img> </a>
+            <div id="signInTitle">Welcome</div>
             <div id="manage">Log in to start managing your tasks!</div>
 
             <input
