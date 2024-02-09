@@ -111,7 +111,7 @@ function Column({ column,chatUser }: { column: ColumnType, chatUser:any }) {
             aria-label="add-task"
             icon={<AddIcon />}
         />
-        <button className='send-button' onClick={handleSendButtonClick}>Send A Task! <ArrowRightIcon/></button>
+        <button className='send-button' onClick={handleSendButtonClick}>Send Task <ArrowRightIcon/></button>
         <Modal isOpen={isAddTaskModalOpen} onClose={closeAddTaskModal} size="md">
           <ModalOverlay />
           <ModalContent pb={3.5}>
